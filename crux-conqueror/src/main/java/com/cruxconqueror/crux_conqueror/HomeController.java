@@ -1,0 +1,12 @@
+package com.cruxconqueror.crux_conqueror;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HomeController {
+    @GetMapping("/")
+    public String home() {
+        return "Crux Conqueror's backend is up and running";
+    }
+    
+}

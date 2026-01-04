@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-CruxConquerorApplication<crux-conqueror>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.cruxconqueror.crux_conqueror.CruxConquerorApplication",
+            "projectName": "crux-conqueror",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
