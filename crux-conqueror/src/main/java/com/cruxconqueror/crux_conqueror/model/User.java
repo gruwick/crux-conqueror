@@ -23,4 +23,17 @@ private String passwordHash;
 @Column(name = "Date_Made")
 private LocalDateTime dateMade;
 
+public User(){}
+
+public User(String username, String email, String passwordHash){
+    this.username = username;
+    this.email = email;
+    this.passwordHash = passwordHash;
+}
+public Long getId(){return id;}
+public String getUsername(){return username;}
+public Strign getEmail(){return email;}
+public String getPasswordHash(){return passwordHash;}
+public  LocalDateTime getDateMade(){return dateMade;}
+
 }
