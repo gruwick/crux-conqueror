@@ -36,4 +36,7 @@ public String getEmail(){return email;}
 public String getPasswordHash(){return passwordHash;}
 public LocalDateTime getDateMade(){return dateMade;}
 
+public void setUsername(String username) {this.username = username;}
+public void setEmail(String email) {this.email = email;}
+public void setPasswordHash(String passwordHash) {this.passwordHash = passwordHash;}
 }
