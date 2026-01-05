@@ -19,7 +19,7 @@ public DbTestController(UserRepo userRepo){
 public List<User> users() {
     return userRepo.findAll();
 }
-@PostMapping("/create")
+@GetMapping("/create")
 public User createUser(
     @RequestParam String username,
     @RequestParam String email,
