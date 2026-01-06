@@ -18,7 +18,7 @@ private String username;
 @Column(name = "Emails", nullable =false, unique = true)
 private String email;
 
-@Column(name = "Password_Hash", nullable = false, unique = true)
+@Column(name = "Password_Hash", nullable = false)
 private String passwordHash;
 
 @Column(name = "Date_Made")
