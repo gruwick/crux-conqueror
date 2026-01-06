@@ -8,6 +8,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 
 
 
@@ -19,15 +22,27 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+    @Bean
+    public DaoAuthenticationProvider authProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
+
+    }
+
     @Bean 
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/test/**").permitAll()
+            .requestMatchers("/login").permitAll()
             .anyRequest().authenticated()
         )
-        .formLogin(Customizer.withDefaults());
+        .formLogin(Customizer.withDefaults())
+        .logout(Customizer.withDefaults())
+        .build();
 
     return http.build();
     }
