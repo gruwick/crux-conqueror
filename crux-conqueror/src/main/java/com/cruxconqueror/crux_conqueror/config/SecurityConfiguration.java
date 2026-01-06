@@ -42,7 +42,6 @@ public class SecurityConfiguration {
         )
         .formLogin(Customizer.withDefaults())
         .logout(Customizer.withDefaults())
-        .build();
 
     return http.build();
     }
