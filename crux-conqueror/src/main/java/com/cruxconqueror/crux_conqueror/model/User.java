@@ -21,7 +21,7 @@ private String email;
 @Column(name = "Password_Hash", nullable = false)
 private String passwordHash;
 
-@Column(name = "Date_Made")
+@Column(name = "Date_Made", insertable =false, updatable = false)
 private LocalDateTime dateMade;
 
 public User(){}
