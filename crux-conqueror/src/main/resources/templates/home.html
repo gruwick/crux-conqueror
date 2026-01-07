@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crux Conqueror — Home</title>
+</head>
+<body>
+  <h1>Logged in </h1>
+
+  <p th:text="'Signed in as: ' + ${#authentication.name}"></p>
+
+  <form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+  </form>
+</body>
+</html>
