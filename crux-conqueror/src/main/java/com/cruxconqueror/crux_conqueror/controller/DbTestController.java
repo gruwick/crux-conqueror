@@ -28,6 +28,16 @@ public User createUser(
     @RequestParam String email,
     @RequestParam String password
 ) {
+    if(username.isBlank()||email.isBlank()||password.isBlank() ){
+        throw new IllegalArgumentException("Your Username, Email or Password is empty and must be changed");
+    }
+     if(userRepo.existsByUsername(username)){
+        throw new IllegalArgumentException("Your Username already exists and must be changed");
+    }
+    if(userRepo.existsByEmail(username)){
+        throw new IllegalArgumentException("Your Email already exists and must be changed");
+    }
+    
     String hashedPassword = passwordEncoder.encode(password);
     //Reminder to myself to remove this after testing, not needed long term
     //Storing the hashed password now and not the raw
