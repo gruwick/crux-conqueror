@@ -31,19 +31,27 @@ public class SecurityConfiguration {
 
     }
 
-    @Bean 
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http
+@Bean
+SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/test","/test/**").permitAll()
-            .requestMatchers("/login").permitAll()
-            .requestMatchers("/error").permitAll()
+            .requestMatchers("/test/**").permitAll()
+            .requestMatchers("/login", "/error").permitAll()
             .anyRequest().authenticated()
         )
-        .formLogin(Customizer.withDefaults())
-        .logout(Customizer.withDefaults());
+        .formLogin(form -> form
+            .loginPage("/login")
+            .loginProcessingUrl("/login")
+            .defaultSuccessUrl("/", true)
+            .failureUrl("/login?error")
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutSuccessUrl("/login?logout")
+        );
 
     return http.build();
-    }
+}
+
 }
