@@ -6,3 +6,35 @@
   <title>Crux Conqueror — Login</title>
   <link rel="stylesheet" th:href="@{/css/auth.css}">
 </head>
+
+<body>
+  <main class="auth-shell">
+    <section class="auth-card">
+      <h1>Crux Conqueror</h1>
+      <p class="subtitle">Please sign in</p>
+
+      <div class="msg error" th:if="${param.error}">
+        Bad credentials
+      </div>
+
+      <div class="msg success" th:if="${param.logout}">
+        You have successfully logged out
+      </div>
+
+      <form th:action="@{/login}" method="post" class="auth-form">
+        <label>
+          <span>Username</span>
+          <input type="text" name="username" required />
+        </label>
+
+        <label>
+          <span>Password</span>
+          <input type="password" name="password" required />
+        </label>
+
+        <button type="submit">Sign in</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
