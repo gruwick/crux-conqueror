@@ -38,6 +38,7 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/test","/test/**").permitAll()
             .requestMatchers("/login").permitAll()
+            .requestMatchers("/error").permitAll()
             .anyRequest().authenticated()
         )
         .formLogin(Customizer.withDefaults())
