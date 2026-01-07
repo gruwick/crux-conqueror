@@ -34,10 +34,10 @@ public User createUser(
      if(userRepo.existsByUsername(username)){
         throw new IllegalArgumentException("Your Username already exists and must be changed");
     }
-    if(userRepo.existsByEmail(username)){
+    if(userRepo.existsByEmail(email)){
         throw new IllegalArgumentException("Your Email already exists and must be changed");
     }
-    
+
     String hashedPassword = passwordEncoder.encode(password);
     //Reminder to myself to remove this after testing, not needed long term
     //Storing the hashed password now and not the raw
