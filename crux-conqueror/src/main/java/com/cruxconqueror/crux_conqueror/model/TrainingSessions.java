@@ -58,7 +58,7 @@ public class TrainingSessions {
 
     //Bouldering per grade mapped to BoulderGradeStat
 
-    @OneToMany(mappedBy = "session, cascade = CascadeType.ALL, orphanRemoval = true")
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoulderingGradesStat> gradeStats = new ArrayList<>();
 
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add Grade Breakdown</title>
+</head>
+<body>
+  <h1>Add bouldering grade breakdown</h1>
+  <p>
+    <a th:href="@{/sessions}">Done (back to sessions list)</a> |
+    <a th:href="@{/sessions/new}">Log another session</a>
+  </p>
+  <h3>Session info</h3>
+  <p>
+    Type: <span th:text="${session.sessionType}"></span><br/>
+    Date: <span th:text="${session.sessionDate}"></span><br/>
+    Duration: <span th:text="${session.durationMinutes}"></span> min<br/>
+    Intensity: <span th:text="${session.intensity}"></span>
+  </p>
+  <h3>Add one grade row</h3>
+  <form th:action="@{/sessions/{id}/grades(id=${session.id})}" th:object="${row}" method="post">
+    <label>
+      Grade:
+      <input type="text" th:field="*{grade}" placeholder="V4 / 6B+" required />
+    </label>
+    <br/><br/>
+    <label>
+      Attempts:
+      <input type="number" th:field="*{attempts}" min="0" required />
+    </label>
+    <br/><br/>
+    <label>
+      Tops:
+      <input type="number" th:field="*{tops}" min="0" required />
+    </label>
+    <br/><br/>
+    <button type="submit">Add row</button>
+  </form>
+  <hr/>
+  <h3>Current rows</h3>
+  <div th:if="${#lists.isEmpty(session.gradeStats)}">
+    <p>No grade rows added yet.</p>
+  </div>
+  <table th:if="${!#lists.isEmpty(session.gradeStats)}" border="1" cellpadding="6">
+    <thead>
+      <tr>
+        <th>Grade</th>
+        <th>Attempts</th>
+        <th>Tops</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="g : ${session.gradeStats}">
+        <td th:text="${g.grade}"></td>
+        <td th:text="${g.attempts}"></td>
+        <td th:text="${g.tops}"></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
