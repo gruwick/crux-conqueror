@@ -25,6 +25,10 @@
         Account created  you can sign in now. </div>
 
       <form th:action="@{/login}" method="post" class="auth-form">
+          <p style="margin-top:12px;">
+            Don't have an account?
+          <a th:href="@{/register}">Create one</a>
+          </p>
         <label>
           <span>Username</span>
           <input type="text" name="username" required />
