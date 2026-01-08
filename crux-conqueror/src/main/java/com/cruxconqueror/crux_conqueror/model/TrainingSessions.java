@@ -58,7 +58,45 @@ public class TrainingSessions {
 
     //Bouldering per grade mapped to BoulderGradeStat
 
-    @OneToMany(mappedBy = "session, cascasde = CascadeType.ALL, orphanRemoval = true")
+    @OneToMany(mappedBy = "session, cascade = CascadeType.ALL, orphanRemoval = true")
     private List<BoulderingGradesStat> gradeStats = new ArrayList<>();
+
+
+    //Constructors, getters and setters
+
+    public Long getId(){return id;}
+
+    public User getUser(){return user;}
+    public void setUser(User user){this.user = user;}
+
+    public LocalDateTime getSessionDate(){return sessionDate;}
+    public void setSessionDate(LocalDateTime sessionDate){this.sessionDate = sessionDate;}
+
+    public String getSessionType(){return sessionType;}
+    public void setSessionType(String sessionType){this.sessionType = sessionType;}
+
+    public Integer getDurationMinutes(){return durationMinutes;}
+    public void setDurationMinutes(Integer durationMinutes){this.durationMinutes = durationMinutes;}
+
+    public Integer getIntensity(){return intensity;}
+    public void setIntensity(Integer intensity){this.intensity = intensity;}
+
+    public String getHighestGrade(){return highestGrade;}
+    public void setHighestGrade(String highestGrade){this.highestGrade = highestGrade;}
+
+    public Integer getAttemptsTotal() { return attemptsTotal; }
+    public void setAttemptsTotal(Integer attemptsTotal) { this.attemptsTotal = attemptsTotal; }
+
+    public Integer getTopsTotal() { return topsTotal; }
+    public void setTopsTotal(Integer topsTotal) { this.topsTotal = topsTotal; }
+
+    public Integer getFlashesTotal() { return flashesTotal; }
+    public void setFlashesTotal(Integer flashesTotal) { this.flashesTotal = flashesTotal; }
+
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
+
+    public List<BoulderingGradesStat> getGradeStats() { return gradeStats; }
+    public void setGradeStats(List<BoulderingGradesStat> gradeStats) { this.gradeStats = gradeStats; }
 
 }
