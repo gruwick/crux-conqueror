@@ -60,6 +60,7 @@ public class TrainingSessions {
 
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoulderingGradesStat> gradeStats = new ArrayList<>();
+    public TrainingSessions() {}
 
 
     //Constructors, getters and setters
