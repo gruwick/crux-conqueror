@@ -37,7 +37,7 @@ SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/test/**").permitAll()
-            .requestMatchers("/login", "/error").permitAll()
+            .requestMatchers("/login", "/register", "/error").permitAll()
             .anyRequest().authenticated()
         )
         .formLogin(form -> form
