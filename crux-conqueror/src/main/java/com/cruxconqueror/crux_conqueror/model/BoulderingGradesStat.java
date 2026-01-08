@@ -44,12 +44,12 @@ public class BoulderingGradesStat {
     public Long getId() {return id;}
 
     public TrainingSessions getSession(){return session;}
-    public void setsession(TrainingSessions session){this.session = session;}
+    public void setSession(TrainingSessions session){this.session = session;}
 
-    public String getGrade()(return grade;)
+    public String getGrade(){return grade;}
     public void setGrade(String grade){this.grade = grade;}
 
-    public Integer getAttempts(){return tops;}
+    public Integer getAttempts(){return attempts;}
     public void setAttempts(Integer attempts){this.attempts = attempts;}
 
     public Integer getTops() {return tops;}
