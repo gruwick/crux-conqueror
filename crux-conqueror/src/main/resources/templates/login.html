@@ -21,6 +21,9 @@
         You have successfully logged out
       </div>
 
+      <div class="msg success" th:if="${param.registered}"> 
+        Account created  you can sign in now. </div>
+
       <form th:action="@{/login}" method="post" class="auth-form">
         <label>
           <span>Username</span>
