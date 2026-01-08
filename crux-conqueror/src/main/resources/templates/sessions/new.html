@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Log Session</title>
+</head>
+<body>
+  <h1>Log a training session</h1>
+  <p><a th:href="@{/sessions}">Back to sessions</a></p>
+  <form th:action="@{/sessions}" th:object="${session}" method="post">
+    <label>
+      Session type:
+      <select th:field="*{sessionType}" required>
+        <option value="">Select…</option>
+        <option value="BOULDERING">Bouldering</option>
+        <option value="STRENGTH">Strength</option>
+        <option value="FINGERBOARD">Fingerboard</option>
+      </select>
+    </label>
+    <br/><br/>
+    <label>
+      Date/time:
+      <input type="datetime-local" th:field="*{sessionDate}" />
+    </label>
+    <br/><br/>
+    <label>
+      Duration (minutes):
+      <input type="number" th:field="*{durationMinutes}" min="1" required />
+    </label>
+    <br/><br/>
+    <label>
+      Intensity (1–10):
+      <input type="number" th:field="*{intensity}" min="1" max="10" required />
+    </label>
+    <hr/>
+    <h3>Bouldering summary (optional)</h3>
+    <label>
+      Highest grade:
+      <input type="text" th:field="*{highestGrade}" placeholder="V5 / 6C+" />
+    </label>
+    <br/><br/>
+    <label>
+      Attempts total:
+      <input type="number" th:field="*{attemptsTotal}" min="0" />
+    </label>
+    <br/><br/>
+    <label>
+      Tops total:
+      <input type="number" th:field="*{topsTotal}" min="0" />
+    </label>
+    <br/><br/>
+    <label>
+      Flashes total:
+      <input type="number" th:field="*{flashesTotal}" min="0" />
+    </label>
+    <br/><br/>
+    <label>
+      Notes:
+      <br/>
+      <textarea th:field="*{notes}" rows="4" cols="40"></textarea>
+    </label>
+    <br/><br/>
+    <button type="submit">Save session</button>
+  </form>
+</body>
+</html>
