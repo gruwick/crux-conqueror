@@ -15,10 +15,10 @@
       <div class="msg error" th:if="${emailTaken}">
         Email is already in use.
       </div>
-      <div class="msg error" th:if="${#fields.hasErrors('*')}">
-        Please fix the errors below.
-      </div>
       <form th:action="@{/register}" th:object="${form}" method="post" class="auth-form">
+        <div class="msg error" th:if="${#fields.hasErrors('*')}">
+        Please fix the errors below.
+        </div>
         <label>
           <span>Username</span>
           <input type="text" th:field="*{username}" />
