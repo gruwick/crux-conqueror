@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav style="padding: 12px; border-bottom: 1px solid #ccc;">
+    <a th:href="@{/}" style="margin-right: 12px;">Home</a>
+    <a th:href="@{/sessions/new}" style="margin-right: 12px;">Log Session</a>
+    <a th:href="@{/sessions}" style="margin-right: 12px;">View Sessions</a>
+
+    <span style="float:right;">
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit">Logout</button>
+        </form>
+    </span>
+</nav>
+
+</body>
+</html>
