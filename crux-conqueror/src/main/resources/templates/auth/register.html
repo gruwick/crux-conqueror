@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Create account — Crux Conqueror</title>
+  <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-card">
+      <h1>Create account</h1>
+      <div class="msg error" th:if="${usernameTaken}">
+        Username is already taken.
+      </div>
+      <div class="msg error" th:if="${emailTaken}">
+        Email is already in use.
+      </div>
+      <div class="msg error" th:if="${#fields.hasErrors('*')}">
+        Please fix the errors below.
+      </div>
+      <form th:action="@{/register}" th:object="${form}" method="post" class="auth-form">
+        <label>
+          <span>Username</span>
+          <input type="text" th:field="*{username}" />
+          <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" th:field="*{email}" />
+          <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" th:field="*{password}" />
+          <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+        </label>
+        <button type="submit">Create account</button>
+      </form>
+      <p style="margin-top:12px;">
+        Already have an account?
+        <a th:href="@{/login}">Sign in</a>
+      </p>
+    </section>
+  </main>
+</body>
+</html>
