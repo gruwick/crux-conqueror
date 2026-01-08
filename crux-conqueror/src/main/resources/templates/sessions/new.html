@@ -5,6 +5,8 @@
   <title>Log Session</title>
 </head>
 <body>
+    <div th:replace="fragments/navbar :: body"></div>
+
   <h1>Log a training session</h1>
   <p><a th:href="@{/sessions}">Back to sessions</a></p>
   <form th:action="@{/sessions}" th:object="${session}" method="post">
