@@ -4,3 +4,57 @@
   <meta charset="UTF-8" />
   <title>Crux Conqueror - Dashboard</title>
 </head>
+
+<body>
+  <div th:replace="fragments/navbar :: body"></div>
+
+  <h1>Dashboard</h1>
+
+  <p th:text="'Signed in as: ' + ${username}"></p>
+
+  <h2>Session summary</h2>
+  <ul>
+    <li th:text="'Total sessions: ' + ${totalSessions}"></li>
+    <li th:text="'Sessions (last 7 days): ' + ${sessionsLast7Days}"></li>
+    <li th:text="'Sessions (last 30 days): ' + ${sessionsLast30Days}"></li>
+    <li th:text="'Total minutes (last 30 days): ' + ${totalMinutesLast30Days}"></li>
+    <li th:text="'Avg intensity (last 30 days): ' + ${#numbers.formatDecimal(avgIntensityLast30Days, 1, 1)}"></li>
+  </ul>
+
+  <h2>Bouldering totals (last 30 days)</h2>
+  <ul>
+    <li th:text="'Attempts: ' + ${attemptsLast30Days}"></li>
+    <li th:text="'Tops: ' + ${topsLast30Days}"></li>
+    <li th:text="'Flashes: ' + ${flashesLast30Days}"></li>
+  </ul>
+
+  <h2>Recent sessions</h2>
+
+  <div th:if="${#lists.isEmpty(recentSessions)}">
+    <p>No sessions logged yet. Try logging one!</p>
+    <a th:href="@{/sessions/new}">Log a session</a>
+  </div>
+
+  <table th:if="${!#lists.isEmpty(recentSessions)}" border="1" cellpadding="6">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Duration</th>
+        <th>Intensity</th>
+        <th>Highest Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="s : ${recentSessions}">
+        <td th:text="${#temporals.format(s.sessionDate, 'dd MMM yyyy HH:mm')}"></td>
+        <td th:text="${s.sessionType}"></td>
+        <td th:text="${s.durationMinutes} + ' min'"></td>
+        <td th:text="${s.intensity}"></td>
+        <td th:text="${s.highestGrade}"></td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
