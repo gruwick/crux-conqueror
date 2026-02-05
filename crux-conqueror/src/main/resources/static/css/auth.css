@@ -62,3 +62,119 @@ button {
 .msg.success {
   border: 1px solid #b8f2c2;
 }
+body.auth-login {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Full split page */
+.login-split {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Left side */
+.login-left {
+  display: grid;
+  place-items: center;
+  padding: 40px 24px;
+  background: #fff;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid #ddd;
+  padding: 24px;
+  background: #fff;
+}
+
+/* Brand block */
+.login-brand {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.login-logo {
+  width: 110px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.login-brandText {
+  font-weight: 800;
+  font-style: italic;
+  font-size: 22px;
+}
+
+/* Title */
+.login-title {
+  margin: 12px 0 18px;
+  font-size: 34px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Form */
+.login-form {
+  display: grid;
+  gap: 12px;
+}
+
+.login-field span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+}
+
+/* Black button like Figma */
+.login-btn {
+  padding: 12px;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #1f1f1f;
+  color: #fff;
+}
+
+.login-btn:hover {
+  filter: brightness(1.05);
+}
+
+/* Small text */
+.login-small, .login-legal {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+.login-small a, .login-legal a {
+  color: #1a4fff;
+}
+
+/* Right side image */
+.login-right {
+  background-image: url("/images/boulder-wall.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* Mobile: hide image panel */
+@media (max-width: 900px) {
+  .login-split {
+    grid-template-columns: 1fr;
+  }
+  .login-right {
+    display: none;
+  }
+}

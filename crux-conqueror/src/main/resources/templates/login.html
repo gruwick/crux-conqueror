@@ -7,41 +7,48 @@
   <link rel="stylesheet" th:href="@{/css/auth.css}">
 </head>
 
-<body>
-  <main class="auth-shell">
-    <section class="auth-card">
-      <h1>Crux Conqueror</h1>
-      <p class="subtitle">Please sign in</p>
+<body class="auth-login">
+  <main class="login-split">
+    <section class="login-left">
+      <section class="login-card">
+        <div class="login-brand">
+          <img class="login-logo" th:src="@{/images/logo.jpg}" alt="Crux Conqueror" />
+          <div class="login-brandText">Crux Conqueror</div>
+        </div>
 
-      <div class="msg error" th:if="${param.error}">
-        Bad credentials
-      </div>
+        <h1 class="login-title">Sign in</h1>
 
-      <div class="msg success" th:if="${param.logout}">
-        You have successfully logged out
-      </div>
+        <div class="msg error" th:if="${param.error}">Bad credentials</div>
+        <div class="msg success" th:if="${param.logout}">You have successfully logged out</div>
+        <div class="msg success" th:if="${param.registered}">Account created — you can sign in now.</div>
 
-      <div class="msg success" th:if="${param.registered}"> 
-        Account created  you can sign in now. </div>
+        <form th:action="@{/login}" method="post" class="login-form">
+          <label class="login-field">
+            <span>Username</span>
+            <input type="text" name="username" placeholder="Enter your username" autocomplete="username" required />
+          </label>
 
-      <form th:action="@{/login}" method="post" class="auth-form">
-          <p style="margin-top:12px;">
-            Don't have an account?
-          <a th:href="@{/register}">Create one</a>
+          <label class="login-field">
+            <span>Password</span>
+            <input type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required />
+          </label>
+
+          <button type="submit" class="login-btn">Continue</button>
+
+          <p class="login-small">
+            Don't have an account? <a th:href="@{/register}">Create one</a>
           </p>
-        <label>
-          <span>Username</span>
-          <input type="text" name="username" required />
-        </label>
 
-        <label>
-          <span>Password</span>
-          <input type="password" name="password" required />
-        </label>
-
-        <button type="submit">Sign in</button>
-      </form>
+          <p class="login-legal">
+            By signing in, I have read and agree to
+            <a th:href="@{/terms}">Terms</a> and
+            <a th:href="@{/privacy}">Privacy Policy</a>
+          </p>
+        </form>
+      </section>
     </section>
+
+    <section class="login-right" aria-hidden="true"></section>
   </main>
 </body>
 </html>
