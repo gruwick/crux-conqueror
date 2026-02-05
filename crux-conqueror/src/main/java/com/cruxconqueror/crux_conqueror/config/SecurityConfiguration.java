@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @EnableWebSecurity
 public class SecurityConfiguration {
     
+    
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
