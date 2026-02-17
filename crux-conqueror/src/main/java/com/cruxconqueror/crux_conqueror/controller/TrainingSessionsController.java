@@ -133,6 +133,12 @@ public class TrainingSessionsController {
 
         return "sessions/edit";
     }
+    @PostMapping("/{id}/edit")
+    public String editSubmit(@PathVariable Long id, 
+                             @ModelAttribute("session") TrainingSessions updated, Principal principal) {
+        
+        return ;
+    }
     
 
     private TrainingSessions requireOwnedSession(Long id, Principal principal) {
