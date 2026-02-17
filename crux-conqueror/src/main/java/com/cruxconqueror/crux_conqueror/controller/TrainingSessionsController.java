@@ -14,6 +14,9 @@ import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
@@ -122,6 +125,13 @@ public class TrainingSessionsController {
         TrainingSessions session = requireOwnedSession(id, principal);
         sessionsRepo.delete(session);
         return "redirect:/sessions";
+    }
+    @GetMapping("/{id}/edit")
+    public String editForm(@PathVariable Long id, Model model, Principal principal) {
+        TrainingSessions session = requireOwnedSession(id, principal);
+        model.addAttribute("session", session);
+
+        return "sessions/edit";
     }
     
 
