@@ -12,6 +12,9 @@ import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 @RequestMapping("/sessions")
@@ -40,7 +43,7 @@ public class TrainingSessionsController {
     @GetMapping("/new")
     public String newSession(Model model) {
         TrainingSessions session = new TrainingSessions();
-        session.setSessionDate(LocalDateTime.now()); // default
+        session.setSessionDate(LocalDateTime.now()); 
         model.addAttribute("session", session);
         return "sessions/new";
     }
@@ -49,8 +52,6 @@ public class TrainingSessionsController {
     public String create(@ModelAttribute("session") TrainingSessions session, Principal principal) {
         User user = userRepo.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException("Logged-in user not found"));
-       
-                // Adding in some basic validation to help
 
         if (session.getSessionType() == null || session.getSessionType().isBlank()) {
             throw new IllegalArgumentException("Session type is required");
@@ -108,18 +109,22 @@ public class TrainingSessionsController {
             throw new IllegalArgumentException("Tops must be 0 or more");
         }
 
-        // attach row to session
         row.setSession(session);
         session.getGradeStats().add(row);
 
-        // Cascade saves grade row
         sessionsRepo.save(session);
 
-        // lets you stay on add page so you can add multiple rows quickly
         return "redirect:/sessions/" + id + "/grades/new";
     }
 
-    // Ensure session belongs to logged-in user
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id, Principal principal){
+        TrainingSessions session = requireOwnedSession(id, principal);
+        sessionsRepo.delete(session);
+        return "redirect:/sessions";
+    }
+    
+
     private TrainingSessions requireOwnedSession(Long id, Principal principal) {
         TrainingSessions session = sessionsRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Session not found"));
