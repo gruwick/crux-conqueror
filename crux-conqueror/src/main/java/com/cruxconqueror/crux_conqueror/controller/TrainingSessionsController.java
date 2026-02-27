@@ -12,8 +12,6 @@ import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 
@@ -131,12 +129,41 @@ public class TrainingSessionsController {
 
         return "sessions/edit";
     }
-   /*  @PostMapping("/{id}/edit")
-    public String editSubmit(@PathVariable Long id, 
-                             @ModelAttribute("session") TrainingSessions updated, Principal principal) {
-        
-        return ;
-    } */
+@PostMapping("/{id}/edit")
+public String editSubmit(@PathVariable Long id,
+                         @ModelAttribute("session") TrainingSessions updated,
+                         Principal principal) {
+
+    TrainingSessions existing = requireOwnedSession(id, principal);
+
+    if (updated.getSessionType() == null || updated.getSessionType().isBlank()) {
+        throw new IllegalArgumentException("Session type is required");
+    }
+    if (updated.getDurationMinutes() == null || updated.getDurationMinutes() <= 0) {
+        throw new IllegalArgumentException("Duration must be greater than 0");
+    }
+    if (updated.getIntensity() == null || updated.getIntensity() < 1 || updated.getIntensity() > 10) {
+        throw new IllegalArgumentException("Intensity must be between 1 and 10");
+    }
+    if (updated.getSessionDate() == null) {
+        updated.setSessionDate(existing.getSessionDate());
+    }
+
+    existing.setSessionType(updated.getSessionType());
+    existing.setSessionDate(updated.getSessionDate());
+    existing.setDurationMinutes(updated.getDurationMinutes());
+    existing.setIntensity(updated.getIntensity());
+
+    existing.setHighestGrade(updated.getHighestGrade());
+    existing.setAttemptsTotal(updated.getAttemptsTotal() == null ? 0 : updated.getAttemptsTotal());
+    existing.setTopsTotal(updated.getTopsTotal() == null ? 0 : updated.getTopsTotal());
+    existing.setFlashesTotal(updated.getFlashesTotal() == null ? 0 : updated.getFlashesTotal());
+    existing.setNotes(updated.getNotes());
+
+    sessionsRepo.save(existing);
+
+    return "redirect:/sessions";
+}
     
 
     private TrainingSessions requireOwnedSession(Long id, Principal principal) {
