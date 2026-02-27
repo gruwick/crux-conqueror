@@ -164,7 +164,24 @@ public String editSubmit(@PathVariable Long id,
 
     return "redirect:/sessions";
 }
-    
+
+@PostMapping("/{id}/archive")
+public String archive(@PathVariable Long id, Principal principal) {
+    TrainingSessions session = requireOwnedSession(id, principal);
+    session.setArchived(true);
+    session.setArchivedAt(LocalDateTime.now());
+    sessionsRepo.save(session);
+    return "redirect:/sessions";
+}
+
+@PostMapping("/{id}/unarchive")
+public String unarchive(@PathVariable Long id, Principal principal) {
+    TrainingSessions session = requireOwnedSession(id, principal);
+    session.setArchived(false);
+    session.setArchivedAt(null);
+    sessionsRepo.save(session);
+    return "redirect:/sessions?showArchived=true";
+}
 
     private TrainingSessions requireOwnedSession(Long id, Principal principal) {
         TrainingSessions session = sessionsRepo.findById(id)

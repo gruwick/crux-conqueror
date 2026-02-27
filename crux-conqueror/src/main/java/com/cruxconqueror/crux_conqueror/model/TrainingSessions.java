@@ -34,6 +34,12 @@ public class TrainingSessions {
     @Column(name = "Intensity", nullable = false)
     private Integer intensity;
 
+    @Column(name = "Archived", nullable = false)
+    private Boolean archived = false;
+
+    @Column(name = "Archived_At")
+    private LocalDateTime archivedAt;
+
     //I want to split up my columns to have specific ones for Bouldering, Strength and Fingerboarding and will mark them
 
     //Bouldering columns
@@ -100,4 +106,9 @@ public class TrainingSessions {
     public List<BoulderingGradesStat> getGradeStats() { return gradeStats; }
     public void setGradeStats(List<BoulderingGradesStat> gradeStats) { this.gradeStats = gradeStats; }
 
+    public Boolean getArchived() { return archived; }
+    public void setArchived(Boolean archived) { this.archived = archived; }
+
+    public LocalDateTime getArchivedAt() { return archivedAt; }
+    public void setArchivedAt(LocalDateTime archivedAt) { this.archivedAt = archivedAt; }
 }
