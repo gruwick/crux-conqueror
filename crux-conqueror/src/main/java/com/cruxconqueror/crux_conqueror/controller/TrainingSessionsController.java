@@ -183,6 +183,30 @@ public String unarchive(@PathVariable Long id, Principal principal) {
     return "redirect:/sessions?showArchived=true";
 }
 
+@PostMapping("/bulk-delete")
+public String bulkDelete(@RequestParam(name="ids", required=false) List<Long> ids, Principal principal) {
+    if (ids == null || ids.isEmpty()) return "redirect:/sessions";
+
+    for (Long id : ids) {
+        TrainingSessions s = requireOwnedSession(id, principal);
+        sessionsRepo.delete(s);
+    }
+    return "redirect:/sessions";
+}
+
+@PostMapping("/bulk-archive")
+public String bulkArchive(@RequestParam(name="ids", required=false) List<Long> ids, Principal principal) {
+    if (ids == null || ids.isEmpty()) return "redirect:/sessions";
+
+    for (Long id : ids) {
+        TrainingSessions s = requireOwnedSession(id, principal);
+        s.setArchived(true);
+        s.setArchivedAt(LocalDateTime.now());
+        sessionsRepo.save(s);
+    }
+    return "redirect:/sessions";
+}
+
     private TrainingSessions requireOwnedSession(Long id, Principal principal) {
         TrainingSessions session = sessionsRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Session not found"));
