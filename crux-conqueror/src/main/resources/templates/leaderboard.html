@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:replace="fragments/navbar :: body"></div>
+
+<h1>Leaderboard (last 30 days)</h1>
+
+<p th:if="${myIndex >= 0}">
+  You are ranked: <b th:text="${myIndex + 1}"></b>
+</p>
+
+<table border="1" cellpadding="6">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>User</th>
+      <th>Sessions</th>
+      <th>Total minutes</th>
+      <th>Avg intensity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="r, stat : ${rows}"
+        th:style="${stat.index == myIndex} ? 'font-weight:bold;' : ''">
+      <td th:text="${stat.index + 1}"></td>
+      <td th:text="${r.username}"></td>
+      <td th:text="${r.sessionsLast30}"></td>
+      <td th:text="${r.minutesLast30}"></td>
+      <td th:text="${#numbers.formatDecimal(r.avgIntensityLast30, 1, 1)}"></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  <a href="#top">Jump to top</a>
+  <span th:if="${myIndex >= 0}">
+    | <a th:href="@{'#row-' + ${myIndex}}">Jump to me</a>
+  </span>
+</p>
+
+</body>
+</html>
