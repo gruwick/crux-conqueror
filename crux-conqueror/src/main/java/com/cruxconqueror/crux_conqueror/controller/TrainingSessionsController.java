@@ -28,16 +28,24 @@ public class TrainingSessionsController {
     }
     //Allow listing of sessions for current user
 
-    @GetMapping
-    public String list(Model model, Principal principal) {
-        User user = userRepo.findByUsername(principal.getName())
-                .orElseThrow(() -> new IllegalStateException("Logged-in user not found"));
+@GetMapping
+public String list(
+        @RequestParam(name = "showArchived", required = false, defaultValue = "false") boolean showArchived,
+        Model model,
+        Principal principal) {
 
-        List<TrainingSessions> sessions = sessionsRepo.findByUserOrderBySessionDateDesc(user);
-        model.addAttribute("sessions", sessions);
+    User user = userRepo.findByUsername(principal.getName())
+            .orElseThrow(() -> new IllegalStateException("Logged-in user not found"));
 
-        return "sessions/list";
-    }
+    List<TrainingSessions> sessions = showArchived
+            ? sessionsRepo.findByUserAndArchivedTrueOrderBySessionDateDesc(user)
+            : sessionsRepo.findByUserAndArchivedFalseOrderBySessionDateDesc(user);
+
+    model.addAttribute("sessions", sessions);
+    model.addAttribute("showArchived", showArchived);
+
+    return "sessions/list";
+}
     // for creating form
     @GetMapping("/new")
     public String newSession(Model model) {
