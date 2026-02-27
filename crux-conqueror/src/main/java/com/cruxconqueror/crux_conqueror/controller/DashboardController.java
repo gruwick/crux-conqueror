@@ -29,7 +29,8 @@ public class DashboardController {
     public String dashboard(Model model, Principal principal) {
         User user = userRepo.findByUsername(principal.getName())
                     .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
-       List<TrainingSessions> sessions = sessionsRepo.findByUserOrderBySessionDateDesc(user);
+        List<TrainingSessions> sessions =
+                sessionsRepo.findByUserAndArchivedFalseOrderBySessionDateDesc(user);
 
        LocalDateTime now = LocalDateTime.now();
        LocalDateTime last7 = now.minusDays(7);
