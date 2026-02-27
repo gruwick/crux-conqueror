@@ -44,6 +44,9 @@ public class TrainingSessionsController {
         TrainingSessions session = new TrainingSessions();
         session.setSessionDate(LocalDateTime.now()); 
         model.addAttribute("session", session);
+        model.addAttribute("formTitle", "Log a training session");
+        model.addAttribute("formAction", "/sessions");
+        model.addAttribute("submitText", "Save session");
         return "sessions/new";
     }
     
