@@ -60,10 +60,15 @@ public class LeaderboardController {
         }
 
         // Sort: sessions desc, minutes desc, username asc
-        rows.sort(Comparator
-                .comparingInt(LeaderboardRow::getSessionsLast30).reversed()
-                .thenComparingInt(LeaderboardRow::getMinutesLast30).reversed()
-                .thenComparing(LeaderboardRow::getUsername));
+        rows.sort((a, b) -> {
+            int sessionCompare = Integer.compare(b.getSessionsLast30(), a.getSessionsLast30());
+        if (sessionCompare != 0) return sessionCompare;
+
+            int minuteCompare = Integer.compare(b.getMinutesLast30(), a.getMinutesLast30());
+        if (minuteCompare != 0) return minuteCompare;
+
+        return a.getUsername().compareTo(b.getUsername());
+            });
 
                 //Error testing
             System.out.println("---- SORTED ROWS ----");
