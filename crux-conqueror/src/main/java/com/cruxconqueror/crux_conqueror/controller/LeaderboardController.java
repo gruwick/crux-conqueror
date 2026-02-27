@@ -65,6 +65,13 @@ public class LeaderboardController {
                 .thenComparingInt(LeaderboardRow::getMinutesLast30).reversed()
                 .thenComparing(LeaderboardRow::getUsername));
 
+                //Error testing
+            System.out.println("---- SORTED ROWS ----");
+            rows.forEach(r -> System.out.println(r.getUsername()
+                + " sessions=" + r.getSessionsLast30()
+                + " minutes=" + r.getMinutesLast30()));
+                    System.out.println("---------------------");
+
         // Find current user's rank
         String me = principal != null ? principal.getName() : null;
         int myIndex = -1;
