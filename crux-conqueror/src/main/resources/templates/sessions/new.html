@@ -7,9 +7,9 @@
 <body>
     <div th:replace="fragments/navbar :: body"></div>
 
-  <h1>Log a training session</h1>
+  <h1 th:text="${formTitle}">Log a training session</h1>
   <p><a th:href="@{/sessions}">Back to sessions</a></p>
-  <form th:action="@{/sessions}" th:object="${session}" method="post">
+  <form th:action="@{${formAction}}" th:object="${session}" method="post">
     <label>
       Session type:
       <select th:field="*{sessionType}" required>
@@ -62,7 +62,7 @@
       <textarea th:field="*{notes}" rows="4" cols="40"></textarea>
     </label>
     <br/><br/>
-    <button type="submit">Save session</button>
+    <button type="submit" th:text="${submitText}">Save session</button>
   </form>
 </body>
 </html>
