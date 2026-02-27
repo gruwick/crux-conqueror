@@ -138,7 +138,12 @@ public String list(
         TrainingSessions session = requireOwnedSession(id, principal);
         model.addAttribute("session", session);
 
-        return "sessions/edit";
+        model.addAttribute("formTitle", "Edit training session");
+        model.addAttribute("formAction", "/sessions/" + id + "/edit");
+        model.addAttribute("submitText", "Update session");
+
+
+        return "sessions/new";
     }
 @PostMapping("/{id}/edit")
 public String editSubmit(@PathVariable Long id,
