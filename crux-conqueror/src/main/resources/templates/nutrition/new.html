@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nutrition Entry</title>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: body"></div>
+
+<h1 th:text="${formTitle}">Add food entry</h1>
+
+<p><a th:href="@{/nutrition}">Back to nutrition</a></p>
+
+<form th:action="@{${formAction}}" th:object="${entry}" method="post">
+
+  <label>
+    Meal type:
+    <select th:field="*{mealType}" required>
+      <option value="">Select…</option>
+      <option value="BREAKFAST">Breakfast</option>
+      <option value="LUNCH">Lunch</option>
+      <option value="DINNER">Dinner</option>
+      <option value="SNACK">Snack</option>
+    </select>
+  </label>
+
+  <br/><br/>
+
+  <label>
+    Date/time:
+    <input type="datetime-local" th:field="*{entryDateTime}" />
+  </label>
+
+  <br/><br/>
+
+  <label>
+    Food name:
+    <input type="text" th:field="*{foodName}" required />
+  </label>
+
+  <br/><br/>
+
+  <hr/>
+
+  <h3>Macronutrients</h3>
+
+  <label>
+    Calories:
+    <input type="number" th:field="*{calories}" min="0" />
+  </label>
+
+  <br/><br/>
+
+  <label>
+    Carbs (g):
+    <input type="number" th:field="*{carbs}" min="0" />
+  </label>
+
+  <br/><br/>
+
+  <label>
+    Protein (g):
+    <input type="number" th:field="*{protein}" min="0" />
+  </label>
+
+  <br/><br/>
+
+  <label>
+    Fats (g):
+    <input type="number" th:field="*{fats}" min="0" />
+  </label>
+
+  <br/><br/>
+
+  <label>
+    Sugar (g):
+    <input type="number" th:field="*{sugar}" min="0" />
+  </label>
+
+  <br/><br/>
+
+  <label>
+    Salt (g):
+    <input type="number" th:field="*{salt}" min="0" />
+  </label>
+
+  <br/><br/>
+
+  <label>
+    Additional thoughts:
+    <br/>
+    <textarea th:field="*{additionalThoughts}" rows="4" cols="40"></textarea>
+  </label>
+
+  <br/><br/>
+
+  <button type="submit" th:text="${submitText}">Save entry</button>
+
+</form>
+
+</body>
+</html>
