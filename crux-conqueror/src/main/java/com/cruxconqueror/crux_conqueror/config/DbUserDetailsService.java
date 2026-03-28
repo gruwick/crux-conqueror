@@ -5,7 +5,11 @@ import com.cruxconqueror.crux_conqueror.repository.UserRepo;
 import java.util.Collections;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
-
+/**
+ * Implementation of my UserDetails service whcih is used by spring security.
+ * Retrieved user data from my database and converts it to a format that sping Security can use for authentication
+ * Allows it to be called automatically during login to verify user credentials
+ */
 @Service
 public class DbUserDetailsService implements UserDetailsService {
     
