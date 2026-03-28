@@ -51,8 +51,8 @@ public class FoodEntry {
     @Column(name = "Salt")
     private Integer salt;
 
-    @Column(name = "Additional Thoughts", columnDefinition = "TEXT")
-    private String additional_Thoughts;
+    @Column(name = "Additional_Thoughts", columnDefinition = "TEXT")
+    private String additionalThoughts;
 
     public FoodEntry() {}
 
@@ -88,7 +88,7 @@ public class FoodEntry {
     public Integer getSalt(){return salt;}
     public void setSalt(Integer salt){this.salt = salt;}
 
-    public String getAdditonalThoughts() {return additional_Thoughts;}
-    public void setAdditionalThoughts(String additional_Throughts){this.additional_Thoughts = additional_Throughts;}
+    public String getAdditonalThoughts() {return additionalThoughts;}
+    public void setAdditionalThoughts(String additional_Throughts){this.additionalThoughts = additional_Throughts;}
 
 }
