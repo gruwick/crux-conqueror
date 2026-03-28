@@ -88,7 +88,7 @@ public class FoodEntry {
     public Integer getSalt(){return salt;}
     public void setSalt(Integer salt){this.salt = salt;}
 
-    public String getAdditonalThoughts() {return additionalThoughts;}
+    public String getAdditionalThoughts() {return additionalThoughts;}
     public void setAdditionalThoughts(String additional_Throughts){this.additionalThoughts = additional_Throughts;}
 
 }
