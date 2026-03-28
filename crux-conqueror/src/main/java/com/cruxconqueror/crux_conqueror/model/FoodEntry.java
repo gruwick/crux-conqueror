@@ -24,7 +24,7 @@ public class FoodEntry {
     @Column(name = "Meal_Type", nullable =false, length = 20)
     private String mealType;
 
-    @Column(name = "Food_name", nullable = false, length = 50)
+    @Column(name = "Food_Name", nullable = false, length = 50)
     private String foodName;
 
     @Min(0)
