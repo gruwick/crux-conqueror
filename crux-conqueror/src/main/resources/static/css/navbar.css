@@ -1,22 +1,24 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1f1f1f;
-    padding: 10px 20px;
+nav {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    background-color: #181818;
 }
 
-.navbar a {
+nav a {
+    margin-right: 12px;
     color: white;
     text-decoration: none;
-    margin-right: 15px;
 }
 
-.navbar a:hover {
+nav a:hover {
     color: #8bc34a;
 }
 
-.nav-right button {
+nav span {
+    float: right;
+}
+
+nav button {
     background-color: #8bc34a;
     border: none;
     padding: 6px 12px;
