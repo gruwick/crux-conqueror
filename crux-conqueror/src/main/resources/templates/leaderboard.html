@@ -4,6 +4,7 @@
 <div th:replace="fragments/navbar :: body"></div>
 
 <h1>Leaderboard (last 30 days)</h1>
+<link rel="stylesheet" th:href="@{/css/navbar.css}">
 
 <p th:if="${myIndex >= 0}">
   You are ranked: <b th:text="${myIndex + 1}"></b>
