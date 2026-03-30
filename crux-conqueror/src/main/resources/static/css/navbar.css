@@ -1,5 +1,5 @@
 nav {
-    padding: 16px;
+    padding: 20px;
     border-bottom: 1px solid #ccc;
     background-color: #181818;
 }
@@ -21,7 +21,7 @@ nav span {
 nav button {
     background-color: #8bc34a;
     border: none;
-    padding: 6px 12px;
+    padding: 10px 12px;
     cursor: pointer;
 }
 body {
