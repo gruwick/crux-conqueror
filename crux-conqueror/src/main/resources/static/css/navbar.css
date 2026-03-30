@@ -21,7 +21,7 @@ nav span {
 nav button {
     background-color: #8bc34a;
     border: none;
-    padding: 6px 6px;
+    padding: 6px 12px;
     cursor: pointer;
 }
 body {
