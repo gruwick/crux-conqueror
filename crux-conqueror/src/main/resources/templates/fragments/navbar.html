@@ -1,22 +1,17 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
+<nav class="navbar">
+    <div class="nav-left">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/nutrition}">Nutrition</a>
+        <a th:href="@{/sessions/new}">Log Session</a>
+        <a th:href="@{/sessions}">View Sessions</a>
+        <a th:href="@{/leaderboard}">Leaderboard</a>
+        <a th:href="@{/community}">Community</a>
+    </div>
 
-<nav style="padding: 12px; border-bottom: 1px solid #ccc;">
-    <a th:href="@{/}" style="margin-right: 12px;">Home</a>
-    <a th:href="@{/dashboard}" style="margin-right: 12px;">Dashboard</a>
-     <a th:href="@{/nutrition}" style="margin-right: 12px;">Nutrition</a>
-    <a th:href="@{/sessions/new}" style="margin-right: 12px;">Log Session</a>
-    <a th:href="@{/sessions}" style="margin-right: 12px;">View Sessions</a>
-    <a th:href="@{/leaderboard}" style="margin-right: 12px;">Leaderboard</a>
-    <a th:href="@{/community}" style="margin-right: 12px;">Community</a>
-
-    <span style="float:right;">
-        <form th:action="@{/logout}" method="post" style="display:inline;">
+    <div class="nav-right">
+        <form th:action="@{/logout}" method="post">
             <button type="submit">Logout</button>
         </form>
-    </span>
+    </div>
 </nav>
-
-</body>
-</html>
