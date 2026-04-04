@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
 import com.cruxconqueror.crux_conqueror.model.User;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface TrainingSessionsRepo extends JpaRepository<TrainingSessions, Long> {
     List<TrainingSessions> findByUserOrderBySessionDateDesc(User user);
@@ -12,4 +13,6 @@ public interface TrainingSessionsRepo extends JpaRepository<TrainingSessions, Lo
     List<TrainingSessions> findByArchivedFalseAndSessionDateAfter(LocalDateTime since);
 
     long countByUserAndArchivedFalse(User user);
+    Optional<TrainingSessions> findFirstByUserAndArchivedFalseOrderBySessionDateDesc(User user);
+
 }
