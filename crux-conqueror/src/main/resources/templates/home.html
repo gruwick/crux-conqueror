@@ -2,18 +2,32 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crux Conqueror — Home</title>
   <link rel="stylesheet" th:href="@{/css/navbar.css}">
 </head>
 <body>
   <div th:replace="fragments/navbar :: body"></div>
 
-  <h1>Logged in </h1>
+  <h1>Welcome back , <span th:text="${username}">user</span></h1>
 
-  <p th:text="'Signed in as: ' + ${#authentication.name}"></p>
+  <p Track your Climbing, nutrition and Training all in one place!</p>
+    <h2>Quick Actions</h2>
+    <p>
+      <a th:href="@{/dashboard}"> Go to Dashboard</a> |
+      <a th:href="@{/sessions/new}"> Log Session</a>
+      <a th:href="@{/nutrition/new}"> Add a Food Entry </a>
+    </p>
 
-  <form th:action="@{/logout}" method="post">
-    <button type="submit">Logout</button>
-  </form>
+    <h2>Quick Summary</h2>
+    <ul>
+      <li th:text="'Total sessions: ' + ${totalSessions}"></li>
+      <li th:text="'Calories today: ' + ${caloriesToday}"></li>
+      <li th:text="'Protein today: ' + ${proteinToday}"></li>
+      <li th:text="'Latest meal: ' + ${latestMeal}"></li>
+      <li th:text="'Latest session grade: ' + ${latestSessionGrade}"></li>
+    </ul>
+
+  
 </body>
 </html>
