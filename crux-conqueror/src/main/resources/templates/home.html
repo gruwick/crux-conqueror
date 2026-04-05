@@ -1,34 +1,124 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crux Conqueror — Home</title>
-  <link rel="stylesheet" th:href="@{/css/navbar.css}">
-  <link rel="stylesheet" th:href="@{/css/home.css}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crux Conqueror - Home</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
-  <div th:replace="fragments/navbar :: body"></div>
+    <div th:replace="fragments/navbar :: body"></div>
 
-  <h1>Welcome back , <span th:text="${username}">user</span></h1>
+    <main class="page-container">
 
-  <p Track your Climbing, nutrition and Training all in one place!</p>
-    <h2>Quick Actions</h2>
-    <p>
-      <a th:href="@{/dashboard}"> Go to Dashboard</a> |
-      <a th:href="@{/sessions/new}"> Log Session</a>
-      <a th:href="@{/nutrition/new}"> Add a Food Entry </a>
-    </p>
+        <section class="hero">
+            <div class="hero-left">
+                <h1>Welcome back, <span th:text="${username}">user</span></h1>
+                <p class="hero-subtitle">
+                    Track your training, nutrition, and climbing progress in one place.
+                </p>
 
-    <h2>Quick Summary</h2>
-    <ul>
-      <li th:text="'Total sessions: ' + ${totalSessions}"></li>
-      <li th:text="'Calories today: ' + ${caloriesToday}"></li>
-      <li th:text="'Protein today: ' + ${proteinToday}"></li>
-      <li th:text="'Latest meal: ' + ${latestMeal}"></li>
-      <li th:text="'Latest session grade: ' + ${latestSessionGrade}"></li>
-    </ul>
+                <div class="hero-actions">
+                    <a th:href="@{/dashboard}" class="action-btn primary-btn">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Go to Dashboard</span>
+                    </a>
 
-  
+                    <a th:href="@{/sessions/new}" class="action-btn secondary-btn">
+                        <i class="fa-solid fa-dumbbell"></i>
+                        <span>Log Session</span>
+                    </a>
+
+                    <a th:href="@{/nutrition/new}" class="action-btn secondary-btn">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>Add Food Entry</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-panel">
+                    <p>Latest Meal</p>
+                    <h3 th:text="${latestMeal}">No meals logged</h3>
+                </div>
+
+                <div class="hero-panel">
+                    <p>Latest Session Grade</p>
+                    <h3 th:text="${latestSessionGrade}">N/A</h3>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary-section">
+            <h2>Quick Summary</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon sessions">
+                        <i class="fa-solid fa-mountain"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Total Sessions</p>
+                        <h3 th:text="${totalSessions}">0</h3>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon calories">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Calories Today</p>
+                        <h3 th:text="${caloriesToday}">0</h3>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon protein">
+                        <i class="fa-solid fa-drumstick-bite"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Protein Today</p>
+                        <h3><span th:text="${proteinToday}">0</span>g</h3>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon grade">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Latest Session Grade</p>
+                        <h3 th:text="${latestSessionGrade}">N/A</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div class="panel-card large-panel">
+                <h2>Training Focus</h2>
+                <p>Keep your sessions and nutrition logging consistent this week.</p>
+                <p>This section can later become your weekly tracker, insight card, or recommendation area.</p>
+            </div>
+
+            <div class="side-stack">
+                <div class="panel-card">
+                    <h2>Latest Meal</h2>
+                    <p th:text="${latestMeal}">No meals logged</p>
+                </div>
+
+                <div class="panel-card">
+                    <h2>Coming Next</h2>
+                    <p>Weekly goal tracker</p>
+                    <p>Community highlights</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
 </body>
 </html>
