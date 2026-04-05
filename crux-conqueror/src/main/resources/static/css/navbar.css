@@ -3,13 +3,23 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 18px;
+    padding: 14px 24px;
     border-bottom: 1px solid #ccc;
     background-color: #181818;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+nav .nav-links {
+    display:flex;
+    flex-wrap: wrap;
+    gap:12px;
 }
 
 nav a {
-    margin-right: 12px;
     color: white;
     text-decoration: none;
 }
@@ -18,18 +28,20 @@ nav a:hover {
     color: #8bc34a;
 }
 
-nav span {
-    float: right;
+nav .nav-actions {
+    display: flex;
+    align-items: center;
 }
 
 nav button {
     background-color: #8bc34a;
     border: none;
-    padding: 6px 12px;
+    padding: 8px 14px;
     cursor: pointer;
+    border-radius: 8px;
 }
 body {
     margin: 0;
     padding: 0;
-    padding-top: 70px;
+    padding-top: 75px;
 }
