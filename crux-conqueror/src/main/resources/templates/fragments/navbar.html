@@ -3,6 +3,7 @@
 <body>
 
 <nav>
+    <div class="nav-links">
     <a th:href="@{/}">Home</a>
     <a th:href="@{/dashboard}">Dashboard</a>
     <a th:href="@{/nutrition}">Nutrition</a>
@@ -10,12 +11,13 @@
     <a th:href="@{/sessions}">View Sessions</a>
     <a th:href="@{/leaderboard}">Leaderboard</a>
     <a th:href="@{/community}">Community</a>
+    </div>
 
-    <span>
+    <div class="nav-actions">
         <form th:action="@{/logout}" method="post" style="display:inline;">
             <button type="submit">Logout</button>
         </form>
-    </span>
+    </div>
 </nav>
 
 </body>
