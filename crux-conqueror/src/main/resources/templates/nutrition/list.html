@@ -3,103 +3,120 @@
 <head>
   <meta charset="UTF-8" />
   <title>Nutrition</title>
+
   <link rel="stylesheet" th:href="@{/css/navbar.css}">
+  <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
 
 <div th:replace="fragments/navbar :: body"></div>
 
-<h1>Nutrition</h1>
+<div class="page-container">
 
-<p>
-  <a th:href="@{/nutrition/new}">Add food entry</a> |
-  <a th:href="@{/dashboard}">Dashboard</a>
-</p>
+  <h1>Nutrition</h1>
 
-<h2 th:text="${'Showing: ' + #temporals.format(selectedDate, 'EEEE dd MMM yyyy')}"></h2>
+  <p>
+    <a th:href="@{/nutrition/new}">Add food entry</a> |
+    <a th:href="@{/dashboard}">Dashboard</a>
+  </p>
 
-<div>
-  <a th:href="@{/nutrition(date=${previousWeek})}">Previous Week</a>
-  |
-  <a th:href="@{/nutrition(date=${nextWeek})}">Next Week</a>
-</div>
+  <div class="week-nav">
 
-<br>
+    <h2 th:text="${'Showing: ' + #temporals.format(selectedDate, 'EEEE dd MMM yyyy')}"></h2>
 
-<div>
-  <span th:each="day : ${weekDays}">
-    <a th:href="@{/nutrition(date=${day})}"
-       th:text="${day}"
-       th:style="${day.equals(selectedDate)} ? 'font-weight:bold; color:green; margin-right:10px;' : 'margin-right:10px;'">
-    </a>
-  </span>
-</div>
+    <div>
+      <a th:href="@{/nutrition(date=${previousWeek})}">Previous Week</a>
+      |
+      <a th:href="@{/nutrition(date=${nextWeek})}">Next Week</a>
+    </div>
 
-<h2>Summary</h2>
+    <div class="week-days">
+      <span th:each="day : ${weekDays}">
+        <a th:href="@{/nutrition(date=${day})}"
+           th:text="${day}"
+           class="day-link"
+           th:classappend="${day.equals(selectedDate)} ? ' selected-day' : ''">
+        </a>
+      </span>
+    </div>
 
-<ul>
-  <li th:text="'Total Calories: ' + ${totalCalories}"></li>
-  <li th:text="'Total Carbs: ' + ${totalCarbs}"></li>
-  <li th:text="'Total Protein: ' + ${totalProtein}"></li>
-  <li th:text="'Total Fats: ' + ${totalFats}"></li>
-  <li th:text="'Total Sugar: ' + ${totalSugar}"></li>
-  <li th:text="'Total Salt: ' + ${totalSalt}"></li>
-</ul>
+  </div>
 
-<h2>Food entries</h2>
+  <div class="summary-section panel-card">
 
-<div th:if="${#lists.isEmpty(entries)}">
-  <p>No food entries yet.</p>
-</div>
+    <h2>Summary</h2>
 
-<div th:if="${!#lists.isEmpty(entries)}">
+    <ul>
+      <li th:text="'Total Calories: ' + ${totalCalories}"></li>
+      <li th:text="'Total Carbs: ' + ${totalCarbs}"></li>
+      <li th:text="'Total Protein: ' + ${totalProtein}"></li>
+      <li th:text="'Total Fats: ' + ${totalFats}"></li>
+      <li th:text="'Total Sugar: ' + ${totalSugar}"></li>
+      <li th:text="'Total Salt: ' + ${totalSalt}"></li>
+    </ul>
 
-  <table border="1" cellpadding="6">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Meal</th>
-        <th>Food</th>
-        <th>Calories</th>
-        <th>Carbs</th>
-        <th>Protein</th>
-        <th>Fats</th>
-        <th>Sugar</th>
-        <th>Salt</th>
-        <th>Thoughts</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+  </div>
 
-    <tbody>
-      <tr th:each="e : ${entries}">
-        <td th:text="${#temporals.format(e.entryDateTime, 'dd MMM yyyy HH:mm')}"></td>
-        <td th:text="${e.mealType}"></td>
-        <td th:text="${e.foodName}"></td>
-        <td th:text="${e.calories}"></td>
-        <td th:text="${e.carbs}"></td>
-        <td th:text="${e.protein}"></td>
-        <td th:text="${e.fats}"></td>
-        <td th:text="${e.sugar}"></td>
-        <td th:text="${e.salt}"></td>
-        <td th:text="${e.additionalThoughts} ?: '-'"></td>
+  <div class="table-section panel-card">
 
-        <td>
-          <a th:href="@{'/nutrition/' + ${e.id} + '/edit'}">Edit</a>
+    <h2>Food entries</h2>
 
-          <form th:action="@{'/nutrition/' + ${e.id} + '/delete'}"
-                method="post"
-                style="display:inline;">
-            <button type="submit"
-                    onclick="return confirm('Delete this entry?');">
-              Delete
-            </button>
-          </form>
-        </td>
+    <div th:if="${#lists.isEmpty(entries)}">
+      <p>No food entries yet.</p>
+    </div>
 
-      </tr>
-    </tbody>
-  </table>
+    <div th:if="${!#lists.isEmpty(entries)}">
+
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Meal</th>
+            <th>Food</th>
+            <th>Calories</th>
+            <th>Carbs</th>
+            <th>Protein</th>
+            <th>Fats</th>
+            <th>Sugar</th>
+            <th>Salt</th>
+            <th>Thoughts</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr th:each="e : ${entries}">
+            <td th:text="${#temporals.format(e.entryDateTime, 'dd MMM yyyy HH:mm')}"></td>
+            <td th:text="${e.mealType}"></td>
+            <td th:text="${e.foodName}"></td>
+            <td th:text="${e.calories}"></td>
+            <td th:text="${e.carbs}"></td>
+            <td th:text="${e.protein}"></td>
+            <td th:text="${e.fats}"></td>
+            <td th:text="${e.sugar}"></td>
+            <td th:text="${e.salt}"></td>
+            <td th:text="${e.additionalThoughts} ?: '-'"></td>
+
+            <td>
+              <a th:href="@{'/nutrition/' + ${e.id} + '/edit'}">Edit</a>
+
+              <form th:action="@{'/nutrition/' + ${e.id} + '/delete'}"
+                    method="post"
+                    style="display:inline;">
+                <button type="submit"
+                        onclick="return confirm('Delete this entry?');">
+                  Delete
+                </button>
+              </form>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
 
 </div>
 
