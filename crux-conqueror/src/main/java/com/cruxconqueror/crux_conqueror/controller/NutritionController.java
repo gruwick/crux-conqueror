@@ -10,69 +10,44 @@ import com.cruxconqueror.crux_conqueror.model.FoodEntry;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.FoodEntryRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
+import com.cruxconqueror.crux_conqueror.service.NutritionService;
 
 @Controller
 @RequestMapping("/nutrition")
 public class NutritionController {
     private final FoodEntryRepo foodEntryRepo;
     private final UserRepo userRepo;
+    private final NutritionService nutritionService;
 
-    public NutritionController(FoodEntryRepo foodEntryRepo, UserRepo userRepo){
+    public NutritionController(FoodEntryRepo foodEntryRepo, UserRepo userRepo, NutritionService nutritionService){
         this.foodEntryRepo = foodEntryRepo;
         this.userRepo = userRepo;
+        this.nutritionService = nutritionService;
     }
     
     @GetMapping
     public String list(Model model, Principal principal) {
         User user = userRepo.findByUsername(principal.getName())
         .orElseThrow(() -> new IllegalStateException("User not found"));
-        List<FoodEntry> entries = foodEntryRepo.findByUserOrderByEntryDateTimeDesc(user);
 
-        int totalCalories = entries.stream()
-                .map(FoodEntry::getCalories)
-                .filter(v -> v != null)
-                .mapToInt(Integer::intValue)
-                .sum();
+        List<FoodEntry> todaysEntries = nutritionService.getTodaysEntries(user);
+        int calories = nutritionService.getCaloriesFromEntries(todaysEntries);
+        int protein = nutritionService.getProteinFromEntries(todaysEntries);
+        int carbs = nutritionService.getCarbsFromEntries(todaysEntries);
+        int fat = nutritionService.getFatsFromEntries(todaysEntries);
+        int sugar = nutritionService.getSugarFromEntries(todaysEntries);
+        int salt = nutritionService.getSaltFromEntries(todaysEntries);
 
-        int totalCarbs = entries.stream()
-                .map(FoodEntry::getCarbs)
-                .filter(v -> v != null)
-                .mapToInt(Integer::intValue)
-                .sum();
 
-        int totalProtein = entries.stream()
-                .map(FoodEntry::getProtein)
-                .filter(v -> v != null)
-                .mapToInt(Integer::intValue)
-                .sum();
-
-        int totalFats = entries.stream()
-                .map(FoodEntry::getFats)
-                .filter(v -> v != null)
-                .mapToInt(Integer::intValue)
-                .sum();
-
-        int totalSugar = entries.stream()
-                .map(FoodEntry::getSugar)
-                .filter(v -> v != null)
-                .mapToInt(Integer::intValue)
-                .sum();
-
-        int totalSalt = entries.stream()
-                .map(FoodEntry::getSalt)
-                .filter(v -> v != null)
-                .mapToInt(Integer::intValue)
-                .sum();
-
-        List<FoodEntry> recentEntries = entries.stream().limit(10).toList();
-        model.addAttribute("entries", entries);
+        List<FoodEntry> recentEntries = todaysEntries.stream().limit(10).toList();
+        model.addAttribute("entries", recentEntries);
         model.addAttribute("recentEntries", recentEntries);
-        model.addAttribute("totalCalories", totalCalories);
-        model.addAttribute("totalCarbs", totalCarbs);
-        model.addAttribute("totalProtein", totalProtein);
-        model.addAttribute("totalFats", totalFats);
-        model.addAttribute("totalSugar", totalSugar);
-        model.addAttribute("totalSalt", totalSalt);
+        model.addAttribute("totalCalories", calories);
+        model.addAttribute("totalCarbs", carbs);
+        model.addAttribute("totalProtein", protein);
+        model.addAttribute("totalFats", fat);
+        model.addAttribute("totalSugar", sugar);
+        model.addAttribute("totalSalt", salt);
 
         return "nutrition/list";
 
