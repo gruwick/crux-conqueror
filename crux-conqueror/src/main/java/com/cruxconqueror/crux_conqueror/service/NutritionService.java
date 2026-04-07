@@ -1,7 +1,9 @@
 package com.cruxconqueror.crux_conqueror.service;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 import com.cruxconqueror.crux_conqueror.model.FoodEntry;
 import com.cruxconqueror.crux_conqueror.model.User;
@@ -14,13 +16,30 @@ public class NutritionService {
     public NutritionService(FoodEntryRepo foodEntryRepo){
         this.foodEntryRepo = foodEntryRepo;
     }
+
     public List<FoodEntry> getTodaysEntries(User user){
-        LocalDate today = LocalDate.now();
-        LocalDateTime startOfDay = today.atStartOfDay();
-        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+        return getEntriesForDate(user, LocalDate.now());
+    }
+    public List<FoodEntry> getEntriesForDate(User user, LocalDate date){
+
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
 
         return foodEntryRepo.findByUserAndEntryDateTimeBetweenOrderByEntryDateTimeDesc( user, startOfDay, endOfDay);
     }
+    public LocalDate getStartOfWeek(LocalDate date){
+        return date.with(DayOfWeek.MONDAY);
+    }
+
+    public List<LocalDate> getWeekDays(LocalDate selectedDate){
+        LocalDate startOfWeek = getStartOfWeek(selectedDate);
+        List<LocalDate> weekDays = new ArrayList<>();
+        for(int i =0; i<7; i++){
+            weekDays.add(startOfWeek.plusDays(i));
+        }
+        return weekDays;
+    }
+    
 
     public int getCaloriesFromEntries(List<FoodEntry> entries){
         return entries.stream()
@@ -70,4 +89,5 @@ public class NutritionService {
                 .map(FoodEntry::getFoodName)
                 .orElse("No meals have been logged");
     }
+
 }

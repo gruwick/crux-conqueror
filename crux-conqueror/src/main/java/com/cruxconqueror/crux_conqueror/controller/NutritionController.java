@@ -3,6 +3,7 @@ package com.cruxconqueror.crux_conqueror.controller;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.time.LocalDate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,15 @@ public class NutritionController {
     }
     
     @GetMapping
-    public String list(Model model, Principal principal) {
+    public String list(@RequestParam(required = false)String date, Model model, Principal principal) {
         User user = userRepo.findByUsername(principal.getName())
-        .orElseThrow(() -> new IllegalStateException("User not found"));
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+        LocalDate selectedDate;
+        if(date != null && !date.isBlank()) {
+            selectedDate = LocalDate.parse(date);
+        } else {
+            selectedDate =LocalDate.now();
+        }
 
         List<FoodEntry> todaysEntries = nutritionService.getTodaysEntries(user);
         int calories = nutritionService.getCaloriesFromEntries(todaysEntries);
@@ -37,6 +44,12 @@ public class NutritionController {
         int fat = nutritionService.getFatsFromEntries(todaysEntries);
         int sugar = nutritionService.getSugarFromEntries(todaysEntries);
         int salt = nutritionService.getSaltFromEntries(todaysEntries);
+
+        LocalDate startOfWeek = nutritionService.getStartOfWeek(selectedDate);
+        List<LocalDate> weekDays = nutritionService.getWeekDays(selectedDate);
+
+        LocalDate previousWeek = startOfWeek.minusWeeks(1);
+        LocalDate nextWeek = startOfWeek.plusWeeks(1);
 
 
         List<FoodEntry> recentEntries = todaysEntries.stream().limit(10).toList();
