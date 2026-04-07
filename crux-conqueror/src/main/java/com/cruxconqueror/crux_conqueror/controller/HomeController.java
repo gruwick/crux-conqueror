@@ -13,6 +13,7 @@ import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.FoodEntryRepo;
 import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
+import com.cruxconqueror.crux_conqueror.service.NutritionService;
 
 @Controller
 public class HomeController {
@@ -20,11 +21,13 @@ public class HomeController {
     private final UserRepo userRepo;
     private final TrainingSessionsRepo sessionsRepo;
     private final FoodEntryRepo foodEntryRepo;
+    private final NutritionService nutritionService;
 
-    public HomeController(UserRepo userRepo, TrainingSessionsRepo sessionsRepo, FoodEntryRepo foodEntryRepo){
+    public HomeController(UserRepo userRepo, TrainingSessionsRepo sessionsRepo, FoodEntryRepo foodEntryRepo, NutritionService nutritionService){
         this.userRepo = userRepo;
         this.sessionsRepo = sessionsRepo;
         this.foodEntryRepo = foodEntryRepo;
+        this.nutritionService = nutritionService;
     }
 
     @GetMapping("/")
@@ -35,29 +38,10 @@ public class HomeController {
           User user = userRepo.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
 
-        LocalDate today = LocalDate.now();
-        LocalDateTime startOfDay = today.atStartOfDay();
-        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
-
-        List<FoodEntry> todaysEntries =
-                foodEntryRepo.findByUserAndEntryDateTimeBetweenOrderByEntryDateTimeDesc(
-                        user, startOfDay, endOfDay);
-
-        int caloriesToday = todaysEntries.stream()
-                .map(FoodEntry::getCalories)
-                .filter(v -> v != null)
-                .mapToInt(Integer::intValue)
-                .sum();
-
-        int proteinToday = todaysEntries.stream()
-                .map(FoodEntry::getProtein)
-                .filter(v -> v != null)
-                .mapToInt(Integer::intValue)
-                .sum();
-
-        String latestMeal = foodEntryRepo.findFirstByUserOrderByEntryDateTimeDesc(user)
-                .map(FoodEntry::getFoodName)
-                .orElse("No meals logged");
+        List<FoodEntry> todaysEntries = nutritionService.getTodaysEntries(user);
+        int caloriesToday = nutritionService.getCaloriesFromEntries(todaysEntries);
+        int proteinToday = nutritionService.getProteinFromEntries(todaysEntries);
+        String latestMeal = nutritionService.getLatestMeal(user);
 
         String latestSessionGrade = sessionsRepo.findFirstByUserAndArchivedFalseOrderBySessionDateDesc(user)
                 .map(s -> s.getHighestGrade() == null || s.getHighestGrade().isBlank() ? "N/A" : s.getHighestGrade())
