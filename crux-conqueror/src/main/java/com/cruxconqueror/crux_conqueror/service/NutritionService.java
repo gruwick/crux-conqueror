@@ -43,6 +43,28 @@ public class NutritionService {
                 .mapToInt(Integer::intValue)
                 .sum();
     }
+    public int getFatsFromEntries(List<FoodEntry> entries) {
+        return entries.stream()
+                .map(FoodEntry::getFats)
+                .filter(v -> v !=null)
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
+    public int getSaltFromEntries(List<FoodEntry> entries) {
+        return entries.stream()
+                .map(FoodEntry::getSalt)
+                .filter(v -> v !=null)
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
+    public int getSugarFromEntries(List<FoodEntry> entries) {
+        return entries.stream()
+                .map(FoodEntry::getSugar)
+                .filter(v -> v !=null)
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
+
     public String getLatestMeal(User user) {
         return foodEntryRepo.findFirstByUserOrderByEntryDateTimeDesc(user)
                 .map(FoodEntry::getFoodName)
