@@ -1,14 +1,11 @@
 package com.cruxconqueror.crux_conqueror.controller;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.cruxconqueror.crux_conqueror.model.FoodEntry;
-import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.FoodEntryRepo;
 import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
@@ -20,13 +17,11 @@ public class HomeController {
 
     private final UserRepo userRepo;
     private final TrainingSessionsRepo sessionsRepo;
-    private final FoodEntryRepo foodEntryRepo;
     private final NutritionService nutritionService;
 
     public HomeController(UserRepo userRepo, TrainingSessionsRepo sessionsRepo, FoodEntryRepo foodEntryRepo, NutritionService nutritionService){
         this.userRepo = userRepo;
         this.sessionsRepo = sessionsRepo;
-        this.foodEntryRepo = foodEntryRepo;
         this.nutritionService = nutritionService;
     }
 
