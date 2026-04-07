@@ -17,19 +17,32 @@
 
   <h1>Nutrition</h1>
 
-  <p>
-    <a th:href="@{/nutrition/new}">Add food entry</a> |
-    <a th:href="@{/dashboard}">Dashboard</a>
-  </p>
+  <div class="nutrition-actions">
+    <a th:href="@{/nutrition/new}" class="action-btn primary-btn">
+      <i class="fa-solid fa-plus"></i>
+      <span>Add food entry</span>
+    </a>
+
+    <a th:href="@{/dashboard}" class="secondary-page-btn">
+      <i class="fa-solid fa-chart-line"></i>
+      <span>Dashboard</span>
+    </a>
+  </div>
 
   <div class="week-nav">
 
     <h2 th:text="${'Showing: ' + #temporals.format(selectedDate, 'EEEE dd MMM yyyy')}"></h2>
 
-    <div>
-      <a th:href="@{/nutrition(date=${previousWeek})}">Previous Week</a>
-      |
-      <a th:href="@{/nutrition(date=${nextWeek})}">Next Week</a>
+    <div class="week-controls">
+      <a th:href="@{/nutrition(date=${previousWeek})}" class="week-btn">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Previous Week</span>
+      </a>
+
+      <a th:href="@{/nutrition(date=${nextWeek})}" class="week-btn">
+        <span>Next Week</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
     </div>
 
     <div class="week-days">
@@ -44,75 +57,75 @@
 
   </div>
 
-<div class="summary-section panel-card">
+  <div class="summary-section panel-card">
 
-  <h2>Summary</h2>
+    <h2>Summary</h2>
 
-  <div class="stats-grid nutrition-stats-grid">
+    <div class="stats-grid nutrition-stats-grid">
 
-    <div class="stat-card">
-      <div class="stat-icon calories">
-        <i class="fa-solid fa-fire"></i>
+      <div class="stat-card">
+        <div class="stat-icon calories">
+          <i class="fa-solid fa-fire"></i>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Calories</p>
+          <h3 th:text="${totalCalories}">0</h3>
+        </div>
       </div>
-      <div class="stat-content">
-        <p class="stat-label">Calories</p>
-        <h3 th:text="${totalCalories}">0</h3>
-      </div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-icon carbs-icon">
-        <i class="fa-solid fa-bread-slice"></i>
+      <div class="stat-card">
+        <div class="stat-icon carbs-icon">
+          <i class="fa-solid fa-bread-slice"></i>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Carbs</p>
+          <h3 th:text="${totalCarbs}">0</h3>
+        </div>
       </div>
-      <div class="stat-content">
-        <p class="stat-label">Carbs</p>
-        <h3 th:text="${totalCarbs}">0</h3>
-      </div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-icon protein">
-        <i class="fa-solid fa-drumstick-bite"></i>
+      <div class="stat-card">
+        <div class="stat-icon protein">
+          <i class="fa-solid fa-drumstick-bite"></i>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Protein</p>
+          <h3><span th:text="${totalProtein}">0</span>g</h3>
+        </div>
       </div>
-      <div class="stat-content">
-        <p class="stat-label">Protein</p>
-        <h3><span th:text="${totalProtein}">0</span>g</h3>
-      </div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-icon fats-icon">
-        <i class="fa-solid fa-cheese"></i>
+      <div class="stat-card">
+        <div class="stat-icon fats-icon">
+          <i class="fa-solid fa-cheese"></i>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Fats</p>
+          <h3><span th:text="${totalFats}">0</span>g</h3>
+        </div>
       </div>
-      <div class="stat-content">
-        <p class="stat-label">Fats</p>
-        <h3><span th:text="${totalFats}">0</span>g</h3>
-      </div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-icon sugar-icon">
-        <i class="fa-solid fa-candy-cane"></i>
+      <div class="stat-card">
+        <div class="stat-icon sugar-icon">
+          <i class="fa-solid fa-candy-cane"></i>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Sugar</p>
+          <h3><span th:text="${totalSugar}">0</span>g</h3>
+        </div>
       </div>
-      <div class="stat-content">
-        <p class="stat-label">Sugar</p>
-        <h3><span th:text="${totalSugar}">0</span>g</h3>
-      </div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-icon salt-icon">
-        <i class="fa-solid fa-flask"></i>
+      <div class="stat-card">
+        <div class="stat-icon salt-icon">
+          <i class="fa-solid fa-flask"></i>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Salt</p>
+          <h3><span th:text="${totalSalt}">0</span>g</h3>
+        </div>
       </div>
-      <div class="stat-content">
-        <p class="stat-label">Salt</p>
-        <h3><span th:text="${totalSalt}">0</span>g</h3>
-      </div>
+
     </div>
 
   </div>
-
-</div>
 
   <div class="table-section panel-card">
 
@@ -124,7 +137,7 @@
 
     <div th:if="${!#lists.isEmpty(entries)}">
 
-      <table>
+      <table class="nutrition-table">
         <thead>
           <tr>
             <th>Date</th>
@@ -154,13 +167,14 @@
             <td th:text="${e.salt}"></td>
             <td th:text="${e.additionalThoughts} ?: '-'"></td>
 
-            <td>
-              <a th:href="@{'/nutrition/' + ${e.id} + '/edit'}">Edit</a>
+            <td class="table-actions">
+              <a th:href="@{'/nutrition/' + ${e.id} + '/edit'}" class="table-link">Edit</a>
 
               <form th:action="@{'/nutrition/' + ${e.id} + '/delete'}"
                     method="post"
-                    style="display:inline;">
+                    class="inline-form">
                 <button type="submit"
+                        class="delete-btn"
                         onclick="return confirm('Delete this entry?');">
                   Delete
                 </button>
