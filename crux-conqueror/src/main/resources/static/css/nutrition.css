@@ -1,0 +1,181 @@
+.week-nav {
+    margin-bottom: 28px;
+}
+.week-nav h2 {
+    margin: 0 0 16px;
+    font-size: 2rem;
+    color: #0f172a;
+}
+.week-controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+.week-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    background-color: white;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    transition: 0.2s ease;
+}
+
+.week-btn:hover {
+    background-color: #0f172a;
+    color: white;
+    border-color: #0f172a;
+}
+
+.nutrition-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+.secondary-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    background-color: white;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    transition: 0.2s ease;
+}
+
+.secondary-page-btn:hover {
+    background-color: #eef2f7;
+}
+.week-days {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(110px, 1fr));
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.week-days span {
+    display: block;
+}
+.day-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    padding: 8px 12px;
+    text-decoration: none;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    color: #1f2937;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.day-link:hover {
+    transform: translateY(-2px);
+    border-color: #22c55e;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+}
+
+.selected-day {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: white;
+    border-color: #16a34a;
+}
+
+.summary-section {
+    margin-bottom: 30px;
+}
+.summary-section h2 {
+    margin-bottom: 16px;
+}
+
+.nutrition-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+.carbs-icon {
+    background: #2563eb;
+}
+
+.fats-icon {
+    background: #d97706;
+}
+
+.sugar-icon {
+    background: #db2777;
+}
+.salt-icon {
+    background: #64748b;
+}
+.table-section {
+    overflow-x: auto;
+}
+.nutrition-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 950px;
+}
+
+.nutrition-table thead th {
+    text-align: left;
+    padding: 14px 12px;
+    font-size: 0.95rem;
+    background-color: #f8fafc;
+    color: #334155;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.nutrition-table tbody td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+}
+
+.nutrition-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.table-link {
+    text-decoration: none;
+    font-weight: 600;
+    color: #2563eb;
+}
+
+.table-link:hover {
+    text-decoration: underline;
+}
+
+.inline-form {
+    display: inline;
+    margin: 0;
+}
+
+.delete-btn {
+    border: none;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+    background-color: #fecaca;
+}
