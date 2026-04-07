@@ -29,7 +29,7 @@
 <div>
   <span th:each="day : ${weekDays}">
     <a th:href="@{/nutrition(date=${day})}"
-       th:text="${#temporals.format(day, 'EEE dd')}"
+       th:text="${day}"
        th:style="${day.equals(selectedDate)} ? 'font-weight:bold; color:green; margin-right:10px;' : 'margin-right:10px;'">
     </a>
   </span>
