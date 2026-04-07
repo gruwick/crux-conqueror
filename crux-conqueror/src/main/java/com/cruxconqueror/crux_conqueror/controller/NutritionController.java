@@ -37,7 +37,7 @@ public class NutritionController {
             selectedDate =LocalDate.now();
         }
 
-        List<FoodEntry> todaysEntries = nutritionService.getTodaysEntries(user);
+        List<FoodEntry> todaysEntries = nutritionService.getEntriesForDate(user, selectedDate);
         int calories = nutritionService.getCaloriesFromEntries(todaysEntries);
         int protein = nutritionService.getProteinFromEntries(todaysEntries);
         int carbs = nutritionService.getCarbsFromEntries(todaysEntries);
@@ -61,6 +61,10 @@ public class NutritionController {
         model.addAttribute("totalFats", fat);
         model.addAttribute("totalSugar", sugar);
         model.addAttribute("totalSalt", salt);
+        model.addAttribute("selectedDate", selectedDate);
+        model.addAttribute("weekSays", weekDays);
+        model.addAttribute("previousWeek", previousWeek);
+        model.addAttribute("nextWeek", nextWeek);
 
         return "nutrition/list";
 
