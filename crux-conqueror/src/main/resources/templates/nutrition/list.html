@@ -42,20 +42,75 @@
 
   </div>
 
-  <div class="summary-section panel-card">
+<div class="summary-section panel-card">
 
-    <h2>Summary</h2>
+  <h2>Summary</h2>
 
-    <ul>
-      <li th:text="'Total Calories: ' + ${totalCalories}"></li>
-      <li th:text="'Total Carbs: ' + ${totalCarbs}"></li>
-      <li th:text="'Total Protein: ' + ${totalProtein}"></li>
-      <li th:text="'Total Fats: ' + ${totalFats}"></li>
-      <li th:text="'Total Sugar: ' + ${totalSugar}"></li>
-      <li th:text="'Total Salt: ' + ${totalSalt}"></li>
-    </ul>
+  <div class="stats-grid nutrition-stats-grid">
+
+    <div class="stat-card">
+      <div class="stat-icon calories">
+        <i class="fa-solid fa-fire"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Calories</p>
+        <h3 th:text="${totalCalories}">0</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon carbs-icon">
+        <i class="fa-solid fa-bread-slice"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Carbs</p>
+        <h3 th:text="${totalCarbs}">0</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon protein">
+        <i class="fa-solid fa-drumstick-bite"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Protein</p>
+        <h3><span th:text="${totalProtein}">0</span>g</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon fats-icon">
+        <i class="fa-solid fa-cheese"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Fats</p>
+        <h3><span th:text="${totalFats}">0</span>g</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon sugar-icon">
+        <i class="fa-solid fa-candy-cane"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Sugar</p>
+        <h3><span th:text="${totalSugar}">0</span>g</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon salt-icon">
+        <i class="fa-solid fa-flask"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Salt</p>
+        <h3><span th:text="${totalSalt}">0</span>g</h3>
+      </div>
+    </div>
 
   </div>
+
+</div>
 
   <div class="table-section panel-card">
 
