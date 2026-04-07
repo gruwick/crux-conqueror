@@ -16,6 +16,25 @@
   <a th:href="@{/dashboard}">Dashboard</a>
 </p>
 
+<h2> th:text="'Showing: ' + ${#temporals.format(selectedDate, 'EEEE dd MMM yyyy')}"></h2>
+<div>
+  <a th:href="@{/nutrition(date=${previousWeek})}">Previous Week</a>
+
+  <a th:href="@{/nutrition(date=${nextWeek})}">Next Week</a>
+</div>
+
+<br>
+
+<div>
+  <span> th:each="day : ${weekDays}">
+    <a> th:href="@{/nutrition(date=${day})}"
+        th:href="${#temporals.format(day, 'EEE dd')}"
+        th:href="${day.equals(selectedDate)} ? 'font-weight:bold; color:green; margin-right: 10px;' : 'margin-right:10px;'">
+    </a>
+  </span>
+</div>
+
+
 <h2>Summary</h2>
 
 <ul>
