@@ -62,7 +62,7 @@ public class NutritionController {
         model.addAttribute("totalSugar", sugar);
         model.addAttribute("totalSalt", salt);
         model.addAttribute("selectedDate", selectedDate);
-        model.addAttribute("weekSays", weekDays);
+        model.addAttribute("weekDays", weekDays);
         model.addAttribute("previousWeek", previousWeek);
         model.addAttribute("nextWeek", nextWeek);
 
