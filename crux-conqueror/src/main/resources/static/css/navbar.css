@@ -78,10 +78,10 @@ nav .nav-actions {
 nav button {
     background-color: #8bc34a;
     border: none;
-    padding: 9px 16px;
+    padding: 11px 18px;
     cursor: pointer;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 10px;
+    font-weight: 700;
 }
 
 nav button:hover {
