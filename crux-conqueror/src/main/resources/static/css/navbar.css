@@ -23,7 +23,7 @@ nav .nav-inner {
 nav .nav-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     color: white;
     text-decoration: none;
     flex-shrink: 0;
