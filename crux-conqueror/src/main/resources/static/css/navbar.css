@@ -53,7 +53,7 @@ nav .brand-text {
 nav .nav-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 18px;
+    gap: 28px;
     align-items: center;
     justify-content: center;
     flex: 1;
@@ -62,7 +62,7 @@ nav .nav-links {
 nav a {
     color: white;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 800;
 }
 
 nav a:hover {
@@ -100,7 +100,7 @@ nav .dropdown-toggle {
 
 nav .dropdown-toggle::after {
     content: " ▼";
-    font-size: 0.7rem;
+    font-size: 1.1rem;
 }
 
 nav .dropdown-menu {
