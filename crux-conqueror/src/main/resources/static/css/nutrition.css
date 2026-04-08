@@ -39,12 +39,12 @@
 }
 
 .week-nav {
-    margin-bottom: 26px;
+    margin-bottom: 22px;
 }
 
 .week-nav h2 {
-    margin: 0 0 18px;
-    font-size: 1.9rem;
+    margin: 0 0 14px;
+    font-size: 1.75rem;
     color: #0f172a;
 }
 
@@ -52,7 +52,7 @@
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
 }
 
 .week-btn {
@@ -90,14 +90,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 62px;
-    padding: 10px 12px;
+    min-height: 52px;
+    padding: 8px 10px;
     text-decoration: none;
     background: white;
     border: 1px solid #e5e7eb;
-    border-radius: 14px;
+    border-radius: 12px;
     color: #1f2937;
     font-weight: 700;
+    font-size: 0.95rem;
     box-shadow: 0 6px 16px rgba(0,0,0,0.06);
     transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
@@ -116,6 +117,11 @@
 
 .summary-section {
     margin-bottom: 28px;
+}
+
+.summary-section.panel-card,
+.table-section.panel-card {
+    padding: 20px;
 }
 
 .summary-section h2,
