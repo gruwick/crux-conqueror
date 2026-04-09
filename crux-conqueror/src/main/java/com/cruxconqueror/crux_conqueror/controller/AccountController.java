@@ -25,7 +25,7 @@ public class AccountController {
         .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
 
         model.addAttribute("user", user);
-        return "account";
+        return "Account/account";
     }
 
     @PostMapping("/account")

@@ -86,7 +86,7 @@ public class DashboardController {
 
         model.addAttribute("recentSessions", recentSessions);
 
-        return "dashboard";
+        return "dashboard/dashboard";
     }
 }
 

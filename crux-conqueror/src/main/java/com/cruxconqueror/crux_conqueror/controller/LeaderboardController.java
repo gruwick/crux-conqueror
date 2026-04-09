@@ -92,6 +92,6 @@ public class LeaderboardController {
         model.addAttribute("rows", rows);
         model.addAttribute("myIndex", myIndex);
 
-        return "leaderboard";
+        return "community/leaderboard";
     }
 }

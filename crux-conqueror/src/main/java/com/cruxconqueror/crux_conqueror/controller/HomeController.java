@@ -28,7 +28,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model, Principal principal) {
         if(principal == null) {
-        return "home";
+        return "home/home";
     }
           User user = userRepo.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
@@ -51,6 +51,6 @@ public class HomeController {
         model.addAttribute("latestMeal", latestMeal);
         model.addAttribute("latestSessionGrade", latestSessionGrade);
 
-        return "home";  
+        return "home/home";  
 }
 }
