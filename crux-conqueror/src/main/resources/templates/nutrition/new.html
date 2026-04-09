@@ -1,104 +1,110 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <title>Nutrition Entry</title>
-  <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nutrition Entry</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/nutrition.css}">
 </head>
 <body>
 
 <div th:replace="fragments/navbar :: navbar"></div>
 
-<h1 th:text="${formTitle}">Add food entry</h1>
+<main class="page-container">
+    <section class="form-page-header">
+        <h1 th:text="${formTitle}">Add food entry</h1>
+        <p>Log your meal details and nutritional values for the day.</p>
+    </section>
 
-<p><a th:href="@{/nutrition}">Back to nutrition</a></p>
+    <div class="nutrition-actions">
+        <a th:href="@{/nutrition}" class="secondary-page-btn">Back to nutrition</a>
+    </div>
 
-<form th:action="@{${formAction}}" th:object="${entry}" method="post">
+    <section class="panel-card nutrition-form-card">
+        <form th:action="@{${formAction}}" th:object="${entry}" method="post" class="nutrition-form">
+            
+            <div class="form-section">
+                <h2>Entry Details</h2>
 
-  <label>
-    Meal type:
-    <select th:field="*{mealType}" required>
-      <option value="">Select…</option>
-      <option value="BREAKFAST">Breakfast</option>
-      <option value="LUNCH">Lunch</option>
-      <option value="DINNER">Dinner</option>
-      <option value="SNACK">Snack</option>
-    </select>
-  </label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mealType">Meal type</label>
+                        <select id="mealType" th:field="*{mealType}" required>
+                            <option value="">Select…</option>
+                            <option value="BREAKFAST">Breakfast</option>
+                            <option value="LUNCH">Lunch</option>
+                            <option value="DINNER">Dinner</option>
+                            <option value="SNACK">Snack</option>
+                        </select>
+                    </div>
 
-  <br/><br/>
+                    <div class="form-group">
+                        <label for="entryDateTime">Date/time</label>
+                        <input id="entryDateTime" type="datetime-local" th:field="*{entryDateTime}" />
+                    </div>
+                </div>
 
-  <label>
-    Date/time:
-    <input type="datetime-local" th:field="*{entryDateTime}" />
-  </label>
+                <div class="form-group">
+                    <label for="foodName">Food name</label>
+                    <input id="foodName" type="text" th:field="*{foodName}" required />
+                </div>
+            </div>
 
-  <br/><br/>
+            <div class="form-section">
+                <h2>Macronutrients</h2>
 
-  <label>
-    Food name:
-    <input type="text" th:field="*{foodName}" required />
-  </label>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="calories">Calories</label>
+                        <input id="calories" type="number" th:field="*{calories}" min="0" />
+                    </div>
 
-  <br/><br/>
+                    <div class="form-group">
+                        <label for="carbs">Carbs (g)</label>
+                        <input id="carbs" type="number" th:field="*{carbs}" min="0" />
+                    </div>
 
-  <hr/>
+                    <div class="form-group">
+                        <label for="protein">Protein (g)</label>
+                        <input id="protein" type="number" th:field="*{protein}" min="0" />
+                    </div>
 
-  <h3>Macronutrients</h3>
+                    <div class="form-group">
+                        <label for="fats">Fats (g)</label>
+                        <input id="fats" type="number" th:field="*{fats}" min="0" />
+                    </div>
 
-  <label>
-    Calories:
-    <input type="number" th:field="*{calories}" min="0" />
-  </label>
+                    <div class="form-group">
+                        <label for="sugar">Sugar (g)</label>
+                        <input id="sugar" type="number" th:field="*{sugar}" min="0" />
+                    </div>
 
-  <br/><br/>
+                    <div class="form-group">
+                        <label for="salt">Salt (g)</label>
+                        <input id="salt" type="number" th:field="*{salt}" min="0" />
+                    </div>
+                </div>
+            </div>
 
-  <label>
-    Carbs (g):
-    <input type="number" th:field="*{carbs}" min="0" />
-  </label>
+            <div class="form-section">
+                <h2>Additional Notes</h2>
 
-  <br/><br/>
+                <div class="form-group">
+                    <label for="additionalThoughts">Additional thoughts</label>
+                    <textarea id="additionalThoughts" th:field="*{additionalThoughts}" rows="5"></textarea>
+                </div>
+            </div>
 
-  <label>
-    Protein (g):
-    <input type="number" th:field="*{protein}" min="0" />
-  </label>
+            <div class="form-actions-row">
+                <a th:href="@{/nutrition}" class="secondary-page-btn">Cancel</a>
+                <button type="submit" class="action-btn primary-btn" th:text="${submitText}">Save entry</button>
+            </div>
 
-  <br/><br/>
-
-  <label>
-    Fats (g):
-    <input type="number" th:field="*{fats}" min="0" />
-  </label>
-
-  <br/><br/>
-
-  <label>
-    Sugar (g):
-    <input type="number" th:field="*{sugar}" min="0" />
-  </label>
-
-  <br/><br/>
-
-  <label>
-    Salt (g):
-    <input type="number" th:field="*{salt}" min="0" />
-  </label>
-
-  <br/><br/>
-
-  <label>
-    Additional thoughts:
-    <br/>
-    <textarea th:field="*{additionalThoughts}" rows="4" cols="40"></textarea>
-  </label>
-
-  <br/><br/>
-
-  <button type="submit" th:text="${submitText}">Save entry</button>
-
-</form>
+        </form>
+    </section>
+</main>
 
 </body>
 </html>
