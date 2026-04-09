@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crux Conqueror - Account</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/account.css}">
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <main class="page-container">
+        <section class="account-header">
+            <h1>Account Settings</h1>
+            <p>Manage your profile details, training goals, and privacy settings.</p>
+        </section>
+
+        <form th:action="@{/account}" method="post" class="account-form">
+         <section class="account-grid">
+              <div class="panel-card">
+                   <h2>Account Information</h2>
+
+                  <div class="form-group">
+                      <label>Username</label>
+                       <input type="text" th:value="${user.username}" readonly>
+                  </div>
+
+                    <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" th:value="${user.email}" readonly>
+                    </div>
+                </div>
+
+                    <div class="panel-card">
+                    <h2>Profile Details</h2>
+
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" name="bio" rows="4" th:text="${user.bio}"></textarea>
+                    </div>
+
+                <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" name="age" min="0" th:value="${user.age}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="experienceLevel">Experience Level</label>
+                            <select id="experienceLevel" name="experienceLevel">
+                                <option value="">Select experience</option>
+                                <option value="Beginner" th:selected="${user.experienceLevel == 'Beginner'}">Beginner</option>
+                                <option value="Intermediate" th:selected="${user.experienceLevel == 'Intermediate'}">Intermediate</option>
+                                <option value="Advanced" th:selected="${user.experienceLevel == 'Advanced'}">Advanced</option>
+                            </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                        <div class="form-group">
+                            <label for="heightCm">Height (cm)</label>
+                            <input type="number" step="0.1" id="heightCm" name="heightCm" min="0" th:value="${user.heightCm}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weightKg">Weight (kg)</label>
+                            <input type="number" step="0.1" id="weightKg" name="weightKg" min="0" th:value="${user.weightKg}">
+                        </div>
+                </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="goalType">Goal Type</label>
+                            <select id="goalType" name="goalType">
+                                <option value="">Select goal</option>
+                                <option value="Cut" th:selected="${user.goalType == 'Cut'}">Cut</option>
+                                <option value="Maintain" th:selected="${user.goalType == 'Maintain'}">Maintain</option>
+                                <option value="Bulk" th:selected="${user.goalType == 'Bulk'}">Bulk</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="activityLevel">Activity Level</label>
+                            <select id="activityLevel" name="activityLevel">
+                                <option value="">Select activity</option>
+                                <option value="Low" th:selected="${user.activityLevel == 'Low'}">Low</option>
+                                <option value="Moderate" th:selected="${user.activityLevel == 'Moderate'}">Moderate</option>
+                                <option value="High" th:selected="${user.activityLevel == 'High'}">High</option>
+                                <option value="Very High" th:selected="${user.activityLevel == 'Very High'}">Very High</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <h2>Privacy Settings</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bioVisibility">Bio</label>
+                            <select id="bioVisibility" name="bioVisibility">
+                                <option value="PUBLIC" th:selected="${user.bioVisibility == 'PUBLIC'}">Public</option>
+                                <option value="FRIENDS" th:selected="${user.bioVisibility == 'FRIENDS'}">Friends only</option>
+                                <option value="PRIVATE" th:selected="${user.bioVisibility == 'PRIVATE'}">Private</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ageVisibility">Age</label>
+                            <select id="ageVisibility" name="ageVisibility">
+                                <option value="PUBLIC" th:selected="${user.ageVisibility == 'PUBLIC'}">Public</option>
+                                <option value="FRIENDS" th:selected="${user.ageVisibility == 'FRIENDS'}">Friends only</option>
+                                <option value="PRIVATE" th:selected="${user.ageVisibility == 'PRIVATE'}">Private</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="heightVisibility">Height</label>
+                            <select id="heightVisibility" name="heightVisibility">
+                                <option value="PUBLIC" th:selected="${user.heightVisibility == 'PUBLIC'}">Public</option>
+                                <option value="FRIENDS" th:selected="${user.heightVisibility == 'FRIENDS'}">Friends only</option>
+                                <option value="PRIVATE" th:selected="${user.heightVisibility == 'PRIVATE'}">Private</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weightVisibility">Weight</label>
+                            <select id="weightVisibility" name="weightVisibility">
+                                <option value="PUBLIC" th:selected="${user.weightVisibility == 'PUBLIC'}">Public</option>
+                                <option value="FRIENDS" th:selected="${user.weightVisibility == 'FRIENDS'}">Friends only</option>
+                                <option value="PRIVATE" th:selected="${user.weightVisibility == 'PRIVATE'}">Private</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experienceVisibility">Experience Level</label>
+                        <select id="experienceVisibility" name="experienceVisibility">
+                            <option value="PUBLIC" th:selected="${user.experienceVisibility == 'PUBLIC'}">Public</option>
+                            <option value="FRIENDS" th:selected="${user.experienceVisibility == 'FRIENDS'}">Friends only</option>
+                            <option value="PRIVATE" th:selected="${user.experienceVisibility == 'PRIVATE'}">Private</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Save Changes</button>
+            </div>
+        </form>
+    </main>
+</body>
+</html>
