@@ -67,13 +67,52 @@ public User(String username, String email, String passwordHash){
     this.email = email;
     this.passwordHash = passwordHash;
 }
-public Long getId(){return id;}
-public String getUsername(){return username;}
-public String getEmail(){return email;}
-public String getPasswordHash(){return passwordHash;}
-public LocalDateTime getDateMade(){return dateMade;}
+ public Long getId() { return id; }
 
-public void setUsername(String username) {this.username = username;}
-public void setEmail(String email) {this.email = email;}
-public void setPasswordHash(String passwordHash) {this.passwordHash = passwordHash;}
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    public LocalDateTime getDateMade() { return dateMade; }
+
+    public String getBio() { return bio; }
+    public void setBio(String bio) { this.bio = bio; }
+
+    public Integer getAge() { return age; }
+    public void setAge(Integer age) { this.age = age; }
+
+    public Double getHeightCm() { return heightCm; }
+    public void setHeightCm(Double heightCm) { this.heightCm = heightCm; }
+
+    public Double getWeightKg() { return weightKg; }
+    public void setWeightKg(Double weightKg) { this.weightKg = weightKg; }
+
+    public String getExperienceLevel() { return experienceLevel; }
+    public void setExperienceLevel(String experienceLevel) { this.experienceLevel = experienceLevel; }
+
+    public String getGoalType() { return goalType; }
+    public void setGoalType(String goalType) { this.goalType = goalType; }
+
+    public String getActivityLevel() { return activityLevel; }
+    public void setActivityLevel(String activityLevel) { this.activityLevel = activityLevel; }
+
+    public String getBioVisibility() { return bioVisibility; }
+    public void setBioVisibility(String bioVisibility) { this.bioVisibility = bioVisibility; }
+
+    public String getAgeVisibility() { return ageVisibility; }
+    public void setAgeVisibility(String ageVisibility) { this.ageVisibility = ageVisibility; }
+
+    public String getHeightVisibility() { return heightVisibility; }
+    public void setHeightVisibility(String heightVisibility) { this.heightVisibility = heightVisibility; }
+
+    public String getWeightVisibility() { return weightVisibility; }
+    public void setWeightVisibility(String weightVisibility) { this.weightVisibility = weightVisibility; }
+
+    public String getExperienceVisibility() { return experienceVisibility; }
+    public void setExperienceVisibility(String experienceVisibility) { this.experienceVisibility = experienceVisibility; }
 }
