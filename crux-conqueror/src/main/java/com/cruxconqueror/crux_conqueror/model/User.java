@@ -24,6 +24,42 @@ private String passwordHash;
 @Column(name = "Date_Made", insertable =false, updatable = false)
 private LocalDateTime dateMade;
 
+@Column(name = "Bio", columnDefinition = "TEXT")
+private String bio;
+
+@Column(name = "Age")
+private Integer age;
+
+@Column(name = "Height_cm")
+private Double heightCm;
+
+@Column(name = "Weight_kg")
+private Double weightKg;
+
+@Column(name = "Experience_Level", length = 30)
+private String experienceLevel;
+
+@Column(name = "Goal_Type", length = 30)
+private String goalType;
+
+@Column(name = "Activity_Level", length = 30)
+private String activityLevel;
+
+@Column(name = "Bio_Visibility", length = 20)
+private String bioVisibility;
+
+@Column(name = "Age_Visibility", length = 20)
+private String ageVisibility;
+
+@Column(name = "Height_Visibility", length = 20)
+private String heightVisibility;
+
+@Column(name = "Weight_Visibility", length = 20)
+private String weightVisibility;
+
+@Column(name = "Experience_Visibility", length = 20)
+private String experienceVisibility;
+
 public User(){}
 
 public User(String username, String email, String passwordHash){
