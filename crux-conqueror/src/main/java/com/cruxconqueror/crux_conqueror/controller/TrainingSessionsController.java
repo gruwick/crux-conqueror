@@ -7,13 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.cruxconqueror.crux_conqueror.model.BoulderingGradesStat;
 import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
-
-
 
 @Controller
 @RequestMapping("/sessions")
@@ -81,52 +78,11 @@ public String list(
         if(session.getTopsTotal() == null) session.setTopsTotal(0);
         if(session.getFlashesTotal() == null) session.setFlashesTotal(0);
 
-        TrainingSessions saved = sessionsRepo.save(session);
-
-        if ("BOULDERING".equalsIgnoreCase(saved.getSessionType())) {
-            return "redirect:/sessions/" + saved.getId() + "/grades/new";
-        }
+        sessionsRepo.save(session);
 
         return "redirect:/sessions";
 }
     
-    @GetMapping("/{id}/grades/new")
-    public String newGradeRow(@PathVariable Long id, Model model, Principal principal) {
-        TrainingSessions session = requireOwnedSession(id, principal);
-        model.addAttribute("session", session);
-
-        BoulderingGradesStat row = new BoulderingGradesStat();
-        model.addAttribute("row", row);
-
-        return "sessions/grade-new";
-    }
-
-  
-    @PostMapping("/{id}/grades")
-    public String addGradeRow(@PathVariable Long id,
-                              @ModelAttribute("row") BoulderingGradesStat row,
-                              Principal principal) {
-
-        TrainingSessions session = requireOwnedSession(id, principal);
-
-        if (row.getGrade() == null || row.getGrade().isBlank()) {
-            throw new IllegalArgumentException("Grade is required");
-        }
-        if (row.getAttempts() == null || row.getAttempts() < 0) {
-            throw new IllegalArgumentException("Attempts must be 0 or more");
-        }
-        if (row.getTops() == null || row.getTops() < 0) {
-            throw new IllegalArgumentException("Tops must be 0 or more");
-        }
-
-        row.setSession(session);
-        session.getGradeStats().add(row);
-
-        sessionsRepo.save(session);
-
-        return "redirect:/sessions/";
-    }
-
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id, Principal principal){
         TrainingSessions session = requireOwnedSession(id, principal);
@@ -141,7 +97,6 @@ public String list(
         model.addAttribute("formTitle", "Edit training session");
         model.addAttribute("formAction", "/sessions/" + id + "/edit");
         model.addAttribute("submitText", "Update session");
-
 
         return "sessions/new";
     }
