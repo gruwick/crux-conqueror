@@ -124,7 +124,7 @@ public String list(
 
         sessionsRepo.save(session);
 
-        return "redirect:/sessions/" + id + "/grades/new";
+        return "redirect:/sessions/";
     }
 
     @PostMapping("/{id}/delete")
