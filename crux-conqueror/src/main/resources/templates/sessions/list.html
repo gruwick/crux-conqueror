@@ -1,109 +1,127 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <title>My Training Sessions</title>
-  <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Training Sessions</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/sessions.css}">
 </head>
 <body>
-  <div th:replace="fragments/navbar :: navbar"></div>
-  <h1>My training sessions</h1>
-<p>
-  <a th:href="@{/sessions/new}">Log a new session</a> |
-  <a th:href="@{/}">Home</a> |
-  <a th:if="${!showArchived}" th:href="@{/sessions(showArchived=true)}">Show archived</a>
-  <a th:if="${showArchived}" th:href="@{/sessions}">Show active</a>
-</p>
+    <div th:replace="fragments/navbar :: navbar"></div>
 
-  <div th:if="${#lists.isEmpty(sessions)}">
-    <p>No sessions logged yet.</p>
-  </div>
+    <main class="page-container">
+        <section class="sessions-header">
+            <h1>My training sessions</h1>
+            <p>Track, review, and manage your climbing and training history.</p>
+        </section>
 
-<div th:if="${!#lists.isEmpty(sessions)}">
+        <div class="sessions-actions">
+            <a th:href="@{/sessions/new}" class="action-btn primary-btn">Log a new session</a>
+            <a th:href="@{/}" class="secondary-page-btn">Home</a>
 
-  <form method="post">
+            <a th:if="${!showArchived}" th:href="@{/sessions(showArchived=true)}" class="secondary-page-btn">
+                Show archived
+            </a>
 
-    <button type="submit"
-            formaction="/sessions/bulk-archive">
-      Archive selected
-    </button>
+            <a th:if="${showArchived}" th:href="@{/sessions}" class="secondary-page-btn">
+                Show active
+            </a>
+        </div>
 
-    <button type="submit"
-            formaction="/sessions/bulk-delete"
-            onclick="return confirm('Delete selected sessions?');">
-      Delete selected
-    </button>
+        <div th:if="${#lists.isEmpty(sessions)}" class="panel-card empty-state-card">
+            <h2>No sessions logged yet</h2>
+            <p>Your training sessions will appear here once you add your first entry.</p>
+            <a th:href="@{/sessions/new}" class="action-btn primary-btn">Log your first session</a>
+        </div>
 
-    <br/><br/>
+        <div th:if="${!#lists.isEmpty(sessions)}">
+            <form method="post" class="sessions-form">
+                <div class="bulk-actions">
+                    <button type="submit" formaction="/sessions/bulk-archive" class="secondary-action-btn">
+                        Archive selected
+                    </button>
 
-    <table border="1" cellpadding="6">
-<thead>
-  <tr>
-    <th>Select</th>
-    <th>Date</th>
-    <th>Type</th>
-    <th>Duration</th>
-    <th>Intensity</th>
-    <th>Highest grade</th>
-    <th>Attempts</th>
-    <th>Tops</th>
-    <th>Flashes</th>
-    <th>Notes</th>
-    <th>Actions</th>
-  </tr>
-</thead>
-      <tbody>
-<tr th:each="s : ${sessions}">
+                    <button type="submit"
+                            formaction="/sessions/bulk-delete"
+                            onclick="return confirm('Delete selected sessions?');"
+                            class="danger-action-btn">
+                        Delete selected
+                    </button>
+                </div>
 
-  <td>
-    <input type="checkbox" name="ids" th:value="${s.id}" />
-  </td>
+                <section class="panel-card table-section">
+                    <div class="table-wrapper">
+                        <table class="sessions-table">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Duration</th>
+                                    <th>Intensity</th>
+                                    <th>Highest grade</th>
+                                    <th>Attempts</th>
+                                    <th>Tops</th>
+                                    <th>Flashes</th>
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
 
-  <td th:text="${s.sessionDate}"></td>
-  <td th:text="${s.sessionType}"></td>
-  <td th:text="${s.durationMinutes} + ' min'"></td>
-  <td th:text="${s.intensity}"></td>
-  <td th:text="${s.highestGrade} ?: '-'"></td>
-  <td th:text="${s.attemptsTotal}"></td>
-  <td th:text="${s.topsTotal}"></td>
-  <td th:text="${s.flashesTotal}"></td>
-  <td th:text="${s.notes} ?: '-'"></td>
+                            <tbody>
+                                <tr th:each="s : ${sessions}">
+                                    <td>
+                                        <input type="checkbox" name="ids" th:value="${s.id}" />
+                                    </td>
 
-  <td>
-    <!-- Edit -->
-    <a th:href="@{'/sessions/' + ${s.id} + '/edit'}">Edit</a>
+                                    <td th:text="${s.sessionDate}"></td>
+                                    <td th:text="${s.sessionType}"></td>
+                                    <td th:text="${s.durationMinutes} + ' min'"></td>
+                                    <td th:text="${s.intensity}"></td>
+                                    <td th:text="${s.highestGrade} ?: '-'"></td>
+                                    <td th:text="${s.attemptsTotal}"></td>
+                                    <td th:text="${s.topsTotal}"></td>
+                                    <td th:text="${s.flashesTotal}"></td>
+                                    <td class="notes-cell" th:text="${s.notes} ?: '-'"></td>
 
-    <!-- Delete -->
-    <form th:action="@{'/sessions/' + ${s.id} + '/delete'}"
-          method="post"
-          style="display:inline;">
-      <button type="submit"
-              onclick="return confirm('Delete this session?');">
-        Delete
-      </button>
-    </form>
+                                    <td>
+                                        <div class="table-actions">
+                                            <a th:href="@{'/sessions/' + ${s.id} + '/edit'}" class="table-link">Edit</a>
 
-    <!-- Archive -->
-    <form th:if="${!showArchived}"
-          th:action="@{'/sessions/' + ${s.id} + '/archive'}"
-          method="post"
-          style="display:inline;">
-      <button type="submit">Archive</button>
-    </form>
+                                            <form th:action="@{'/sessions/' + ${s.id} + '/delete'}"
+                                                  method="post"
+                                                  class="inline-form">
+                                                <button type="submit"
+                                                        class="mini-danger-btn"
+                                                        onclick="return confirm('Delete this session?');">
+                                                    Delete
+                                                </button>
+                                            </form>
 
-    <!-- Unarchive -->
-    <form th:if="${showArchived}"
-          th:action="@{'/sessions/' + ${s.id} + '/unarchive'}"
-          method="post"
-          style="display:inline;">
-      <button type="submit">Unarchive</button>
-    </form>
-  </td>
+                                            <form th:if="${!showArchived}"
+                                                  th:action="@{'/sessions/' + ${s.id} + '/archive'}"
+                                                  method="post"
+                                                  class="inline-form">
+                                                <button type="submit" class="mini-neutral-btn">Archive</button>
+                                            </form>
 
-</tr>
-      </tbody>
-    </table>
-   </form>
-  </div>
+                                            <form th:if="${showArchived}"
+                                                  th:action="@{'/sessions/' + ${s.id} + '/unarchive'}"
+                                                  method="post"
+                                                  class="inline-form">
+                                                <button type="submit" class="mini-neutral-btn">Unarchive</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </main>
 </body>
 </html>
