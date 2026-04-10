@@ -1,69 +1,105 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <title>Log Session</title>
-  <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Session</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/sessions.css}">
 </head>
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
 
-  <h1 th:text="${formTitle}">Log a training session</h1>
-  <p><a th:href="@{/sessions}">Back to sessions</a></p>
-  <form th:action="@{${formAction}}" th:object="${session}" method="post">
-    <label>
-      Session type:
-      <select th:field="*{sessionType}" required>
-        <option value="">Select…</option>
-        <option value="BOULDERING">Bouldering</option>
-        <option value="STRENGTH">Strength</option>
-        <option value="FINGERBOARD">Fingerboard</option>
-      </select>
-    </label>
-    <br/><br/>
-    <label>
-      Date/time:
-      <input type="datetime-local" th:field="*{sessionDate}" />
-    </label>
-    <br/><br/>
-    <label>
-      Duration (minutes):
-      <input type="number" th:field="*{durationMinutes}" min="1" required />
-    </label>
-    <br/><br/>
-    <label>
-      Intensity (1–10):
-      <input type="number" th:field="*{intensity}" min="1" max="10" required />
-    </label>
-    <hr/>
-    <h3>Bouldering summary (optional)</h3>
-    <label>
-      Highest grade:
-      <input type="text" th:field="*{highestGrade}" placeholder="V5 / 6C+" />
-    </label>
-    <br/><br/>
-    <label>
-      Attempts total:
-      <input type="number" th:field="*{attemptsTotal}" min="0" />
-    </label>
-    <br/><br/>
-    <label>
-      Tops total:
-      <input type="number" th:field="*{topsTotal}" min="0" />
-    </label>
-    <br/><br/>
-    <label>
-      Flashes total:
-      <input type="number" th:field="*{flashesTotal}" min="0" />
-    </label>
-    <br/><br/>
-    <label>
-      Notes:
-      <br/>
-      <textarea th:field="*{notes}" rows="4" cols="40"></textarea>
-    </label>
-    <br/><br/>
-    <button type="submit" th:text="${submitText}">Save session</button>
-  </form>
+    <main class="page-container">
+        <section class="form-page-header">
+            <h1 th:text="${formTitle}">Log a training session</h1>
+            <p>Record the key details from your climbing or training session.</p>
+        </section>
+
+        <div class="sessions-actions">
+            <a th:href="@{/sessions}" class="secondary-page-btn">Back to sessions</a>
+        </div>
+
+        <section class="panel-card session-form-card">
+            <form th:action="@{${formAction}}" th:object="${session}" method="post" class="session-form">
+
+                <div class="form-section">
+                    <h2>Session Details</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sessionType">Session type</label>
+                            <select id="sessionType" th:field="*{sessionType}" required>
+                                <option value="">Select…</option>
+                                <option value="BOULDERING">Bouldering</option>
+                                <option value="STRENGTH">Strength</option>
+                                <option value="FINGERBOARD">Fingerboard</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sessionDate">Date/time</label>
+                            <input id="sessionDate" type="datetime-local" th:field="*{sessionDate}" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="durationMinutes">Duration (minutes)</label>
+                            <input id="durationMinutes" type="number" th:field="*{durationMinutes}" min="1" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="intensity">Intensity (1–10)</label>
+                            <input id="intensity" type="number" th:field="*{intensity}" min="1" max="10" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Bouldering Summary</h2>
+                    <p class="form-section-subtitle">Optional details for bouldering-based sessions.</p>
+
+                    <div class="form-group">
+                        <label for="highestGrade">Highest grade</label>
+                        <input id="highestGrade" type="text" th:field="*{highestGrade}" placeholder="V5 / 6C+" />
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="attemptsTotal">Attempts total</label>
+                            <input id="attemptsTotal" type="number" th:field="*{attemptsTotal}" min="0" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="topsTotal">Tops total</label>
+                            <input id="topsTotal" type="number" th:field="*{topsTotal}" min="0" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="flashesTotal">Flashes total</label>
+                            <input id="flashesTotal" type="number" th:field="*{flashesTotal}" min="0" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Session Notes</h2>
+
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" th:field="*{notes}" rows="5"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions-row">
+                    <a th:href="@{/sessions}" class="secondary-page-btn">Cancel</a>
+                    <button type="submit" class="action-btn primary-btn" th:text="${submitText}">Save session</button>
+                </div>
+
+            </form>
+        </section>
+    </main>
 </body>
 </html>
