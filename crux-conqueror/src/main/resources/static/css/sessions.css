@@ -203,3 +203,99 @@
 .mini-neutral-btn:hover {
     background-color: #cbd5e1;
 }
+
+.form-page-header {
+    margin-bottom: 18px;
+}
+
+.form-page-header h1 {
+    margin: 0 0 8px;
+    font-size: 2.2rem;
+    color: #0f172a;
+}
+
+.form-page-header p {
+    margin: 0;
+    color: #64748b;
+}
+
+.session-form-card {
+    padding: 28px;
+}
+
+.session-form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.form-section h2 {
+    margin: 0 0 18px;
+    font-size: 1.3rem;
+    color: #0f172a;
+}
+
+.form-section-subtitle {
+    margin: -8px 0 18px;
+    color: #64748b;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #334155;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    color: #1f2937;
+    background-color: white;
+    box-sizing: border-box;
+    transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 4px;
+}
