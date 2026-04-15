@@ -152,6 +152,82 @@
                 <button type="submit" class="save-btn">Save Changes</button>
             </div>
         </form>
+        <section class="social-grid">
+    <div class="panel-card">
+        <h2>Suggested Accounts</h2>
+
+        <div th:if="${#lists.isEmpty(suggestedUsers)}">
+            <p class="muted-text">No suggested accounts available right now.</p>
+        </div>
+
+        <div th:each="suggested : ${suggestedUsers}" class="social-row">
+            <div>
+                <strong th:text="${suggested.username}">username</strong>
+            </div>
+
+            <form th:action="@{/friends/request}" method="post" class="inline-form">
+                <input type="hidden" name="receiverId" th:value="${suggested.id}">
+                <button type="submit" class="mini-action-btn">Send Request</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel-card">
+        <h2>Incoming Requests</h2>
+
+        <div th:if="${#lists.isEmpty(incomingRequests)}">
+            <p class="muted-text">No incoming requests.</p>
+        </div>
+
+        <div th:each="request : ${incomingRequests}" class="social-row">
+            <div>
+                <strong th:text="${request.sender.username}">username</strong>
+            </div>
+
+            <div class="social-actions">
+                <form th:action="@{'/friends/' + ${request.id} + '/accept'}" method="post" class="inline-form">
+                    <button type="submit" class="mini-action-btn">Accept</button>
+                </form>
+
+                <form th:action="@{'/friends/' + ${request.id} + '/decline'}" method="post" class="inline-form">
+                    <button type="submit" class="mini-danger-btn">Decline</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-card">
+        <h2>Outgoing Requests</h2>
+
+        <div th:if="${#lists.isEmpty(outgoingRequests)}">
+            <p class="muted-text">No outgoing requests.</p>
+        </div>
+
+        <div th:each="request : ${outgoingRequests}" class="social-row">
+            <div>
+                <strong th:text="${request.receiver.username}">username</strong>
+            </div>
+
+            <form th:action="@{'/friends/' + ${request.id} + '/cancel'}" method="post" class="inline-form">
+                <button type="submit" class="mini-neutral-btn">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel-card">
+        <h2>Friends</h2>
+
+        <div th:if="${#lists.isEmpty(friends)}">
+            <p class="muted-text">You have not added any friends yet.</p>
+        </div>
+
+        <div th:each="friend : ${friends}" class="social-row">
+            <div>
+                <strong th:text="${friend.username}">username</strong>
+            </div>
+        </div>
+    </div>
+</section>
     </main>
 </body>
 </html>
