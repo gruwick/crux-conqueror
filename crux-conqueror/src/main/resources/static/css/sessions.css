@@ -299,3 +299,33 @@
     flex-wrap: wrap;
     padding-top: 4px;
 }
+/*Reusing session.css for my leaderboard right now */
+.leaderboard-select {
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    color: #1f2937;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+.leaderboard-select:focus {
+    outline: none;
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+
+.highlight-row {
+    background-color: #ecfdf5;
+    font-weight: 700;
+}
+
+.highlight-row td {
+    border-bottom-color: #bbf7d0;
+}
+
+.muted-text {
+    color: #64748b;
+}

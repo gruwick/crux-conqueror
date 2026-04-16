@@ -1,61 +1,116 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaderboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/sessions.css}">
+</head>
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
+    <div th:replace="fragments/navbar :: navbar"></div>
 
-<h1>Leaderboard (last 30 days)</h1>
-<link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <main class="page-container">
+        <section class="sessions-header">
+            <h1>Leaderboard</h1>
+            <p>Compare your progress globally or against your current friends over the last 30 days.</p>
+        </section>
 
-<p th:if="${myIndex >= 0}">
-  You are ranked: <b th:text="${myIndex + 1}"></b>
-</p>
+        <section class="panel-card" style="margin-bottom: 22px;">
+            <form method="get" action="/leaderboard" class="sessions-actions">
+                <select name="scope" class="leaderboard-select">
+                    <option value="global" th:selected="${scope == 'global'}">Global</option>
+                    <option value="friends" th:selected="${scope == 'friends'}">Friends</option>
+                </select>
 
-<form method="get" action="/leaderboard" class="leaderboard-controls">
+                <select name="metric" class="leaderboard-select">
+                    <option value="sessions" th:selected="${metric == 'sessions'}">Most Sessions</option>
+                    <option value="minutes" th:selected="${metric == 'minutes'}">Total Training Time</option>
+                    <option value="grade" th:selected="${metric == 'grade'}">Highest Grade</option>
+                    <option value="intensity" th:selected="${metric == 'intensity'}">Average Intensity</option>
+                </select>
 
-    <select name="scope">
-        <option value="global" th:selected="${scope == 'global'}">Global</option>
-        <option value="friends" th:selected="${scope == 'friends'}">Friends</option>
-    </select>
+                <button type="submit" class="action-btn primary-btn">Apply</button>
+            </form>
+        </section>
 
-    <select name="metric">
-        <option value="sessions" th:selected="${metric == 'sessions'}">Most Sessions</option>
-        <option value="minutes" th:selected="${metric == 'minutes'}">Total Minutes</option>
-        <option value="grade" th:selected="${metric == 'grade'}">Highest Grade</option>
-        <option value="intensity" th:selected="${metric == 'intensity'}">Avg Intensity</option>
-    </select>
+        <section class="stats-grid" style="margin-bottom: 22px;">
+            <div class="stat-card">
+                <div class="stat-icon sessions">
+                    <span>#</span>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Your Rank</p>
+                    <h3 th:text="${myIndex >= 0 ? myIndex + 1 : '-'}">-</h3>
+                </div>
+            </div>
 
-    <button type="submit">Apply</button>
+            <div class="stat-card">
+                <div class="stat-icon calories">
+                    <span th:text="${scope == 'friends' ? 'F' : 'G'}">G</span>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Scope</p>
+                    <h3 th:text="${scope == 'friends' ? 'Friends' : 'Global'}">Global</h3>
+                </div>
+            </div>
 
-</form>
+            <div class="stat-card">
+                <div class="stat-icon protein">
+                    <span>M</span>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Metric</p>
+                    <h3 th:text="${metric == 'sessions' ? 'Sessions' : metric == 'minutes' ? 'Minutes' : metric == 'grade' ? 'Grade' : 'Intensity'}">Sessions</h3>
+                </div>
+            </div>
 
-<table border="1" cellpadding="6">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>User</th>
-      <th>Sessions</th>
-      <th>Total minutes</th>
-      <th>Avg intensity</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr th:each="r, stat : ${rows}"
-        th:style="${stat.index == myIndex} ? 'font-weight:bold;' : ''">
-      <td th:text="${stat.index + 1}"></td>
-      <td th:text="${r.username}"></td>
-      <td th:text="${r.sessionsLast30}"></td>
-      <td th:text="${r.minutesLast30}"></td>
-      <td th:text="${#numbers.formatDecimal(r.avgIntensityLast30, 1, 1)}"></td>
-    </tr>
-  </tbody>
-</table>
+            <div class="stat-card">
+                <div class="stat-icon grade">
+                    <span th:text="${#lists.size(rows)}">0</span>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Users Shown</p>
+                    <h3 th:text="${#lists.size(rows)}">0</h3>
+                </div>
+            </div>
+        </section>
 
-<p>
-  <a href="#top">Jump to top</a>
-  <span th:if="${myIndex >= 0}">
-    | <a th:href="@{'#row-' + ${myIndex}}">Jump to me</a>
-  </span>
-</p>
+        <section class="panel-card table-section">
+            <h2 style="margin-top: 0; margin-bottom: 18px;">Current Rankings</h2>
 
+            <div th:if="${#lists.isEmpty(rows)}">
+                <p class="muted-text">No leaderboard data available yet.</p>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(rows)}" class="table-wrapper">
+                <table class="sessions-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Sessions</th>
+                            <th>Total Minutes</th>
+                            <th>Avg Intensity</th>
+                            <th>Best Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="r, stat : ${rows}"
+                            th:classappend="${stat.index == myIndex} ? 'highlight-row' : ''">
+                            <td th:text="${stat.index + 1}"></td>
+                            <td th:text="${r.username}"></td>
+                            <td th:text="${r.sessionsLast30}"></td>
+                            <td th:text="${r.minutesLast30}"></td>
+                            <td th:text="${#numbers.formatDecimal(r.avgIntensityLast30, 1, 1)}"></td>
+                            <td th:text="${r.bestGrade}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
