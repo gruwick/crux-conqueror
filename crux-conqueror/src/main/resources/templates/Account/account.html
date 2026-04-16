@@ -156,7 +156,7 @@
     <div class="panel-card">
         <h2>Suggested Accounts</h2>
 
-        <form th:action="@{/account + '#social'}" method="get" class="search-form">
+        <form action="/account#social" method="get" class="search-form">
         <input type="text" name="search" th:value="${search}" placeholder="Search by username" class="search-input">
         <button type="submit" class="mini-action-btn">Search</button>
         </form>
