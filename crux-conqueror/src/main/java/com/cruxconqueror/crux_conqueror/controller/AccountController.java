@@ -27,7 +27,7 @@ public class AccountController {
         this.friendRequestRepo = friendRequestRepo;
     }
 @GetMapping("/account")
-public String account(Model model, Principal principal) {
+public String account(@RequestParam(required = false) String search, Model model, Principal principal) {
     if(principal == null){
         return "redirect:/login";
     }
@@ -65,13 +65,22 @@ public String account(Model model, Principal principal) {
             blockedIds.add(request.getReceiver().getId());
         }
     }
-    List<User> suggestedUsers = userRepo.findAll().stream()
+List<User> suggestedUsers;
+
+if(search != null && !search.isBlank()){
+    suggestedUsers = userRepo.findByUsernameContainingIgnoreCase(search).stream()
+            .filter(u -> u.getId() != null)
+            .filter(u -> !blockedIds.contains(u.getId()))
+            .sorted(Comparator.comparing(User::getUsername, String.CASE_INSENSITIVE_ORDER))
+            .collect(Collectors.toList());
+} else {
+    suggestedUsers = userRepo.findAll().stream()
             .filter(u -> u.getId() != null)
             .filter(u -> !blockedIds.contains(u.getId()))
             .sorted(Comparator.comparing(User::getUsername, String.CASE_INSENSITIVE_ORDER))
             .limit(8)
             .collect(Collectors.toList());
-
+}
     friends = friends.stream()
             .sorted(Comparator.comparing(User::getUsername, String.CASE_INSENSITIVE_ORDER))
             .collect(Collectors.toList());
@@ -81,6 +90,7 @@ public String account(Model model, Principal principal) {
     model.addAttribute("outgoingRequests", outgoingRequests);
     model.addAttribute("friends", friends);
     model.addAttribute("suggestedUsers", suggestedUsers);
+    model.addAttribute("search", search);
 
     return "Account/account";
 }

@@ -155,6 +155,11 @@
         <section class="social-grid">
     <div class="panel-card">
         <h2>Suggested Accounts</h2>
+        
+        <form th:action="@{/account}" method="get" class="search-form">
+        <input type="text" name="search" th:value="${search}" placeholder="Search by username" class="search-input">
+        <button type="submit" class="mini-action-btn">Search</button>
+    </form>
 
         <div th:if="${#lists.isEmpty(suggestedUsers)}">
             <p class="muted-text">No suggested accounts available right now.</p>
