@@ -152,14 +152,14 @@
                 <button type="submit" class="save-btn">Save Changes</button>
             </div>
         </form>
-        <section class="social-grid">
+        <section class="social-grid" id="social">
     <div class="panel-card">
         <h2>Suggested Accounts</h2>
-        
-        <form th:action="@{/account}" method="get" class="search-form">
+
+        <form th:action="@{/account + '#social'}" method="get" class="search-form">
         <input type="text" name="search" th:value="${search}" placeholder="Search by username" class="search-input">
         <button type="submit" class="mini-action-btn">Search</button>
-    </form>
+        </form>
 
         <div th:if="${#lists.isEmpty(suggestedUsers)}">
             <p class="muted-text">No suggested accounts available right now.</p>
