@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cruxconqueror.crux_conqueror.dto.LeaderboardRow;
 import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
@@ -23,7 +24,10 @@ public class LeaderboardController {
     }
 
     @GetMapping("/leaderboard")
-    public String leaderboard(Model model, Principal principal) {
+    public String leaderboard(Model model, Principal principal,
+        @RequestParam(defaultValue = "global") String scope,
+        @RequestParam(defaultValue = "sessions") String metric
+    ) {
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime last30 = now.minusDays(30);
@@ -55,19 +59,34 @@ public class LeaderboardController {
                     .mapToInt(Integer::intValue)
                     .average()
                     .orElse(0.0);
+            
+            String bestGrade = sessions.stream()
+                    .map(TrainingSessions::getHighestGrade)
+                    .filter(g -> g != null && !g.isBlank())
+                    .max(Comparator.comparingInt(this::gradeToScore))
+                    .orElse("-");
 
-            rows.add(new LeaderboardRow(username, count, minutes, avgIntensity));
+            int bestGradeScore = gradeToScore(bestGrade);
+
+            rows.add(new LeaderboardRow(username, count, minutes, avgIntensity, bestGrade, bestGradeScore));
         }
 
         // Sort: sessions desc, minutes desc, username asc
-        rows.sort((a, b) -> {
-            int sessionCompare = Integer.compare(b.getSessionsLast30(), a.getSessionsLast30());
-        if (sessionCompare != 0) return sessionCompare;
+            rows.sort((a, b) -> {
 
-            int minuteCompare = Integer.compare(b.getMinutesLast30(), a.getMinutesLast30());
-        if (minuteCompare != 0) return minuteCompare;
+                if ("minutes".equals(metric)) {
+                    return Integer.compare(b.getMinutesLast30(), a.getMinutesLast30());
+                }
 
-        return a.getUsername().compareTo(b.getUsername());
+                if ("intensity".equals(metric)) {
+                    return Double.compare(b.getAvgIntensityLast30(), a.getAvgIntensityLast30());
+                }
+
+                if ("grade".equals(metric)) {
+                    return Integer.compare(b.getBestGradeScore(), a.getBestGradeScore());
+                }
+
+                return Integer.compare(b.getSessionsLast30(), a.getSessionsLast30());
             });
 
                 //Error testing
@@ -91,7 +110,17 @@ public class LeaderboardController {
 
         model.addAttribute("rows", rows);
         model.addAttribute("myIndex", myIndex);
+        model.addAttribute("scope", scope);
+        model.addAttribute("metric, metric");
 
         return "community/leaderboard";
+    }
+    private int gradeToScore(String grade){
+        if (grade == null || grade.isBlank()) return 0;
+    try{
+        return Integer.parseInt(grade.replaceAll("[^0-9]", ""));
+    } catch (Exception e) {
+        return 0;
+    }
     }
 }

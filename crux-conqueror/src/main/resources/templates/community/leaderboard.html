@@ -10,6 +10,24 @@
   You are ranked: <b th:text="${myIndex + 1}"></b>
 </p>
 
+<form method="get" action="/leaderboard" class="leaderboard-controls">
+
+    <select name="scope">
+        <option value="global" th:selected="${scope == 'global'}">Global</option>
+        <option value="friends" th:selected="${scope == 'friends'}">Friends</option>
+    </select>
+
+    <select name="metric">
+        <option value="sessions" th:selected="${metric == 'sessions'}">Most Sessions</option>
+        <option value="minutes" th:selected="${metric == 'minutes'}">Total Minutes</option>
+        <option value="grade" th:selected="${metric == 'grade'}">Highest Grade</option>
+        <option value="intensity" th:selected="${metric == 'intensity'}">Avg Intensity</option>
+    </select>
+
+    <button type="submit">Apply</button>
+
+</form>
+
 <table border="1" cellpadding="6">
   <thead>
     <tr>
