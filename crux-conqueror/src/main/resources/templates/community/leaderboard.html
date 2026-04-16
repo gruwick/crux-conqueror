@@ -63,7 +63,7 @@
                 </div>
                 <div class="stat-content">
                     <p class="stat-label">Metric</p>
-                    <h3 th:text="${metric == 'sessions' ? 'Sessions' : metric == 'minutes' ? 'Minutes' : metric == 'grade' ? 'Grade' : 'Intensity'}">Sessions</h3>
+                    <h3 th:text="${#strings.equals(metric, 'sessions') ? 'Sessions' : #strings.equals(metric, 'minutes') ? 'Minutes' : #strings.equals(metric, 'grade') ? 'Grade' : 'Intensity'}">Sessions</h3>
                 </div>
             </div>
 
