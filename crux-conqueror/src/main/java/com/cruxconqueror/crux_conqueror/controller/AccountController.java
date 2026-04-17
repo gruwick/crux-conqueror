@@ -136,13 +136,13 @@ public String sendFriendRequest(@RequestParam Long receiverId, Principal princip
     User receiver = userRepo.findById(receiverId)
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
     if(sender.getId().equals(receiver.getId())){
-        return "redirect:/account";
+        return "redirect:/account#social";
     }
     boolean alreadyExists = !friendRequestRepo.findBySenderAndReceiver(sender, receiver).isEmpty()
             || !friendRequestRepo.findBySenderAndReceiver(receiver, sender).isEmpty();
 
     if(alreadyExists){
-        return "redirect:/account";
+        return "redirect:/account#social";
     }
     FriendRequest request = new FriendRequest();
     request.setSender(sender);
@@ -151,7 +151,7 @@ public String sendFriendRequest(@RequestParam Long receiverId, Principal princip
     request.setCreatedAt(LocalDateTime.now());
     friendRequestRepo.save(request);
 
-    return "redirect:/account";
+    return "redirect:/account#social";
 }
 
 @PostMapping("/friends/{id}/accept")
@@ -165,12 +165,12 @@ public String acceptFriendRequest(@PathVariable Long id, Principal principal){
     FriendRequest request = friendRequestRepo.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Friend request not found"));
     if(request.getReceiver() == null || !request.getReceiver().getId().equals(currentUser.getId())){
-        return "redirect:/account";
+        return "redirect:/account#social";
     }
     request.setStatus("ACCEPTED");
     friendRequestRepo.save(request);
 
-    return "redirect:/account";
+    return "redirect:/account#social";
 }
 
 @PostMapping("/friends/{id}/decline")
@@ -183,11 +183,11 @@ public String declineFriendRequest(@PathVariable Long id, Principal principal){
     FriendRequest request = friendRequestRepo.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Friend request not found"));
     if(request.getReceiver() == null || !request.getReceiver().getId().equals(currentUser.getId())){
-        return "redirect:/account";
+        return "redirect:/account#social";
     }
     friendRequestRepo.delete(request);
 
-    return "redirect:/account";
+    return "redirect:/account#social";
 }
 
 @PostMapping("/friends/{id}/cancel")
@@ -201,12 +201,12 @@ public String cancelFriendRequest(@PathVariable Long id, Principal principal){
     FriendRequest request = friendRequestRepo.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Friend request not found"));
     if(request.getSender() == null || !request.getSender().getId().equals(currentUser.getId())){
-        return "redirect:/account";
+        return "redirect:/account#social";
     }
 
     friendRequestRepo.delete(request);
 
-    return "redirect:/account";
+    return "redirect:/account#social";
 }
     
     
