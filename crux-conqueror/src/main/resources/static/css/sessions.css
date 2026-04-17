@@ -365,3 +365,15 @@
     white-space: pre-wrap;
     word-break: break-word;
 }
+.forum-post-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.forum-action-count {
+    font-size: 0.95rem;
+    color: #64748b;
+}

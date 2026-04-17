@@ -17,15 +17,20 @@
 <p> Share training plans, climbing progress, and discuss climbing related events with the wider community.</p>
 </section>
 
-<section class="panel-card" style="margin-bottom: 22px;">
-  <form method="get" action="/community" class="sessions-actions">
+<form method="get" action="/community" class="sessions-actions">
     <select name="scope" class="leaderboard-select">
       <option value="global" th:selected="${scope == 'global'}">Global</option>
       <option value="friends" th:selected="${scope == 'friends'}">Friends</option>
     </select>
 
+    <select name="sort" class="leaderboard-select">
+      <option value="newest" th:selected="${sort == 'newest'}">Newest</option>
+      <option value="likes" th:selected="${sort == 'likes'}">Most Liked</option>
+      <option value="favourites" th:selected="${sort == 'favourites'}">My Favourites</option>
+    </select>
+
     <button type="submit" class="action-btn primary-btn">Apply</button>
-  </form>
+</form>
 </section>
 
 <section class="panel-card" style="margin-bottom: 22px;">
@@ -50,7 +55,7 @@
 
 <hr/>
 
-<section class="panel-card">
+<section class="panel-card" id ="posts">
   <h2 style="margin-top: 0; margin-bottom: 18px;">Recent posts</h2>
 
   <div th:if="${#lists.isEmpty(posts)}">
@@ -71,6 +76,25 @@
       <div class="forum-post-body">
         <p th:text="${p.content}">Post content</p>
       </div>
+        <div class="forum-post-actions">
+    <form th:action="@{'/community/' + ${p.id} + '/like'}" method="post" class="inline-form">
+      <input type="hidden" name="scope" th:value="${scope}">
+      <input type="hidden" name="sort" th:value="${sort}">
+      <button type="submit" class="mini-action-btn"
+              th:text="${likedPostIds.contains(p.id)} ? 'Unlike' : 'Like'">Like</button>
+    </form>
+
+    <span class="forum-action-count">
+      <span th:text="${likeCounts[p.id]}">0</span> likes
+    </span>
+
+    <form th:action="@{'/community/' + ${p.id} + '/favourite'}" method="post" class="inline-form">
+      <input type="hidden" name="scope" th:value="${scope}">
+      <input type="hidden" name="sort" th:value="${sort}">
+      <button type="submit" class="mini-neutral-btn"
+              th:text="${favouritePostIds.contains(p.id)} ? 'Unfavourite' : 'Favourite'">Favourite</button>
+    </form>
+  </div>
     </article>
   </div>
 </section>
