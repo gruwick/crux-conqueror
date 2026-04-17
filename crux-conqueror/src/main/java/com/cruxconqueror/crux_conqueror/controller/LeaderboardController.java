@@ -111,7 +111,7 @@ public class LeaderboardController {
         model.addAttribute("rows", rows);
         model.addAttribute("myIndex", myIndex);
         model.addAttribute("scope", scope);
-        model.addAttribute("metric, metric");
+        model.addAttribute("metric", metric);
 
         return "community/leaderboard";
     }
