@@ -13,14 +13,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.cruxconqueror.crux_conqueror.dto.LeaderboardRow;
 import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
 import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
+import com.cruxconqueror.crux_conqueror.model.FriendRequest;
+import com.cruxconqueror.crux_conqueror.model.User;
+import com.cruxconqueror.crux_conqueror.repository.FriendRequestRepo;
+import com.cruxconqueror.crux_conqueror.repository.UserRepo;
 
 @Controller
 public class LeaderboardController {
 
     private final TrainingSessionsRepo sessionsRepo;
+    private final UserRepo userRepo;
+    private final FriendRequestRepo friendRequestRepo;
 
-    public LeaderboardController(TrainingSessionsRepo sessionsRepo) {
+    public LeaderboardController(TrainingSessionsRepo sessionsRepo, UserRepo userRepo, FriendRequestRepo friendRequestRepo) {
         this.sessionsRepo = sessionsRepo;
+        this.userRepo = userRepo;
+        this.friendRequestRepo = friendRequestRepo;
     }
 
     @GetMapping("/leaderboard")
@@ -34,6 +42,34 @@ public class LeaderboardController {
 
         // Pull recent active sessions for all users
         List<TrainingSessions> recent = sessionsRepo.findByArchivedFalseAndSessionDateAfter(last30);
+
+        if ("friends".equals(scope) && principal != null) {
+            User currentUser = userRepo.findByUsername(principal.getName())
+                    .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
+
+            List<FriendRequest> acceptedSent = friendRequestRepo.findBySenderAndStatusOrderByCreatedAtDesc(currentUser, "ACCEPTED");
+            List<FriendRequest> acceptedReceived = friendRequestRepo.findByReceiverAndStatusOrderByCreatedAtDesc(currentUser, "ACCEPTED");
+
+            Set<String> allowedUsers = new HashSet<>();
+            allowedUsers.add(currentUser.getUsername());
+
+            for (FriendRequest request : acceptedSent) {
+                if (request.getReceiver() != null && request.getReceiver().getUsername() != null) {
+                    allowedUsers.add(request.getReceiver().getUsername());
+                }
+            }
+
+            for (FriendRequest request : acceptedReceived) {
+                if (request.getSender() != null && request.getSender().getUsername() != null) {
+                    allowedUsers.add(request.getSender().getUsername());
+                }
+            }
+
+            recent = recent.stream()
+                    .filter(s -> s.getUser() != null && s.getUser().getUsername() != null)
+                    .filter(s -> allowedUsers.contains(s.getUser().getUsername()))
+                    .collect(Collectors.toList());
+        }
 
         // Group by username
         Map<String, List<TrainingSessions>> byUser = recent.stream()
