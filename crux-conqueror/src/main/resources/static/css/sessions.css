@@ -329,3 +329,39 @@
 .muted-text {
     color: #64748b;
 }
+.forum-post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.forum-post-card {
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background-color: #f8fafc;
+}
+
+.forum-post-title {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+    color: #0f172a;
+}
+
+.forum-post-subtitle {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.forum-post-body {
+    margin-top: 16px;
+    color: #1f2937;
+    line-height: 1.6;
+}
+
+.forum-post-body p {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}

@@ -4,59 +4,76 @@
   <meta charset="UTF-8" />
   <title>Community Forum</title>
   <link rel="stylesheet" th:href="@{/css/navbar.css}">
+  <link rel="stylesheet" th:href="@{/css/sessions.css}">
+  <link rel="stylesheet" th:href="@{/css/sessions.css}">
 </head>
 <body>
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="page-container">
 
+<section class="session-header">
 <h1>Community Forum</h1>
+<p Share training plans, climbing progress, and discuss climbing related events with the wider community. </p>
+</section>
 
-<h2>Create a post</h2>
-<form th:action="@{/community}" th:object="${newPost}" method="post">
-  <label>
-    Title:
-    <input type="text" th:field="*{title}" maxlength="120" required />
-  </label>
-  <br/><br/>
+<section class="panel-card" style="margin-bottom: 22px;">
+  <form method="get" action="/community" class="sessions-actions">
+    <select name="scope" class="leaderboard-select">
+      <option value="global" th:selected="${scope == 'global'}">Global</option>
+      <option value="friends" th:selected="${scope == 'friends'}">Friends</option>
+    </select>
 
-  <label>
-    Content:
-    <br/>
-    <textarea th:field="*{content}" rows="4" cols="60" required></textarea>
-  </label>
-  <br/><br/>
+    <button type="submit" class="action-btn primary-btn">Apply</button>
+  </form>
+</section>
 
-  <button type="submit">Post</button>
-</form>
+<section class="panel-card" style="margin-bottom: 22px;">
+  <h2 style="margin-top: 0; margin-bottom: 18px;">Create a post</h2>
+
+  <form th:action="@{/community}" th:object="${newPost}" method="post" class="session-form">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input id="title" type="text" th:field="*{title}" maxlength="120" required />
+    </div>
+
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea id="content" th:field="*{content}" rows="5" required></textarea>
+    </div>
+
+    <div class="form-actions-row">
+      <button type="submit" class="action-btn primary-btn">Post</button>
+    </div>
+  </form>
+</section>
 
 <hr/>
 
-<h2>Recent posts</h2>
+<section class="panel-card">
+  <h2 style="margin-top: 0; margin-bottom: 18px;">Recent posts</h2>
 
-<div th:if="${#lists.isEmpty(posts)}">
-  <p>No posts yet. Be the first!</p>
-</div>
+  <div th:if="${#lists.isEmpty(posts)}">
+    <p class="muted-text">No posts yet. Be the first to share something.</p>
+  </div>
 
-<div th:if="${!#lists.isEmpty(posts)}">
-  <table border="1" cellpadding="6">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Created</th>
-        <th>Content</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="p : ${posts}">
-        <td th:text="${p.title}"></td>
-        <td th:text="${p.user.username}"></td>
-        <td th:text="${#temporals.format(p.createdAt, 'dd MMM yyyy HH:mm')}"></td>
-        <td th:text="${p.content}"></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <div th:if="${!#lists.isEmpty(posts)}" class="forum-post-list">
+    <article th:each="p : ${posts}" class="forum-post-card">
+      <div>
+        <h3 th:text="${p.title}" class="forum-post-title">Post title</h3>
+        <p class="forum-post-subtitle">
+          <span th:text="${p.user.username}">username</span>
+          ·
+          <span th:text="${#temporals.format(p.createdAt, 'dd MMM yyyy HH:mm')}">date</span>
+        </p>
+      </div>
 
+      <div class="forum-post-body">
+        <p th:text="${p.content}">Post content</p>
+      </div>
+    </article>
+  </div>
+</section>
+</main>
 </body>
 </html>
