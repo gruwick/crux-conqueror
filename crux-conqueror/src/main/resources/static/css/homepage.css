@@ -1,6 +1,6 @@
 body.homepage {
     background:
-    linear-gradient(rgba(8, 10, 15, 0.5), rgba(8, 10, 15, 0.5)),
+    linear-gradient(rgba(8, 10, 15, 0.3), rgba(8, 10, 15, 0.3)),
     url('/images/Chalk homepage darkend.png');
     background-size: cover;
     background-position: center;
