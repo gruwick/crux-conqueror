@@ -95,6 +95,31 @@
               th:text="${favouritePostIds.contains(p.id)} ? 'Unfavourite' : 'Favourite'">Favourite</button>
     </form>
   </div>
+    <div class="forum-comments-section">
+    <p class="forum-comments-heading">
+      <span th:text="${commentCounts[p.id]}">0</span> comments
+    </p>
+
+    <div th:if="${!#lists.isEmpty(commentsByPost[p.id])}" class="forum-comments-list">
+      <div th:each="comment : ${commentsByPost[p.id]}" class="forum-comment-card">
+        <p class="forum-comment-meta">
+          <strong th:text="${comment.user.username}">username</strong>
+          ·
+          <span th:text="${#temporals.format(comment.createdAt, 'dd MMM yyyy HH:mm')}">date</span>
+        </p>
+        <p class="forum-comment-body" th:text="${comment.content}">Comment text</p>
+      </div>
+    </div>
+
+    <form th:action="@{'/community/' + ${p.id} + '/comment'}" method="post" class="forum-comment-form">
+      <input type="hidden" name="scope" th:value="${scope}">
+      <input type="hidden" name="sort" th:value="${sort}">
+      <textarea name="content" rows="3" class="forum-comment-input" placeholder="Write a comment..." required></textarea>
+      <div class="form-actions-row">
+        <button type="submit" class="mini-action-btn">Add Comment</button>
+      </div>
+    </form>
+  </div>
     </article>
   </div>
 </section>
