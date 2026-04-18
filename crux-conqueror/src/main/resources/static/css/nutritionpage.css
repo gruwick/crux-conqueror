@@ -1,6 +1,6 @@
-body.homepage {
+body.nutritionpage {
     background:
-    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 225, 225, 0.45)),
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 225, 255, 0.45)),
     url('/images/Chalky backround.jpg');
     background-size: cover;
     background-position: center;
