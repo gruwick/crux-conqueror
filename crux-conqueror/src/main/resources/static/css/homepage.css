@@ -17,7 +17,7 @@ body.homepage .home-content-shell {
     padding: 20px;
     border-radius: 18px;
     }
-body.homepage .nav{
+body.homepage nav{
     background: rgba(10, 14, 20, 0.92) !important;
     background-image: none !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
