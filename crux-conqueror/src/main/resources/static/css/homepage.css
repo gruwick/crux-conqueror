@@ -7,7 +7,18 @@ body.homepage {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+body.homepage .summary-section h2 {
+    color: white;
+    margin-top: 0;
+}
+
+body.homepage .home-content-shell {
+    background: rgba(15, 23, 42, 0.35);
+    padding: 20px;
+    border-radius: 18px;
+    }
+
 
 body.homepage .hero {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.92));
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.88));
 }
