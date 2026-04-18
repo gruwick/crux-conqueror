@@ -23,6 +23,8 @@ import com.cruxconqueror.crux_conqueror.model.ForumFavourite;
 import com.cruxconqueror.crux_conqueror.model.ForumLike;
 import com.cruxconqueror.crux_conqueror.repository.ForumFavouriteRepo;
 import com.cruxconqueror.crux_conqueror.repository.ForumLikeRepo;
+import com.cruxconqueror.crux_conqueror.model.ForumComment;
+import com.cruxconqueror.crux_conqueror.repository.ForumCommentRepo;
 
 @Controller
 @RequestMapping("/community")
@@ -33,13 +35,15 @@ public class CommunityController {
     private final FriendRequestRepo friendRequestRepo;
     private final ForumLikeRepo forumLikeRepo;
     private final ForumFavouriteRepo forumFavouriteRepo;
+    private final ForumCommentRepo forumCommentRepo;
 
-    public CommunityController(ForumPostRepo postRepo, UserRepo userRepo, FriendRequestRepo friendRequestRepo, ForumLikeRepo forumLikeRepo, ForumFavouriteRepo forumFavouriteRepo) {
+    public CommunityController(ForumPostRepo postRepo, UserRepo userRepo, FriendRequestRepo friendRequestRepo, ForumLikeRepo forumLikeRepo, ForumFavouriteRepo forumFavouriteRepo, ForumCommentRepo forumCommentRepo) {
         this.postRepo = postRepo;
         this.userRepo = userRepo;
         this.friendRequestRepo = friendRequestRepo;
         this.forumFavouriteRepo = forumFavouriteRepo;
         this.forumLikeRepo = forumLikeRepo;
+        this.forumCommentRepo = forumCommentRepo;
     }
 
 @GetMapping
@@ -120,6 +124,15 @@ public String forum(@RequestParam(name = "scope", defaultValue = "global") Strin
         }
         posts = favouritePosts;
     }
+    Map<Long, List<ForumComment>> commentsByPost = new HashMap<>();
+    Map<Long, Long> commentCounts = new HashMap<>();
+
+    for (ForumPost post : posts) {
+    List<ForumComment> comments = forumCommentRepo.findByPostOrderByCreatedAtAsc(post);
+    commentsByPost.put(post.getId(), comments);
+    commentCounts.put(post.getId(), forumCommentRepo.countByPost(post));
+}
+
 
     model.addAttribute("posts", posts);
     model.addAttribute("scope", scope);
@@ -128,6 +141,8 @@ public String forum(@RequestParam(name = "scope", defaultValue = "global") Strin
     model.addAttribute("favouritePostIds", favouritePostIds);
     model.addAttribute("likeCounts", likeCounts);
     model.addAttribute("newPost", new ForumPost());
+    model.addAttribute("commentsByPost", commentsByPost);
+    model.addAttribute("commentCounts", commentCounts);
 
     return "community/forum";
 }
@@ -201,6 +216,33 @@ public String forum(@RequestParam(name = "scope", defaultValue = "global") Strin
             favourite.setUser(user);
             forumFavouriteRepo.save(favourite);
         }
+
+        return "redirect:/community?scope=" + scope + "&sort=" + sort + "#posts";
+    }
+    @PostMapping("/{id}/comment")
+    public String addComment(@PathVariable Long id,
+                            @RequestParam String content,
+                            @RequestParam(name = "scope", defaultValue = "global") String scope,
+                            @RequestParam(name = "sort", defaultValue = "newest") String sort,
+                            Principal principal) {
+
+        User user = userRepo.findByUsername(principal.getName())
+                .orElseThrow(() -> new IllegalStateException("Logged-in user not found"));
+
+        ForumPost post = postRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+
+        if (content == null || content.isBlank()) {
+            return "redirect:/community?scope=" + scope + "&sort=" + sort + "#posts";
+        }
+
+        ForumComment comment = new ForumComment();
+        comment.setPost(post);
+        comment.setUser(user);
+        comment.setContent(content);
+        comment.setCreatedAt(LocalDateTime.now());
+
+        forumCommentRepo.save(comment);
 
         return "redirect:/community?scope=" + scope + "&sort=" + sort + "#posts";
     }
