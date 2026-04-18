@@ -1,10 +1,7 @@
-package com.cruxconqueror.crux_conqueror.repository;
+package com.cruxconqueror.crux_conqueror.model;
 import java.time.LocalDateTime;
 
-import com.cruxconqueror.crux_conqueror.model.ForumPost;
-
 import jakarta.persistence.*;
-import com.cruxconqueror.crux_conqueror.model.User;
 
 @Entity
 @Table(name = "Forum_Comments")
