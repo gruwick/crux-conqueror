@@ -96,7 +96,7 @@
 
     <div class="chart-controls" id="trainingControls">
       <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="0">Sessions</button>
-      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="1">Minutes</button>
+      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="1">Hours</button>
       <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="2">Intensity</button>
       <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="3">Attempts</button>
       <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="4">Tops</button>
@@ -213,7 +213,7 @@
 
   const trainingChartData = {
     sessions: /*[[${chartData}]]*/ [],
-    minutes: /*[[${minutesChartData}]]*/ [],
+    hours: /*[[${hoursChartData}]]*/ [],
     intensity: /*[[${intensityChartData}]]*/ [],
     attempts: /*[[${attemptsChartData}]]*/ [],
     tops: /*[[${topsChartData}]]*/ [],
@@ -237,7 +237,7 @@
       labels: chartLabels,
       datasets: [
         { label: 'Sessions', data: trainingChartData.sessions, tension: 0.3, fill: false, hidden: true },
-        { label: 'Minutes', data: trainingChartData.minutes, tension: 0.3, fill: false, hidden: true },
+        { label: 'Hours', data: trainingChartData.minutes, tension: 0.3, fill: false, hidden: true },
         { label: 'Intensity', data: trainingChartData.intensity, tension: 0.3, fill: false, hidden: true },
         { label: 'Attempts', data: trainingChartData.attempts, tension: 0.3, fill: false, hidden: true },
         { label: 'Tops', data: trainingChartData.tops, tension: 0.3, fill: false, hidden: true },
