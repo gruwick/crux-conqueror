@@ -84,19 +84,47 @@ public class DashboardController {
 
                 DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEE");
                 List<String> chartLabels = new ArrayList<>();
-                List<Integer> chartData = new ArrayList<>();
-                        
+                List<Integer> sessionsChartData = new ArrayList<>();
+                List<Integer> minutesChartData = new ArrayList<>();
+                List<Double> intensityChartData = new ArrayList<>();
+                List<Integer> attemptsChartData = new ArrayList<>();
+                List<Integer> topsChartData = new ArrayList<>();
+                List<Integer> flashesChartData = new ArrayList<>();
+
                 for (int i = 6; i >= 0; i--) {
                 LocalDate day = LocalDate.now().minusDays(i);
                 chartLabels.add(day.format(dayFormatter));
 
-                int countForDay = (int) sessions.stream()
-                         .filter(s -> s.getSessionDate() != null)
-                         .filter(s -> s.getSessionDate().toLocalDate().equals(day))
-                         .count();
+                List<TrainingSessions> daySessions = sessions.stream()
+                        .filter(s -> s.getSessionDate() != null)
+                        .filter(s -> s.getSessionDate().toLocalDate().equals(day))
+                        .toList();
 
-                 chartData.add(countForDay);
-        }
+                sessionsChartData.add(daySessions.size());
+
+                minutesChartData.add(daySessions.stream()
+                        .filter(s -> s.getDurationMinutes() != null)
+                        .mapToInt(TrainingSessions::getDurationMinutes)
+                        .sum());
+
+                intensityChartData.add(daySessions.stream()
+                        .filter(s -> s.getIntensity() != null)
+                        .mapToInt(TrainingSessions::getIntensity)
+                        .average()
+                        .orElse(0.0));
+
+                attemptsChartData.add(daySessions.stream()
+                        .mapToInt(s -> s.getAttemptsTotal() == null ? 0 : s.getAttemptsTotal())
+                        .sum());
+
+                topsChartData.add(daySessions.stream()
+                        .mapToInt(s -> s.getTopsTotal() == null ? 0 : s.getTopsTotal())
+                        .sum());
+
+                flashesChartData.add(daySessions.stream()
+                        .mapToInt(s -> s.getFlashesTotal() == null ? 0 : s.getFlashesTotal())
+                        .sum());
+                }
 
 
         model.addAttribute("username", user.getUsername());
@@ -115,7 +143,13 @@ public class DashboardController {
 
         model.addAttribute("sessionsPrevious7Days", sessionsPrevious7Days);
         model.addAttribute("chartLabels", chartLabels);
-        model.addAttribute("chartData", chartData);
+        
+        model.addAttribute("chartData", sessionsChartData);
+        model.addAttribute("minutesChartData", minutesChartData);
+        model.addAttribute("intensityChartData", intensityChartData);
+        model.addAttribute("attemptsChartData", attemptsChartData);
+        model.addAttribute("topsChartData", topsChartData);
+        model.addAttribute("flashesChartData", flashesChartData);
 
 
         return "dashboard/dashboard";
