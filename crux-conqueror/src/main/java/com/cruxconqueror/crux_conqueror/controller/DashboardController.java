@@ -102,10 +102,14 @@ public class DashboardController {
 
                 sessionsChartData.add(daySessions.size());
 
-                minutesChartData.add(daySessions.stream()
+                minutesChartData.add(
+                        (int) Math.round(
+                         daySessions.stream()
                         .filter(s -> s.getDurationMinutes() != null)
                         .mapToInt(TrainingSessions::getDurationMinutes)
-                        .sum());
+                        .sum() / 60.0
+                        )
+                );
 
                 intensityChartData.add(daySessions.stream()
                         .filter(s -> s.getIntensity() != null)
@@ -143,7 +147,7 @@ public class DashboardController {
 
         model.addAttribute("sessionsPrevious7Days", sessionsPrevious7Days);
         model.addAttribute("chartLabels", chartLabels);
-        
+
         model.addAttribute("chartData", sessionsChartData);
         model.addAttribute("minutesChartData", minutesChartData);
         model.addAttribute("intensityChartData", intensityChartData);
