@@ -84,64 +84,93 @@
     </section>
 
     <section class="content-grid dashboard-grid">
-      <div class="panel-card large-panel">
-        <h2>Sessions Over Last 7 Days</h2>
-        <div class="chart-wrap">
-          <canvas id="sessionsChart"></canvas>
+  <div class="panel-card large-panel">
+    <div class="chart-panel-header">
+      <h2 id="chartTitle">Training Trends</h2>
+
+      <div class="chart-mode-toggle">
+        <button type="button" class="chart-toggle-btn active" id="trainingModeBtn">Training</button>
+        <button type="button" class="chart-toggle-btn" id="nutritionModeBtn">Nutrition</button>
+      </div>
+    </div>
+
+    <div class="chart-controls" id="trainingControls">
+      <button type="button" class="metric-toggle-btn active" data-chart="training" data-dataset="0">Sessions</button>
+      <button type="button" class="metric-toggle-btn active" data-chart="training" data-dataset="1">Minutes</button>
+      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="2">Intensity</button>
+      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="3">Attempts</button>
+      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="4">Tops</button>
+      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="5">Flashes</button>
+    </div>
+
+    <div class="chart-controls hidden-controls" id="nutritionControls">
+      <button type="button" class="metric-toggle-btn active" data-chart="nutrition" data-dataset="0">Calories</button>
+      <button type="button" class="metric-toggle-btn active" data-chart="nutrition" data-dataset="1">Protein</button>
+      <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="2">Fat</button>
+      <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="3">Sugar</button>
+      <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="4">Salt</button>
+    </div>
+
+    <div class="chart-wrap" id="trainingChartWrap">
+      <canvas id="trainingChart"></canvas>
+    </div>
+
+    <div class="chart-wrap hidden-chart" id="nutritionChartWrap">
+      <canvas id="nutritionChart"></canvas>
+    </div>
+  </div>
+
+  <div class="side-stack">
+    <div class="panel-card">
+      <h2>Insights</h2>
+
+      <div class="insight-list">
+        <p>
+          You logged <strong th:text="${sessionsLast7Days}">0</strong>
+          sessions in the last 7 days.
+        </p>
+
+        <p th:if="${sessionsLast7Days > sessionsPrevious7Days}">
+          Training frequency is up compared with the previous 7 days.
+        </p>
+
+        <p th:if="${sessionsLast7Days == sessionsPrevious7Days}">
+          Training frequency matches the previous 7 days.
+        </p>
+
+        <p th:if="${sessionsLast7Days < sessionsPrevious7Days}">
+          Training frequency is down compared with the previous 7 days.
+        </p>
+
+        <p>
+          In the last 30 days you completed
+          <strong th:text="${totalMinutesLast30Days}">0</strong> minutes of training.
+        </p>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <h2>Bouldering Totals (30 Days)</h2>
+
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <span class="mini-stat-label">Attempts</span>
+          <span class="mini-stat-value" th:text="${attemptsLast30Days}">0</span>
+        </div>
+
+        <div class="mini-stat">
+          <span class="mini-stat-label">Tops</span>
+          <span class="mini-stat-value" th:text="${topsLast30Days}">0</span>
+        </div>
+
+        <div class="mini-stat">
+          <span class="mini-stat-label">Flashes</span>
+          <span class="mini-stat-value" th:text="${flashesLast30Days}">0</span>
         </div>
       </div>
-
-      <div class="side-stack">
-        <div class="panel-card">
-          <h2>Insights</h2>
-
-          <div class="insight-list">
-            <p>
-              You logged <strong th:text="${sessionsLast7Days}">0</strong>
-              sessions in the last 7 days.
-            </p>
-
-            <p th:if="${sessionsLast7Days > sessionsPrevious7Days}">
-              Training frequency is up compared with the previous 7 days.
-            </p>
-
-            <p th:if="${sessionsLast7Days == sessionsPrevious7Days}">
-              Training frequency matches the previous 7 days.
-            </p>
-
-            <p th:if="${sessionsLast7Days < sessionsPrevious7Days}">
-              Training frequency is down compared with the previous 7 days.
-            </p>
-
-            <p>
-              In the last 30 days you completed
-              <strong th:text="${totalMinutesLast30Days}">0</strong> minutes of training.
-            </p>
-          </div>
-        </div>
-
-        <div class="panel-card">
-          <h2>Bouldering Totals (30 Days)</h2>
-
-          <div class="mini-stats">
-            <div class="mini-stat">
-              <span class="mini-stat-label">Attempts</span>
-              <span class="mini-stat-value" th:text="${attemptsLast30Days}">0</span>
-            </div>
-
-            <div class="mini-stat">
-              <span class="mini-stat-label">Tops</span>
-              <span class="mini-stat-value" th:text="${topsLast30Days}">0</span>
-            </div>
-
-            <div class="mini-stat">
-              <span class="mini-stat-label">Flashes</span>
-              <span class="mini-stat-value" th:text="${flashesLast30Days}">0</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
+  </div>
+</section>
 
     <section class="panel-card recent-sessions-panel">
       <div class="panel-heading-row">
@@ -179,42 +208,135 @@
     </section>
   </main>
 
-  <script th:inline="javascript">
-    const chartLabels = /*[[${chartLabels}]]*/ [];
-    const chartData = /*[[${chartData}]]*/ [];
+<script th:inline="javascript">
+  const chartLabels = /*[[${chartLabels}]]*/ [];
 
-    const ctx = document.getElementById('sessionsChart');
+  const trainingChartData = {
+    sessions: /*[[${chartData}]]*/ [],
+    minutes: /*[[${minutesChartData}]]*/ [],
+    intensity: /*[[${intensityChartData}]]*/ [],
+    attempts: /*[[${attemptsChartData}]]*/ [],
+    tops: /*[[${topsChartData}]]*/ [],
+    flashes: /*[[${flashesChartData}]]*/ []
+  };
 
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: chartLabels,
-        datasets: [{
-          label: 'Sessions',
-          data: chartData,
-          tension: 0.3,
-          fill: false
-        }]
+  const nutritionChartData = {
+    calories: /*[[${caloriesChartData}]]*/ [0,0,0,0,0,0,0],
+    protein: /*[[${proteinChartData}]]*/ [0,0,0,0,0,0,0],
+    fat: /*[[${fatChartData}]]*/ [0,0,0,0,0,0,0],
+    sugar: /*[[${sugarChartData}]]*/ [0,0,0,0,0,0,0],
+    salt: /*[[${saltChartData}]]*/ [0,0,0,0,0,0,0]
+  };
+
+  const trainingCtx = document.getElementById('trainingChart');
+  const nutritionCtx = document.getElementById('nutritionChart');
+
+  const trainingChart = new Chart(trainingCtx, {
+    type: 'line',
+    data: {
+      labels: chartLabels,
+      datasets: [
+        { label: 'Sessions', data: trainingChartData.sessions, tension: 0.3, fill: false, hidden: false },
+        { label: 'Minutes', data: trainingChartData.minutes, tension: 0.3, fill: false, hidden: false },
+        { label: 'Intensity', data: trainingChartData.intensity, tension: 0.3, fill: false, hidden: true },
+        { label: 'Attempts', data: trainingChartData.attempts, tension: 0.3, fill: false, hidden: true },
+        { label: 'Tops', data: trainingChartData.tops, tension: 0.3, fill: false, hidden: true },
+        { label: 'Flashes', data: trainingChartData.flashes, tension: 0.3, fill: false, hidden: true }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top' }
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top'
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              precision: 0
-            }
-          }
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 }
         }
       }
+    }
+  });
+
+  const nutritionChart = new Chart(nutritionCtx, {
+    type: 'line',
+    data: {
+      labels: chartLabels,
+      datasets: [
+        { label: 'Calories', data: nutritionChartData.calories, tension: 0.3, fill: false, hidden: false },
+        { label: 'Protein', data: nutritionChartData.protein, tension: 0.3, fill: false, hidden: false },
+        { label: 'Fat', data: nutritionChartData.fat, tension: 0.3, fill: false, hidden: true },
+        { label: 'Sugar', data: nutritionChartData.sugar, tension: 0.3, fill: false, hidden: true },
+        { label: 'Salt', data: nutritionChartData.salt, tension: 0.3, fill: false, hidden: true }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top' }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  const trainingModeBtn = document.getElementById('trainingModeBtn');
+  const nutritionModeBtn = document.getElementById('nutritionModeBtn');
+  const trainingControls = document.getElementById('trainingControls');
+  const nutritionControls = document.getElementById('nutritionControls');
+  const trainingChartWrap = document.getElementById('trainingChartWrap');
+  const nutritionChartWrap = document.getElementById('nutritionChartWrap');
+  const chartTitle = document.getElementById('chartTitle');
+
+  trainingModeBtn.addEventListener('click', function () {
+    trainingModeBtn.classList.add('active');
+    nutritionModeBtn.classList.remove('active');
+
+    trainingControls.classList.remove('hidden-controls');
+    nutritionControls.classList.add('hidden-controls');
+
+    trainingChartWrap.classList.remove('hidden-chart');
+    nutritionChartWrap.classList.add('hidden-chart');
+
+    chartTitle.textContent = 'Training Trends';
+  });
+
+  nutritionModeBtn.addEventListener('click', function () {
+    nutritionModeBtn.classList.add('active');
+    trainingModeBtn.classList.remove('active');
+
+    nutritionControls.classList.remove('hidden-controls');
+    trainingControls.classList.add('hidden-controls');
+
+    nutritionChartWrap.classList.remove('hidden-chart');
+    trainingChartWrap.classList.add('hidden-chart');
+
+    chartTitle.textContent = 'Nutrition Trends';
+  });
+
+  document.querySelectorAll('.metric-toggle-btn').forEach(button => {
+    button.addEventListener('click', function () {
+      const chartType = this.dataset.chart;
+      const datasetIndex = parseInt(this.dataset.dataset);
+
+      this.classList.toggle('active');
+
+      if (chartType === 'training') {
+        const meta = trainingChart.getDatasetMeta(datasetIndex);
+        meta.hidden = meta.hidden === null ? !trainingChart.data.datasets[datasetIndex].hidden : null;
+        trainingChart.update();
+      } else {
+        const meta = nutritionChart.getDatasetMeta(datasetIndex);
+        meta.hidden = meta.hidden === null ? !nutritionChart.data.datasets[datasetIndex].hidden : null;
+        nutritionChart.update();
+      }
     });
-  </script>
+  });
+</script>
 </body>
 </html>

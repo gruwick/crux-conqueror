@@ -149,6 +149,62 @@
 .dashboard-table tbody tr:hover {
     background: #f8fafc;
 }
+.chart-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.chart-panel-header h2 {
+    margin: 0;
+}
+
+.chart-mode-toggle {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chart-toggle-btn,
+.metric-toggle-btn {
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #1f2937;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.chart-toggle-btn:hover,
+.metric-toggle-btn:hover {
+    background: #eef2f7;
+}
+
+.chart-toggle-btn.active,
+.metric-toggle-btn.active {
+    background: #22c55e;
+    color: #0f172a;
+    border-color: #22c55e;
+}
+
+.chart-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.hidden-controls {
+    display: none;
+}
+
+.hidden-chart {
+    display: none;
+}
 
 @media (max-width: 900px) {
     .dashboard-header {
