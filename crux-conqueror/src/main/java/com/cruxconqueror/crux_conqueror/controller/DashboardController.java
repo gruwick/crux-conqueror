@@ -3,6 +3,9 @@ package com.cruxconqueror.crux_conqueror.controller;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,6 +75,30 @@ public class DashboardController {
 
         List<TrainingSessions> recentSessions = sessions.stream().limit(5).toList();
 
+                LocalDateTime last14 = now.minusDays(14);
+                int sessionsPrevious7Days = (int) sessions.stream()
+                .filter(s -> s.getSessionDate() != null
+                        && s.getSessionDate().isAfter(last14)
+                        && s.getSessionDate().isBefore(last7))
+                .count();
+
+                DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEE");
+                List<String> chartLabels = new ArrayList<>();
+                List<Integer> chartData = new ArrayList<>();
+                        
+                for (int i = 6; i >= 0; i--) {
+                LocalDate day = LocalDate.now().minusDays(i);
+                chartLabels.add(day.format(dayFormatter));
+
+                int countForDay = (int) sessions.stream()
+                         .filter(s -> s.getSessionDate() != null)
+                         .filter(s -> s.getSessionDate().toLocalDate().equals(day))
+                         .count();
+
+                 chartData.add(countForDay);
+        }
+
+
         model.addAttribute("username", user.getUsername());
         model.addAttribute("totalSessions", totalsessions);
         model.addAttribute("sessionsLast7Days", sessionsLast7Days);
@@ -85,6 +112,11 @@ public class DashboardController {
         model.addAttribute("flashesLast30Days", flashesLast30Days);
 
         model.addAttribute("recentSessions", recentSessions);
+
+        model.addAttribute("sessionsPrevious7Days", sessionsPrevious7Days);
+        model.addAttribute("chartLabels", chartLabels);
+        model.addAttribute("chartData", chartData);
+
 
         return "dashboard/dashboard";
     }

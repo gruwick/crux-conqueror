@@ -2,60 +2,219 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crux Conqueror - Dashboard</title>
+
   <link rel="stylesheet" th:href="@{/css/navbar.css}">
+  <link rel="stylesheet" th:href="@{/css/home.css}">
+  <link rel="stylesheet" th:href="@{/css/normalpage.css}">
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body>
+<body class="normalpage">
   <div th:replace="fragments/navbar :: navbar"></div>
 
-  <h1>Dashboard</h1>
+  <main class="page-container">
+    <section class="panel-card dashboard-header">
+      <div>
+        <h1>Dashboard</h1>
+        <p class="dashboard-subtitle" th:text="'Signed in as: ' + ${username}">Signed in as: user</p>
+      </div>
 
-  <p th:text="'Signed in as: ' + ${username}"></p>
+      <div class="dashboard-actions">
+        <a th:href="@{/sessions/new}" class="action-btn primary-btn">
+          <i class="fa-solid fa-dumbbell"></i>
+          <span>Log Session</span>
+        </a>
 
-  <h2>Session summary</h2>
-  <ul>
-    <li th:text="'Total sessions: ' + ${totalSessions}"></li>
-    <li th:text="'Sessions (last 7 days): ' + ${sessionsLast7Days}"></li>
-    <li th:text="'Sessions (last 30 days): ' + ${sessionsLast30Days}"></li>
-    <li th:text="'Total minutes (last 30 days): ' + ${totalMinutesLast30Days}"></li>
-    <li th:text="'Avg intensity (last 30 days): ' + ${#numbers.formatDecimal(avgIntensityLast30Days, 1, 1)}"></li>
-  </ul>
+        <a th:href="@{/nutrition}" class="secondary-page-btn">
+          <i class="fa-solid fa-utensils"></i>
+          <span>Nutrition</span>
+        </a>
+      </div>
+    </section>
 
-  <h2>Bouldering totals (last 30 days)</h2>
-  <ul>
-    <li th:text="'Attempts: ' + ${attemptsLast30Days}"></li>
-    <li th:text="'Tops: ' + ${topsLast30Days}"></li>
-    <li th:text="'Flashes: ' + ${flashesLast30Days}"></li>
-  </ul>
+    <section class="summary-section">
+      <h2>Training Summary</h2>
 
-  <h2>Recent sessions</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon sessions">
+            <i class="fa-solid fa-mountain"></i>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Total Sessions</p>
+            <h3 th:text="${totalSessions}">0</h3>
+          </div>
+        </div>
 
-  <div th:if="${#lists.isEmpty(recentSessions)}">
-    <p>No sessions logged yet. Try logging one!</p>
-    <a th:href="@{/sessions/new}">Log a session</a>
-  </div>
+        <div class="stat-card">
+          <div class="stat-icon calories">
+            <i class="fa-solid fa-calendar-week"></i>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Last 7 Days</p>
+            <h3 th:text="${sessionsLast7Days}">0</h3>
+          </div>
+        </div>
 
-  <table th:if="${!#lists.isEmpty(recentSessions)}" border="1" cellpadding="6">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Type</th>
-        <th>Duration</th>
-        <th>Intensity</th>
-        <th>Highest Grade</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="s : ${recentSessions}">
-        <td th:text="${#temporals.format(s.sessionDate, 'dd MMM yyyy HH:mm')}"></td>
-        <td th:text="${s.sessionType}"></td>
-        <td th:text="${s.durationMinutes} + ' min'"></td>
-        <td th:text="${s.intensity}"></td>
-        <td th:text="${s.highestGrade}"></td>
-      </tr>
-    </tbody>
-  </table>
+        <div class="stat-card">
+          <div class="stat-icon protein">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Minutes (30 Days)</p>
+            <h3 th:text="${totalMinutesLast30Days}">0</h3>
+          </div>
+        </div>
 
+        <div class="stat-card">
+          <div class="stat-icon grade">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Avg Intensity</p>
+            <h3 th:text="${#numbers.formatDecimal(avgIntensityLast30Days, 1, 1)}">0.0</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-grid dashboard-grid">
+      <div class="panel-card large-panel">
+        <h2>Sessions Over Last 7 Days</h2>
+        <div class="chart-wrap">
+          <canvas id="sessionsChart"></canvas>
+        </div>
+      </div>
+
+      <div class="side-stack">
+        <div class="panel-card">
+          <h2>Insights</h2>
+
+          <div class="insight-list">
+            <p>
+              You logged <strong th:text="${sessionsLast7Days}">0</strong>
+              sessions in the last 7 days.
+            </p>
+
+            <p th:if="${sessionsLast7Days > sessionsPrevious7Days}">
+              Training frequency is up compared with the previous 7 days.
+            </p>
+
+            <p th:if="${sessionsLast7Days == sessionsPrevious7Days}">
+              Training frequency matches the previous 7 days.
+            </p>
+
+            <p th:if="${sessionsLast7Days < sessionsPrevious7Days}">
+              Training frequency is down compared with the previous 7 days.
+            </p>
+
+            <p>
+              In the last 30 days you completed
+              <strong th:text="${totalMinutesLast30Days}">0</strong> minutes of training.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <h2>Bouldering Totals (30 Days)</h2>
+
+          <div class="mini-stats">
+            <div class="mini-stat">
+              <span class="mini-stat-label">Attempts</span>
+              <span class="mini-stat-value" th:text="${attemptsLast30Days}">0</span>
+            </div>
+
+            <div class="mini-stat">
+              <span class="mini-stat-label">Tops</span>
+              <span class="mini-stat-value" th:text="${topsLast30Days}">0</span>
+            </div>
+
+            <div class="mini-stat">
+              <span class="mini-stat-label">Flashes</span>
+              <span class="mini-stat-value" th:text="${flashesLast30Days}">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel-card recent-sessions-panel">
+      <div class="panel-heading-row">
+        <h2>Recent Sessions</h2>
+        <a th:href="@{/sessions}" class="secondary-page-btn">View All</a>
+      </div>
+
+      <div th:if="${#lists.isEmpty(recentSessions)}" class="empty-state">
+        <p>No sessions logged yet. Try logging one to start building your dashboard.</p>
+        <a th:href="@{/sessions/new}" class="action-btn primary-btn">Log a session</a>
+      </div>
+
+      <div th:if="${!#lists.isEmpty(recentSessions)}" class="table-wrapper">
+        <table class="dashboard-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Duration</th>
+              <th>Intensity</th>
+              <th>Highest Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="s : ${recentSessions}">
+              <td th:text="${#temporals.format(s.sessionDate, 'dd MMM yyyy HH:mm')}">18 Apr 2026 00:26</td>
+              <td th:text="${s.sessionType}">BOULDERING</td>
+              <td th:text="${s.durationMinutes} + ' min'">60 min</td>
+              <td th:text="${s.intensity}">5</td>
+              <td th:text="${s.highestGrade != null ? s.highestGrade : 'N/A'}">N/A</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script th:inline="javascript">
+    const chartLabels = /*[[${chartLabels}]]*/ [];
+    const chartData = /*[[${chartData}]]*/ [];
+
+    const ctx = document.getElementById('sessionsChart');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          label: 'Sessions',
+          data: chartData,
+          tension: 0.3,
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              precision: 0
+            }
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
