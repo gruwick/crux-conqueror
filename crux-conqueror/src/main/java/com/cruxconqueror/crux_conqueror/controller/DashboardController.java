@@ -85,7 +85,7 @@ public class DashboardController {
                 DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEE");
                 List<String> chartLabels = new ArrayList<>();
                 List<Integer> sessionsChartData = new ArrayList<>();
-                List<Integer> minutesChartData = new ArrayList<>();
+                List<Integer> hoursChartData = new ArrayList<>();
                 List<Double> intensityChartData = new ArrayList<>();
                 List<Integer> attemptsChartData = new ArrayList<>();
                 List<Integer> topsChartData = new ArrayList<>();
@@ -102,7 +102,7 @@ public class DashboardController {
 
                 sessionsChartData.add(daySessions.size());
 
-                minutesChartData.add(
+                hoursChartData.add(
                         (int) Math.round(
                          daySessions.stream()
                         .filter(s -> s.getDurationMinutes() != null)
@@ -149,7 +149,7 @@ public class DashboardController {
         model.addAttribute("chartLabels", chartLabels);
 
         model.addAttribute("chartData", sessionsChartData);
-        model.addAttribute("minutesChartData", minutesChartData);
+        model.addAttribute("hoursChartData", hoursChartData);
         model.addAttribute("intensityChartData", intensityChartData);
         model.addAttribute("attemptsChartData", attemptsChartData);
         model.addAttribute("topsChartData", topsChartData);
