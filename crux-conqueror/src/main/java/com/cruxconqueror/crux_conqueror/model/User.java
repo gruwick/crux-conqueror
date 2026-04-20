@@ -60,6 +60,21 @@ private String weightVisibility;
 @Column(name = "Experience_Visibility", length = 20)
 private String experienceVisibility;
 
+@Column(name = "Target_Mode", length = 20)
+private String targetMode;
+
+@Column(name = "Calorie_Goal")
+private Integer calorieGoal;
+
+@Column(name = "Protein_Goal")
+private Integer proteinGoal;
+
+@Column(name = "Carb_Goal")
+private Integer carbGoal;
+
+@Column(name = "Fat_Goal")
+private Integer fatGoal;
+
 public User(){}
 
 public User(String username, String email, String passwordHash){
@@ -67,7 +82,7 @@ public User(String username, String email, String passwordHash){
     this.email = email;
     this.passwordHash = passwordHash;
 }
- public Long getId() { return id; }
+    public Long getId() { return id; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
@@ -115,4 +130,19 @@ public User(String username, String email, String passwordHash){
 
     public String getExperienceVisibility() { return experienceVisibility; }
     public void setExperienceVisibility(String experienceVisibility) { this.experienceVisibility = experienceVisibility; }
+
+    public String getTargetMode() { return targetMode; }
+    public void setTargetMode(String targetMode) { this.targetMode = targetMode; }
+
+    public Integer getCalorieGoal() { return calorieGoal; }
+    public void setCalorieGoal(Integer calorieGoal) { this.calorieGoal = calorieGoal; }
+
+    public Integer getProteinGoal() { return proteinGoal; }
+    public void setProteinGoal(Integer proteinGoal) { this.proteinGoal = proteinGoal; }
+
+    public Integer getCarbGoal() { return carbGoal; }
+    public void setCarbGoal(Integer carbGoal) { this.carbGoal = carbGoal; }
+
+    public Integer getFatGoal() { return fatGoal; }
+    public void setFatGoal(Integer fatGoal) { this.fatGoal = fatGoal; }
 }
