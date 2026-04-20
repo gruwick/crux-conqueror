@@ -124,24 +124,21 @@
   <div class="panel-card">
     <h2>Insights</h2>
     <div class="insight-list">
-      <h3 class="insight-subheading">Training</h3>
-      <p>
-        You logged <strong th:text="${sessionsLast7Days}">0</strong>
-        sessions in the last 7 days.
-      </p>
-      <p th:if="${sessionsLast7Days > sessionsPrevious7Days}">
-        Training frequency is up compared with the previous 7 days.
-      </p>
-      <p th:if="${sessionsLast7Days == sessionsPrevious7Days}">
-        Training frequency matches the previous 7 days.
-      </p>
-      <p th:if="${sessionsLast7Days < sessionsPrevious7Days}">
-        Training frequency is down compared with the previous 7 days.
-      </p>
-      <p>
-        In the last 30 days you completed
-        <strong th:text="${totalMinutesLast30Days}">0</strong> minutes of training.
-      </p>
+    <h3 class="insight-subheading">Training</h3>
+    <p>
+      You logged <strong th:text="${sessionsLast7Days}">0</strong>
+      sessions in the last 7 days.
+    </p>
+    <p th:text="${trainingSummary}">
+      Training summary goes here.
+    </p>
+    <p>
+      In the last 30 days you completed
+      <strong th:text="${totalMinutesLast30Days}">0</strong> minutes of training.
+    </p>
+    <p th:text="${climbingSummary}">
+      Climbing summary goes here.
+    </p>
       <hr class="insight-divider">
       <h3 class="insight-subheading">Nutrition</h3>
       <p th:if="${calorieGoal != null}">

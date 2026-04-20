@@ -77,6 +77,16 @@ public class DashboardController {
         int flashesLast30Days = sessionsLast30.stream()
                 .mapToInt(s -> s.getFlashesTotal() == null ? 0 : s.getFlashesTotal())
                 .sum();
+        
+        String climbingSummary;
+
+        if (attemptsLast30Days == 0) {climbingSummary = "No bouldering attempts were logged in the last 30 days.";} 
+        else if (topsLast30Days == 0) {climbingSummary = "Attempts were logged, but no tops were recorded in the last 30 days.";} 
+        else {double topRate = (double) topsLast30Days / attemptsLast30Days;
+        if (topRate < 0.3) {climbingSummary = "A high number of attempts resulted in relatively few tops, suggesting difficulty completing climbs consistently.";} 
+        else if (topRate < 0.6) {climbingSummary = "Bouldering performance appears balanced, with a moderate proportion of attempts resulting in tops.";} 
+        else {climbingSummary = "A strong proportion of attempts resulted in tops, indicating effective route completion.";}
+        }
 
         List<TrainingSessions> recentSessions = sessions.stream().limit(5).toList();
 
@@ -86,6 +96,21 @@ public class DashboardController {
                         && s.getSessionDate().isAfter(last14)
                         && s.getSessionDate().isBefore(last7))
                 .count();
+
+                String trainingSummary;
+
+                if (sessionsLast7Days == 0) {
+                trainingSummary = "No training sessions were logged in the last 7 days.";
+                } 
+                else if (sessionsLast7Days > sessionsPrevious7Days) {
+                trainingSummary = "Training frequency has increased compared with the previous 7 days.";
+                } 
+                else if (sessionsLast7Days < sessionsPrevious7Days) {
+                trainingSummary = "Training frequency has decreased compared with the previous 7 days.";
+                } 
+                else {
+                trainingSummary = "Training frequency matches the previous 7 days.";
+                }
 
                 DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEE");
                 List<String> chartLabels = new ArrayList<>();
