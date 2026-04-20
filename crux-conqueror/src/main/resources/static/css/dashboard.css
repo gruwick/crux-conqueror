@@ -206,6 +206,18 @@
     display: none;
 }
 
+.insight-divider {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 16px 0;
+}
+
+.insight-subheading {
+    margin: 0 0 10px;
+    font-size: 1.05rem;
+    color: #0f172a;
+}
+
 @media (max-width: 900px) {
     .dashboard-header {
         flex-direction: column;
