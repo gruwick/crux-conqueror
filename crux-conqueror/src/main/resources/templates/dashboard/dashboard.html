@@ -144,6 +144,14 @@
       </p>
       <hr class="insight-divider">
       <h3 class="insight-subheading">Nutrition</h3>
+      <p th:if="${calorieGoal != null}">
+        Daily targets are personalised using your profile, activity level, and selected goal.
+      </p>
+      <p th:if="${calorieGoal != null}">
+        Calorie target: <strong th:text="${calorieGoal}">0</strong> kcal,
+        Protein target: <strong th:text="${proteinGoal}">0</strong> g,
+        Fat target: <strong th:text="${fatGoal}">0</strong> g.
+      </p>
       <p th:if="${latestCaloriesPercent > 0 || latestProteinPercent > 0 || latestFatPercent > 0}">
         Calories reached <strong th:text="${latestCaloriesPercent}">0</strong>% of target.
       </p>
