@@ -143,7 +143,7 @@ if(search != null && !search.isBlank()){
                     }
                     userRepo.save(user);
     
-        return "redirect:/account";
+        return "redirect:/account#nutrition";
     }
     private void calculateGoals(User user){
         if (user.getWeightKg() == null || user.getHeightCm() == null || user.getAge() == null){
