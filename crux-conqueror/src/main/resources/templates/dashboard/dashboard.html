@@ -275,11 +275,26 @@
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { display: true, position: 'top' }
+        legend: { display: true, position: 'top' },
+        tooltip:{
+          callbacks: {
+            label: function(context){
+              let label = context.dataset.label || '';
+              const isPercentage = ['Calories', 'Protein', 'Fat'].includes(label);
+              return label + ': ' + context.parsed.y + (isPercentage ? '%' : '');
+
+              }
+            }
+          }
+        }
       },
       scales: {
         y: {
-          beginAtZero: true
+          beginAtZero: true,
+          ticks: {
+            callback:function(value) {
+              return value + '%';
+          }
         }
       }
     }
