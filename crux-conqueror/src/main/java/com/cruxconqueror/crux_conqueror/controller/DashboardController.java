@@ -145,17 +145,27 @@ public class DashboardController {
                         .filter(e -> e.getEntryDateTime().toLocalDate().equals(day))
                         .toList();
 
-                caloriesChartData.add(dayFoodEntries.stream()
-                        .mapToInt(e -> e.getCalories() == null ? 0 : e.getCalories())
-                        .sum());
+                int dayCals = dayFoodEntries.stream()
+                .mapToInt(e ->e.getCalories() == null ? 0: e.getCalories())
+                .sum();
 
-                proteinChartData.add(dayFoodEntries.stream()
-                        .mapToInt(e -> e.getProtein() == null ? 0 : e.getProtein())
-                        .sum());
+                int dayProtein = dayFoodEntries.stream()
+                .mapToInt(e ->e.getProtein() == null ? 0: e.getProtein())
+                .sum();
+                
+                int dayFat = dayFoodEntries.stream()
+                .mapToInt(e ->e.getFats() == null ? 0: e.getFats())
+                .sum();
 
-                fatChartData.add(dayFoodEntries.stream()
-                        .mapToInt(e -> e.getFats() == null ? 0 : e.getFats())
-                        .sum());
+                caloriesChartData.add(user.getCalorieGoal() != null && user.getCalorieGoal() > 0
+                        ? (int) Math.round(((double) dayCals / user.getCalorieGoal()) *100) : 0);
+                
+                proteinChartData.add(user.getProteinGoal() != null && user.getProteinGoal() > 0
+                        ? (int) Math.round(((double) dayProtein / user.getProteinGoal()) *100) : 0);
+
+                fatChartData.add(user.getFatGoal() != null && user.getFatGoal() > 0
+                        ? (int) Math.round(((double) dayFat / user.getFatGoal()) *100) : 0);
+
 
                 sugarChartData.add(dayFoodEntries.stream()
                         .mapToInt(e -> e.getSugar() == null ? 0 : e.getSugar())
