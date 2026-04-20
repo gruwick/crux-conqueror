@@ -276,6 +276,12 @@ public class DashboardController {
         model.addAttribute("latestProteinPercent", latestProteinPercent);
         model.addAttribute("latestFatPercent", latestFatPercent);
         model.addAttribute("nutritionSummary", nutritionSummary);
+        
+        model.addAttribute("calorieGoal", user.getCalorieGoal());
+        model.addAttribute("proteinGoal", user.getProteinGoal());
+        model.addAttribute("fatGoal", user.getFatGoal());
+        model.addAttribute("goalType", user.getGoalType());
+        model.addAttribute("activityLevel", user.getActivityLevel());
         return "dashboard/dashboard";
     }
 
