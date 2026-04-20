@@ -45,10 +45,13 @@
 .dashboard-grid {
     margin-bottom: 24px;
 }
+.dashboard-grid .large-panel {
+    min-height: auto;
+}
 
 .chart-wrap {
     position: relative;
-    height: 320px;
+    height: 220px;
 }
 
 .insight-list {
