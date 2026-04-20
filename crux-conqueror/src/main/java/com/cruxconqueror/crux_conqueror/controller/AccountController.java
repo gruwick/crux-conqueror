@@ -162,10 +162,27 @@ if(search != null && !search.isBlank()){
         else if("Cut".equalsIgnoreCase(goal)) ree -= 300;
 
         user.setCalorieGoal((int) Math.round(ree));
-        user.setProteinGoal((int) Math.round((ree *.3)/4));
+
+        int totalCalories = (int) Math.round(ree);
+        user.setCalorieGoal(totalCalories);
+        
+        int proteinGrams = (int) Math.round(user.getWeightKg() *1.8);
+        int fatGrams = (int) Math.round(user.getWeightKg() * 0.8);
+        int proteinCalories = proteinGrams *4;
+        int fatCalories = fatGrams *9;
+        int remainingCalories = totalCalories -(proteinCalories + fatCalories);
+        if (remainingCalories < 0) remainingCalories = 0;
+        int carbGrams = remainingCalories / 4;
+
+        user.setProteinGoal(proteinGrams);
+        user.setFatGoal(fatGrams);
+        user.setCarbGoal(carbGrams);
+
+
+       /*  user.setProteinGoal((int) Math.round((ree *.3)/4));
         user.setFatGoal((int) Math.round((ree *.25) /9));
         user.setCarbGoal((int) Math.round(ree * .45) /4);
-
+*/
     }
 
  @PostMapping("/friends/request")
