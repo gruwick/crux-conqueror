@@ -97,10 +97,21 @@ if(search != null && !search.isBlank()){
 
     @PostMapping("/account")
     public String updateAccount(Principal principal, @RequestParam(required = false) String bio,
-                @RequestParam(required = false) Integer age,@RequestParam(required = false) Double heightCm,@RequestParam(required = false) Double weightKg,
-                @RequestParam(required = false) String experienceLevel,@RequestParam(required = false) String goalType,@RequestParam(required = false) String activityLevel,
-                @RequestParam(required = false) String bioVisibility,@RequestParam(required = false) String ageVisibility,@RequestParam(required = false) String heightVisibility,
-                @RequestParam(required = false) String weightVisibility,@RequestParam(required = false) String experienceVisibility
+                @RequestParam(required = false) Integer age,
+                @RequestParam(required = false) Double heightCm,
+                @RequestParam(required = false) Double weightKg,
+                @RequestParam(required = false) String experienceLevel,
+                @RequestParam(required = false) String goalType,@RequestParam(required = false) String activityLevel,
+                @RequestParam(required = false) String bioVisibility,
+                @RequestParam(required = false) String ageVisibility,
+                @RequestParam(required = false) String heightVisibility,
+                @RequestParam(required = false) String weightVisibility,
+                @RequestParam(required = false) String experienceVisibility,
+                @RequestParam(required = false) String targetMode,
+                @RequestParam(required = false) Integer calorieGoal,
+                @RequestParam(required = false) Integer proteinGoal,
+                @RequestParam(required = false) Integer carbGoal,
+                @RequestParam(required = false) Integer fatGoal
                 ) {
                     if(principal ==null){
                         return "redirect:/login";
@@ -120,10 +131,41 @@ if(search != null && !search.isBlank()){
                     user.setHeightVisibility(heightVisibility);
                     user.setWeightVisibility(weightVisibility);
                     user.setExperienceVisibility(experienceVisibility);
+                    user.setTargetMode(targetMode);
+                    
+                    if("Auto".equalsIgnoreCase(targetMode)) {
+                        calculateGoals(user);
+                    } else{
+                        user.setCalorieGoal(calorieGoal);
+                        user.setProteinGoal(proteinGoal);
+                        user.setCarbGoal(carbGoal);
+                        user.setFatGoal(fatGoal);
+                    }
                     userRepo.save(user);
     
-        
         return "redirect:/account";
+    }
+    private void calculateGoals(User user){
+        if (user.getWeightKg() == null || user.getHeightCm() == null || user.getAge() == null){
+            return;
+        }
+        //reminder for writing dissertation, am using Mifflin-ST Jeor equation for metabolic rates
+        double bmr = ( 10*user.getWeightKg()) + (6.25 * user.getHeightCm()) - (5 * user.getAge()) + 5;
+        double ree = bmr;
+        if ("Very High".equals(user.getActivityLevel())) ree *= 1.9;
+        else if("High".equals(user.getActivityLevel())) ree *= 1.725;
+        else if("Moderate".equals(user.getActivityLevel())) ree *= 1.55;
+        else ree *= 1.2;
+
+        String goal = user.getGoalType();
+        if("Bulk".equalsIgnoreCase(goal)) ree += 300;
+        else if("Cut".equalsIgnoreCase(goal)) ree -= 300;
+
+        user.setCalorieGoal((int) Math.round(ree));
+        user.setProteinGoal((int) Math.round((ree *.3)/4));
+        user.setFatGoal((int) Math.round((ree *.25) /9));
+        user.setCarbGoal((int) Math.round(ree * .45) /4);
+
     }
 
  @PostMapping("/friends/request")
