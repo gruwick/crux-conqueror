@@ -152,7 +152,7 @@ public class DashboardController {
                 int dayProtein = dayFoodEntries.stream()
                 .mapToInt(e ->e.getProtein() == null ? 0: e.getProtein())
                 .sum();
-                
+
                 int dayFat = dayFoodEntries.stream()
                 .mapToInt(e ->e.getFats() == null ? 0: e.getFats())
                 .sum();
@@ -208,7 +208,76 @@ public class DashboardController {
         model.addAttribute("saltChartData", saltChartData);
 
 
+
+        int latestCaloriesPercent = 0;
+        int latestProteinPercent = 0;
+        int latestFatPercent = 0;
+
+        for (int i = caloriesChartData.size() - 1; i >= 0; i--) {
+        if (caloriesChartData.get(i) > 0 || proteinChartData.get(i) > 0 || fatChartData.get(i) > 0) {
+                latestCaloriesPercent = caloriesChartData.get(i);
+                latestProteinPercent = proteinChartData.get(i);
+                latestFatPercent = fatChartData.get(i);
+                break;
+                }
+        }
+
+        String calorieStatus;
+        String proteinStatus;
+        String fatStatus;
+
+        if (latestCaloriesPercent < 90) {
+        calorieStatus = "below";
+        } else if (latestCaloriesPercent <= 110) {
+        calorieStatus = "near";
+        } else {
+        calorieStatus = "above";
+        }
+
+        if (latestProteinPercent < 90) {
+        proteinStatus = "below";
+        } else if (latestProteinPercent <= 110) {
+        proteinStatus = "near";
+        } else {
+        proteinStatus = "above";
+        }
+
+        if (latestFatPercent < 90) {
+        fatStatus = "below";
+        } else if (latestFatPercent <= 110) {
+        fatStatus = "near";
+        } else {
+        fatStatus = "above";
+        }
+
+        String nutritionSummary;
+        if (latestCaloriesPercent == 0 && latestProteinPercent == 0 && latestFatPercent == 0) {
+        nutritionSummary = "No nutrition has been logged recently.";
+        } 
+        else if ("below".equals(calorieStatus) && "above".equals(proteinStatus)) {
+        nutritionSummary = "Recent intake is below calorie target, while protein intake is above target.";
+        } 
+        else if ("above".equals(calorieStatus) && "above".equals(fatStatus)) {
+        nutritionSummary = "Recent intake is above calorie target, with fat intake also above target.";
+        } 
+        else if ("near".equals(calorieStatus) && "near".equals(proteinStatus) && "near".equals(fatStatus)) {
+        nutritionSummary = "Recent intake is close to target across calories, protein, and fat.";
+        } 
+        else if ("below".equals(calorieStatus) && "below".equals(proteinStatus)) {
+        nutritionSummary = "Recent intake is below target for both calories and protein.";
+        } 
+        else if ("above".equals(proteinStatus) && "below".equals(fatStatus)) {
+        nutritionSummary = "Protein intake is above target, while fat intake remains below target.";
+        } 
+        else {
+        nutritionSummary = "Recent intake shows mixed progress across calories and macronutrients.";
+        }
+        model.addAttribute("latestCaloriesPercent", latestCaloriesPercent);
+        model.addAttribute("latestProteinPercent", latestProteinPercent);
+        model.addAttribute("latestFatPercent", latestFatPercent);
+        model.addAttribute("nutririonSummary", nutritionSummary);
         return "dashboard/dashboard";
     }
+
 }
 
