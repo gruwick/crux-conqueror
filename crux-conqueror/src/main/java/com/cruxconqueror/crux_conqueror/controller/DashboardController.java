@@ -275,7 +275,7 @@ public class DashboardController {
         model.addAttribute("latestCaloriesPercent", latestCaloriesPercent);
         model.addAttribute("latestProteinPercent", latestProteinPercent);
         model.addAttribute("latestFatPercent", latestFatPercent);
-        model.addAttribute("nutririonSummary", nutritionSummary);
+        model.addAttribute("nutritionSummary", nutritionSummary);
         return "dashboard/dashboard";
     }
 
