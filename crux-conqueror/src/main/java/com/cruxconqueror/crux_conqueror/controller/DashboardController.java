@@ -15,16 +15,20 @@ import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
+import com.cruxconqueror.crux_conqueror.model.FoodEntry;
+import com.cruxconqueror.crux_conqueror.repository.FoodEntryRepo;
 
 
 @Controller
 public class DashboardController {
     private final TrainingSessionsRepo sessionsRepo;
     private final UserRepo userRepo;
+    private final FoodEntryRepo foodEntryRepo;
 
-    public DashboardController(TrainingSessionsRepo sessionsRepo, UserRepo userRepo){
+    public DashboardController(TrainingSessionsRepo sessionsRepo, UserRepo userRepo, FoodEntryRepo foodEntryRepo){
         this.sessionsRepo = sessionsRepo;
         this.userRepo = userRepo;
+        this.foodEntryRepo = foodEntryRepo;
     }
 
     @GetMapping("/dashboard")
@@ -34,6 +38,7 @@ public class DashboardController {
                     .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
         List<TrainingSessions> sessions =
                 sessionsRepo.findByUserAndArchivedFalseOrderBySessionDateDesc(user);
+        List<FoodEntry> foodEntries = foodEntryRepo.findByUserOrderByEntryDateTimeDesc(user);
 
        LocalDateTime now = LocalDateTime.now();
        LocalDateTime last7 = now.minusDays(7);
@@ -91,6 +96,12 @@ public class DashboardController {
                 List<Integer> topsChartData = new ArrayList<>();
                 List<Integer> flashesChartData = new ArrayList<>();
 
+                List<Integer> caloriesChartData = new ArrayList<>();
+                List<Integer> proteinChartData = new ArrayList<>();
+                List<Integer> fatChartData = new ArrayList<>();
+                List<Integer> sugarChartData = new ArrayList<>();
+                List<Integer> saltChartData = new ArrayList<>();
+
                 for (int i = 6; i >= 0; i--) {
                 LocalDate day = LocalDate.now().minusDays(i);
                 chartLabels.add(day.format(dayFormatter));
@@ -128,6 +139,31 @@ public class DashboardController {
                 flashesChartData.add(daySessions.stream()
                         .mapToInt(s -> s.getFlashesTotal() == null ? 0 : s.getFlashesTotal())
                         .sum());
+                
+                List<FoodEntry> dayFoodEntries = foodEntries.stream()
+                        .filter(e -> e.getEntryDateTime() != null)
+                        .filter(e -> e.getEntryDateTime().toLocalDate().equals(day))
+                        .toList();
+
+                caloriesChartData.add(dayFoodEntries.stream()
+                        .mapToInt(e -> e.getCalories() == null ? 0 : e.getCalories())
+                        .sum());
+
+                proteinChartData.add(dayFoodEntries.stream()
+                        .mapToInt(e -> e.getProtein() == null ? 0 : e.getProtein())
+                        .sum());
+
+                fatChartData.add(dayFoodEntries.stream()
+                        .mapToInt(e -> e.getFats() == null ? 0 : e.getFats())
+                        .sum());
+
+                sugarChartData.add(dayFoodEntries.stream()
+                        .mapToInt(e -> e.getSugar() == null ? 0 : e.getSugar())
+                        .sum());
+
+                saltChartData.add(dayFoodEntries.stream()
+                        .mapToInt(e -> e.getSalt() == null ? 0 : e.getSalt())
+                        .sum());
                 }
 
 
@@ -154,6 +190,12 @@ public class DashboardController {
         model.addAttribute("attemptsChartData", attemptsChartData);
         model.addAttribute("topsChartData", topsChartData);
         model.addAttribute("flashesChartData", flashesChartData);
+
+        model.addAttribute("caloriesChartData", caloriesChartData);
+        model.addAttribute("proteinChartData", proteinChartData);
+        model.addAttribute("fatChartData", fatChartData);
+        model.addAttribute("sugarChartData", sugarChartData);
+        model.addAttribute("saltChartData", saltChartData);
 
 
         return "dashboard/dashboard";
