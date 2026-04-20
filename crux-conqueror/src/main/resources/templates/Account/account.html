@@ -148,7 +148,56 @@
                     </div>
                 </div>
             </section>
+            <div class="panel-card">
+                <h2>Nutrition Goals</h2>
 
+                <div class="form-group">
+                    <label for="targetMode">Goal Generation Mode</label>
+                    <select id="targetMode" name="targetMode" onchange="toggleManualGoals()">
+                        <option value="Auto" th:selected="${user.targetMode == 'Auto'}">Automatic (Based on Stats)</option>
+                        <option value="Manual" th:selected="${user.targetMode == 'Manual'}">Manual (Custom Set)</option>
+                    </select>
+                    <p class="muted-text"><small>Auto mode uses your Age, Weight, and Height to calculate targets.</small></p>
+                </div>
+
+                <div id="manual-goal-inputs">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="calorieGoal">Daily Calories</label>
+                            <input type="number" id="calorieGoal" name="calorieGoal" th:value="${user.calorieGoal}">
+                        </div>
+                        <div class="form-group">
+                            <label for="proteinGoal">Protein (g)</label>
+                            <input type="number" id="proteinGoal" name="proteinGoal" th:value="${user.proteinGoal}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="carbGoal">Carbs (g)</label>
+                            <input type="number" id="carbGoal" name="carbGoal" th:value="${user.carbGoal}">
+                        </div>
+                        <div class="form-group">
+                            <label for="fatGoal">Fats (g)</label>
+                            <input type="number" id="fatGoal" name="fatGoal" th:value="${user.fatGoal}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function toggleManualGoals() {
+                    const mode = document.getElementById('targetMode').value;
+                    const manualSection = document.getElementById('manual-goal-inputs');
+                    if (mode === 'Auto') {
+                        manualSection.style.display = 'none';
+                    } else {
+                        manualSection.style.display = 'block';
+                    }
+                }
+                window.onload = toggleManualGoals;
+            </script>
+            </div>
             <div class="form-actions">
                 <button type="submit" class="save-btn">Save Changes</button>
             </div>
