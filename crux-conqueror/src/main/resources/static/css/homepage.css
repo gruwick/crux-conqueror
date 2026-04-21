@@ -240,6 +240,55 @@ body.homepage .community-post-meta {
     color: #64748b;
 }
 
+body.homepage .leaderboard-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+body.homepage .leaderboard-preview-header h2 {
+    margin: 0;
+}
+
+body.homepage .leaderboard-preview-subtitle {
+    margin: 4px 0 0;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+body.homepage .leaderboard-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body.homepage .leaderboard-preview-item {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+body.homepage .leaderboard-rank {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.homepage .leaderboard-name {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+body.homepage .leaderboard-value {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
 @media (max-width: 1000px) {
     body.homepage .home-mini-grid {
         grid-template-columns: 1fr;
