@@ -91,8 +91,31 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            
+            <div class="panel-card">
+                <div class="leaderboard-preview-header">
+                    <div>
+                        <h2>Top Climbers</h2>
+                        <p class="leaderboard-preview-subtitle">Last 30 days</p>
+                    </div>
+                    <a th:href="@{/leaderboard}" class="secondary-page-btn">View Full</a>
+                </div>
 
+                <div class="leaderboard-preview-list" th:if="${not #lists.isEmpty(leaderboardPreview)}">
+                    <div class="leaderboard-preview-item" th:each="row, stat : ${leaderboardPreview}">
+                        <span class="leaderboard-rank" th:text="${stat.count}">1</span>
+                        <span class="leaderboard-name" th:text="${row.username}">username</span>
+                        <span class="leaderboard-value">
+                            <span th:text="${row.sessionsLast30}">0</span> sessions
+                        </span>
+                    </div>
+                </div>
+
+                <p class="community-placeholder" th:if="${#lists.isEmpty(leaderboardPreview)}">
+                    No leaderboard data available yet.
+                </p>
+            </div>
+        </div>
             <div class="side-stack">
                 <div class="panel-card">
                     <h2>Suggestions</h2>
