@@ -84,155 +84,162 @@
     </section>
 
     <section class="content-grid dashboard-grid">
-  <div class="panel-card large-panel">
-    <div class="chart-panel-header">
-      <h2 id="chartTitle">Training Trends</h2>
 
-      <div class="chart-mode-toggle">
-        <button type="button" class="chart-toggle-btn active" id="trainingModeBtn">Training</button>
-        <button type="button" class="chart-toggle-btn" id="nutritionModeBtn">Nutrition</button>
-      </div>
-    </div>
+      <div class="left-stack">
+        <div class="panel-card large-panel">
+          <div class="chart-panel-header">
+            <h2 id="chartTitle">Training Trends</h2>
 
-    <div class="chart-controls" id="trainingControls">
-      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="0">Sessions</button>
-      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="1">Hours</button>
-      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="2">Intensity</button>
-      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="3">Attempts</button>
-      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="4">Tops</button>
-      <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="5">Flashes</button>
-    </div>
+            <div class="chart-mode-toggle">
+              <button type="button" class="chart-toggle-btn active" id="trainingModeBtn">Training</button>
+              <button type="button" class="chart-toggle-btn" id="nutritionModeBtn">Nutrition</button>
+            </div>
+          </div>
 
-    <div class="chart-controls hidden-controls" id="nutritionControls">
-      <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="0">Calories</button>
-      <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="1">Protein</button>
-      <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="2">Fat</button>
-      <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="3">Sugar</button>
-      <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="4">Salt</button>
-    </div>
+          <div class="chart-controls" id="trainingControls">
+            <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="0">Sessions</button>
+            <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="1">Hours</button>
+            <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="2">Intensity</button>
+            <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="3">Attempts</button>
+            <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="4">Tops</button>
+            <button type="button" class="metric-toggle-btn" data-chart="training" data-dataset="5">Flashes</button>
+          </div>
 
-    <div class="chart-wrap" id="trainingChartWrap">
-      <canvas id="trainingChart"></canvas>
-    </div>
+          <div class="chart-controls hidden-controls" id="nutritionControls">
+            <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="0">Calories</button>
+            <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="1">Protein</button>
+            <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="2">Fat</button>
+            <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="3">Sugar</button>
+            <button type="button" class="metric-toggle-btn" data-chart="nutrition" data-dataset="4">Salt</button>
+          </div>
 
-    <div class="chart-wrap hidden-chart" id="nutritionChartWrap">
-      <canvas id="nutritionChart"></canvas>
-    </div>
-  </div>
+          <div class="chart-wrap" id="trainingChartWrap">
+            <canvas id="trainingChart"></canvas>
+          </div>
 
-  <div class="side-stack">
-  <div class="panel-card">
-    <h2>Insights</h2>
-    <div class="insight-list">
-    <h3 class="insight-subheading">Training</h3>
-    <p>
-      You logged <strong th:text="${sessionsLast7Days}">0</strong>
-      sessions in the last 7 days.
-    </p>
-    <p th:text="${trainingSummary}">
-      Training summary goes here.
-    </p>
-    <p>
-      In the last 30 days you completed
-      <strong th:text="${totalMinutesLast30Days}">0</strong> minutes of training.
-    </p>
-    <p th:text="${climbingSummary}">
-      Climbing summary goes here.
-    </p>
-      <hr class="insight-divider">
-      <h3 class="insight-subheading">Nutrition</h3>
-      <p th:if="${calorieGoal != null}">
-        Daily targets are personalised using your profile, activity level, and selected goal.
-      </p>
-      <p th:if="${calorieGoal != null}">
-        Calorie target: <strong th:text="${calorieGoal}">0</strong> kcal,
-        Protein target: <strong th:text="${proteinGoal}">0</strong> g,
-        Fat target: <strong th:text="${fatGoal}">0</strong> g.
-      </p>
-      <p th:if="${latestCaloriesPercent > 0 || latestProteinPercent > 0 || latestFatPercent > 0}">
-        Calories reached <strong th:text="${latestCaloriesPercent}">0</strong>% of target.
-      </p>
-      <p th:if="${latestCaloriesPercent > 0 || latestProteinPercent > 0 || latestFatPercent > 0}">
-        Protein reached <strong th:text="${latestProteinPercent}">0</strong>% of target.
-      </p>
-      <p th:if="${latestCaloriesPercent > 0 || latestProteinPercent > 0 || latestFatPercent > 0}">
-        Fat reached <strong th:text="${latestFatPercent}">0</strong>% of target.
-      </p>
-      <p th:text="${nutritionSummary}">
-        Nutrition summary goes here.
-      </p>
-    </div>
-  </div>
-
-    <div class="panel-card">
-      <h2>Bouldering Totals (30 Days)</h2>
-
-      <div class="mini-stats">
-        <div class="mini-stat">
-          <span class="mini-stat-label">Attempts</span>
-          <span class="mini-stat-value" th:text="${attemptsLast30Days}">0</span>
-        </div>
-
-        <div class="mini-stat">
-          <span class="mini-stat-label">Tops</span>
-          <span class="mini-stat-value" th:text="${topsLast30Days}">0</span>
-        </div>
-
-        <div class="mini-stat">
-          <span class="mini-stat-label">Flashes</span>
-          <span class="mini-stat-value" th:text="${flashesLast30Days}">0</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-  <section class="panel-card goal-progress-panel">
-    <div class="panel-heading-row">
-      <h2>Weekly Goal Progress</h2>
-    </div>
-
-    <div class="goal-progress-grid">
-      <div class="goal-progress-card">
-        <div class="progress-ring" th:style="'--progress:' + ${sessionsProgressPercent} + '%;'">
-          <div class="progress-ring-inner">
-            <span th:text="${sessionsProgressPercent} + '%'">0%</span>
+          <div class="chart-wrap hidden-chart" id="nutritionChartWrap">
+            <canvas id="nutritionChart"></canvas>
           </div>
         </div>
-        <h3>Sessions</h3>
-        <p class="goal-progress-value">
-          <strong th:text="${sessionsThisWeek}">0</strong> /
-          <strong th:text="${weeklySessionTarget}">3</strong>
-        </p>
-        <p class="goal-progress-status" th:text="${sessionsGoalStatus}">On track</p>
-      </div>
 
-      <div class="goal-progress-card">
-        <div class="progress-ring" th:style="'--progress:' + ${caloriesProgressPercent} + '%;'">
-          <div class="progress-ring-inner">
-            <span th:text="${caloriesProgressPercent} + '%'">0%</span>
+        <div class="panel-card goal-progress-panel">
+          <div class="panel-heading-row">
+            <h2>Weekly Goal Progress</h2>
+          </div>
+
+          <div class="goal-progress-grid">
+            <div class="goal-progress-card">
+              <div class="progress-ring" th:style="'--progress:' + ${sessionsProgressPercent} + '%;'">
+                <div class="progress-ring-inner">
+                  <span th:text="${sessionsProgressPercent} + '%'">0%</span>
+                </div>
+              </div>
+              <h3>Sessions</h3>
+              <p class="goal-progress-value">
+                <strong th:text="${sessionsThisWeek}">0</strong> /
+                <strong th:text="${weeklySessionTarget}">3</strong>
+              </p>
+              <p class="goal-progress-status" th:text="${sessionsGoalStatus}">On track</p>
+            </div>
+
+            <div class="goal-progress-card">
+              <div class="progress-ring" th:style="'--progress:' + ${caloriesProgressPercent} + '%;'">
+                <div class="progress-ring-inner">
+                  <span th:text="${caloriesProgressPercent} + '%'">0%</span>
+                </div>
+              </div>
+              <h3>Calories</h3>
+              <p class="goal-progress-value">
+                <strong th:text="${calorieGoalHitDays}">0</strong> / 7
+              </p>
+              <p class="goal-progress-status" th:text="${caloriesGoalStatus}">Good</p>
+            </div>
+
+            <div class="goal-progress-card">
+              <div class="progress-ring" th:style="'--progress:' + ${proteinProgressPercent} + '%;'">
+                <div class="progress-ring-inner">
+                  <span th:text="${proteinProgressPercent} + '%'">0%</span>
+                </div>
+              </div>
+              <h3>Protein</h3>
+              <p class="goal-progress-value">
+                <strong th:text="${proteinGoalHitDays}">0</strong> / 7
+              </p>
+              <p class="goal-progress-status" th:text="${proteinGoalStatus}">Good</p>
+            </div>
           </div>
         </div>
-        <h3>Calories</h3>
-        <p class="goal-progress-value">
-          <strong th:text="${calorieGoalHitDays}">0</strong> / 7
-        </p>
-        <p class="goal-progress-status" th:text="${caloriesGoalStatus}">Good</p>
       </div>
 
-      <div class="goal-progress-card">
-        <div class="progress-ring" th:style="'--progress:' + ${proteinProgressPercent} + '%;'">
-          <div class="progress-ring-inner">
-            <span th:text="${proteinProgressPercent} + '%'">0%</span>
+      <div class="side-stack">
+        <div class="panel-card">
+          <h2>Insights</h2>
+          <div class="insight-list">
+            <h3 class="insight-subheading">Training</h3>
+            <p>
+              You logged <strong th:text="${sessionsLast7Days}">0</strong>
+              sessions in the last 7 days.
+            </p>
+            <p th:text="${trainingSummary}">
+              Training summary goes here.
+            </p>
+            <p>
+              In the last 30 days you completed
+              <strong th:text="${totalMinutesLast30Days}">0</strong> minutes of training.
+            </p>
+            <p th:text="${climbingSummary}">
+              Climbing summary goes here.
+            </p>
+
+            <hr class="insight-divider">
+
+            <h3 class="insight-subheading">Nutrition</h3>
+            <p th:if="${calorieGoal != null}">
+              Daily targets are personalised using your profile, activity level, and selected goal.
+            </p>
+            <p th:if="${calorieGoal != null}">
+              Calorie target: <strong th:text="${calorieGoal}">0</strong> kcal,
+              Protein target: <strong th:text="${proteinGoal}">0</strong> g,
+              Fat target: <strong th:text="${fatGoal}">0</strong> g.
+            </p>
+            <p th:if="${latestCaloriesPercent > 0 || latestProteinPercent > 0 || latestFatPercent > 0}">
+              Calories reached <strong th:text="${latestCaloriesPercent}">0</strong>% of target.
+            </p>
+            <p th:if="${latestCaloriesPercent > 0 || latestProteinPercent > 0 || latestFatPercent > 0}">
+              Protein reached <strong th:text="${latestProteinPercent}">0</strong>% of target.
+            </p>
+            <p th:if="${latestCaloriesPercent > 0 || latestProteinPercent > 0 || latestFatPercent > 0}">
+              Fat reached <strong th:text="${latestFatPercent}">0</strong>% of target.
+            </p>
+            <p th:text="${nutritionSummary}">
+              Nutrition summary goes here.
+            </p>
           </div>
         </div>
-        <h3>Protein</h3>
-        <p class="goal-progress-value">
-          <strong th:text="${proteinGoalHitDays}">0</strong> / 7
-        </p>
-        <p class="goal-progress-status" th:text="${proteinGoalStatus}">Good</p>
+
+        <div class="panel-card">
+          <h2>Bouldering Totals (30 Days)</h2>
+
+          <div class="mini-stats">
+            <div class="mini-stat">
+              <span class="mini-stat-label">Attempts</span>
+              <span class="mini-stat-value" th:text="${attemptsLast30Days}">0</span>
+            </div>
+
+            <div class="mini-stat">
+              <span class="mini-stat-label">Tops</span>
+              <span class="mini-stat-value" th:text="${topsLast30Days}">0</span>
+            </div>
+
+            <div class="mini-stat">
+              <span class="mini-stat-label">Flashes</span>
+              <span class="mini-stat-value" th:text="${flashesLast30Days}">0</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
     <section class="panel-card recent-sessions-panel">
       <div class="panel-heading-row">
         <h2>Recent Sessions</h2>
