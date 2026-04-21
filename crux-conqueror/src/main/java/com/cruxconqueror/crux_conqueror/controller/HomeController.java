@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
+import com.cruxconqueror.crux_conqueror.dto.LeaderboardRow;
 import com.cruxconqueror.crux_conqueror.model.FoodEntry;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.FoodEntryRepo;
@@ -18,6 +19,7 @@ import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
 import com.cruxconqueror.crux_conqueror.service.NutritionService;
 import com.cruxconqueror.crux_conqueror.model.ForumPost;
+import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
 import com.cruxconqueror.crux_conqueror.repository.ForumLikeRepo;
 import com.cruxconqueror.crux_conqueror.repository.ForumPostRepo;
 
@@ -104,6 +106,31 @@ public class HomeController {
             topPosts = topPosts.subList(0, 3);
         }
 
+        LocalDateTime last30 = LocalDateTime.now().minusDays(30);
+        List<TrainingSessions> recent = sessionsRepo.findByArchivedFalseAndSessionDateAfter(last30);
+        Map<String, Integer> sessionsPerUser = new HashMap<>();
+        for (TrainingSessions s : recent) {
+            if (s.getUser() != null && s.getUser().getUsername() != null) {
+                String username = s.getUser().getUsername();
+                sessionsPerUser.put(username, sessionsPerUser.getOrDefault(username, 0) + 1);
+            }
+        }
+        List<LeaderboardRow> leaderboardPreview = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : sessionsPerUser.entrySet()) {
+            leaderboardPreview.add(new LeaderboardRow(
+                entry.getKey(),
+                entry.getValue(),0,0.0,"-",0
+            ));
+        }
+        leaderboardPreview.sort((a, b) -> Integer.compare(
+            b.getSessionsLast30(),
+            a.getSessionsLast30()
+        ));
+        if (leaderboardPreview.size() > 3) {
+        leaderboardPreview = leaderboardPreview.subList(0, 3);
+        }
+
         model.addAttribute("username", user.getUsername());
         model.addAttribute("totalSessions", totalSessions);
         model.addAttribute("caloriesToday", caloriesToday);
@@ -119,6 +146,8 @@ public class HomeController {
 
         model.addAttribute("topPosts", topPosts);
         model.addAttribute("topPostLikes", topPostLikes);
+
+        model.addAttribute("leaderboardPreview", leaderboardPreview);
 
         return "home/home";
     }
