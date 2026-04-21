@@ -119,9 +119,19 @@
                 </div>
 
                 <div class="panel-card">
-                    <h2>Community Highlight</h2>
-                    <p class="community-placeholder">
-                        Community activiy highlights.
+                    <h2>Community Highlights</h2>
+
+                    <div th:if="${topPosts != null and !topPosts.isEmpty()}" class="community-highlights">
+                        <div class="community-highlight-item" th:each="post : ${topPosts}">
+                            <p class="community-post-title" th:text="${post.title}">Post title</p>
+                            <p class="community-post-meta">
+                                <span th:text="${topPostLikeCounts[post.id]}">0</span> likes
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="community-placeholder" th:if="${topPosts == null or topPosts.isEmpty()}">
+                        No popular posts yet.
                     </p>
                 </div>
             </div>

@@ -169,6 +169,30 @@ body.homepage .home-hero-compact {
     box-sizing: border-box;
 }
 
+body.homepage .community-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+body.homepage .community-highlight-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+body.homepage .community-post-title {
+    margin: 0 0 4px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.homepage .community-post-meta {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
 @media (max-width: 1000px) {
     body.homepage .home-mini-grid {
         grid-template-columns: 1fr;
