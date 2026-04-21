@@ -186,7 +186,53 @@
     </div>
   </div>
 </section>
+  <section class="panel-card goal-progress-panel">
+    <div class="panel-heading-row">
+      <h2>Weekly Goal Progress</h2>
+    </div>
 
+    <div class="goal-progress-grid">
+      <div class="goal-progress-card">
+        <div class="progress-ring" th:style="'--progress:' + ${sessionsProgressPercent} + '%;'">
+          <div class="progress-ring-inner">
+            <span th:text="${sessionsProgressPercent} + '%'">0%</span>
+          </div>
+        </div>
+        <h3>Sessions</h3>
+        <p class="goal-progress-value">
+          <strong th:text="${sessionsThisWeek}">0</strong> /
+          <strong th:text="${weeklySessionTarget}">3</strong>
+        </p>
+        <p class="goal-progress-status" th:text="${sessionsGoalStatus}">On track</p>
+      </div>
+
+      <div class="goal-progress-card">
+        <div class="progress-ring" th:style="'--progress:' + ${caloriesProgressPercent} + '%;'">
+          <div class="progress-ring-inner">
+            <span th:text="${caloriesProgressPercent} + '%'">0%</span>
+          </div>
+        </div>
+        <h3>Calories</h3>
+        <p class="goal-progress-value">
+          <strong th:text="${calorieGoalHitDays}">0</strong> / 7
+        </p>
+        <p class="goal-progress-status" th:text="${caloriesGoalStatus}">Good</p>
+      </div>
+
+      <div class="goal-progress-card">
+        <div class="progress-ring" th:style="'--progress:' + ${proteinProgressPercent} + '%;'">
+          <div class="progress-ring-inner">
+            <span th:text="${proteinProgressPercent} + '%'">0%</span>
+          </div>
+        </div>
+        <h3>Protein</h3>
+        <p class="goal-progress-value">
+          <strong th:text="${proteinGoalHitDays}">0</strong> / 7
+        </p>
+        <p class="goal-progress-status" th:text="${proteinGoalStatus}">Good</p>
+      </div>
+    </div>
+  </section>
     <section class="panel-card recent-sessions-panel">
       <div class="panel-heading-row">
         <h2>Recent Sessions</h2>
