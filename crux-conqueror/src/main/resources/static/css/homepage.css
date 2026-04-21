@@ -164,7 +164,9 @@ body.homepage .community-placeholder {
 body.homepage .home-hero-compact {
     display: block;
     width: 100%;
-    margin-bottom: 0px;
+    max-width: none;
+    margin: 0px;
+    box-sizing: border-box;
 }
 
 @media (max-width: 1000px) {
