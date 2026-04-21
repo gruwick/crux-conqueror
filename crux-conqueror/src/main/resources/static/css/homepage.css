@@ -289,6 +289,13 @@ body.homepage .leaderboard-value {
     color: #64748b;
 }
 
+body.homepage .leaderboard-preview-rank {
+    margin: 6px 0 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
 @media (max-width: 1000px) {
     body.homepage .home-mini-grid {
         grid-template-columns: 1fr;

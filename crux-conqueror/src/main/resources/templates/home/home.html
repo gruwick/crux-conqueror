@@ -98,6 +98,9 @@
                         <h2>Top Climbers</h2>
                         <p class="leaderboard-preview-subtitle">Last 30 days</p>
                     </div>
+                    <p class="leaderboard-preview-rank" th:if="${homeRank > 0}">
+                        Your rank: #<span th:text="${homeRank}">1</span>
+                    </p>
                     <a th:href="@{/leaderboard}" class="secondary-page-btn">View Full</a>
                 </div>
 
