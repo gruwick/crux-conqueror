@@ -123,9 +123,17 @@
 
                     <div th:if="${topPosts != null and !topPosts.isEmpty()}" class="community-highlights">
                         <div class="community-highlight-item" th:each="post : ${topPosts}">
-                            <p class="community-post-title" th:text="${post.title}">Post title</p>
+                            <p class="community-post-title">
+                                <a th:href="@{/community}"
+                                th:text="${post.title}"></a>
+                            </p>
+                            <p class="community-post-author">
+                                by <span th:text="${post.user.username}"></span>
+                            </p>
+                            <p class="community-post-preview"
+                            th:text="${#strings.abbreviate(post.content, 40)}"></p>
                             <p class="community-post-meta">
-                                <span th:text="${topPostLikes[post.id]}">0</span> likes
+                                <span th:text="${topPostLikes.get(post.id)}"></span> likes
                             </p>
                         </div>
                     </div>
