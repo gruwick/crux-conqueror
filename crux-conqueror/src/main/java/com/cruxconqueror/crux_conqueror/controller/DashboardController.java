@@ -215,7 +215,7 @@ public class DashboardController {
         model.addAttribute("flashesLast30Days", flashesLast30Days);
         model.addAttribute("trainingSummary", trainingSummary);
         model.addAttribute("climbingSummary",climbingSummary);
-        
+
         model.addAttribute("recentSessions", recentSessions);
 
         model.addAttribute("sessionsPrevious7Days", sessionsPrevious7Days);
@@ -305,12 +305,98 @@ public class DashboardController {
         model.addAttribute("latestProteinPercent", latestProteinPercent);
         model.addAttribute("latestFatPercent", latestFatPercent);
         model.addAttribute("nutritionSummary", nutritionSummary);
+
+        int weeklySessionTarget = 3;
+
+        int sessionsThisWeek = (int) sessions.stream()
+                .filter(s -> s.getSessionDate() != null)
+                .filter(s -> !s.getSessionDate().toLocalDate().isBefore(LocalDate.now().minusDays(6)))
+                .count();
+
+        int calorieGoalHitDays = 0;
+        int proteinGoalHitDays = 0;
+
+        for (int i = 6; i >= 0; i--) {
+        LocalDate day = LocalDate.now().minusDays(i);
+
+        List<FoodEntry> dayFoodEntries = foodEntries.stream()
+                .filter(e -> e.getEntryDateTime() != null)
+                .filter(e -> e.getEntryDateTime().toLocalDate().equals(day))
+                .toList();
+
+        int dayCalories = dayFoodEntries.stream()
+                .mapToInt(e -> e.getCalories() == null ? 0 : e.getCalories())
+                .sum();
+
+        int dayProteinTotal = dayFoodEntries.stream()
+                .mapToInt(e -> e.getProtein() == null ? 0 : e.getProtein())
+                .sum();
+
+        if (user.getCalorieGoal() != null && user.getCalorieGoal() > 0) {
+                int caloriePercent = (int) Math.round(((double) dayCalories / user.getCalorieGoal()) * 100);
+                if (caloriePercent >= 90 && caloriePercent <= 110) {
+                calorieGoalHitDays++;
+                }
+        }
+
+        if (user.getProteinGoal() != null && user.getProteinGoal() > 0) {
+                int proteinPercent = (int) Math.round(((double) dayProteinTotal / user.getProteinGoal()) * 100);
+                if (proteinPercent >= 90) {
+                proteinGoalHitDays++;
+                }
+        }
+        }
+
+        int sessionsProgressPercent = Math.min((int) Math.round(((double) sessionsThisWeek / weeklySessionTarget) * 100), 100);
+        int caloriesProgressPercent = (int) Math.round((calorieGoalHitDays / 7.0) * 100);
+        int proteinProgressPercent = (int) Math.round((proteinGoalHitDays / 7.0) * 100);
+
+        String sessionsGoalStatus;
+        if (sessionsProgressPercent >= 100) {
+        sessionsGoalStatus = "Goal hit";
+        } else if (sessionsProgressPercent >= 66) {
+        sessionsGoalStatus = "On track";
+        } else {
+        sessionsGoalStatus = "Needs work";
+        }
+
+        String caloriesGoalStatus;
+        if (caloriesProgressPercent >= 80) {
+        caloriesGoalStatus = "Good";
+        } else if (caloriesProgressPercent >= 50) {
+        caloriesGoalStatus = "Building";
+        } else {
+        caloriesGoalStatus = "Low";
+        }
+
+        String proteinGoalStatus;
+        if (proteinProgressPercent >= 80) {
+        proteinGoalStatus = "Good";
+        } else if (proteinProgressPercent >= 50) {
+        proteinGoalStatus = "Building";
+        } else {
+        proteinGoalStatus = "Low";
+        }
+
+        model.addAttribute("weeklySessionTarget", weeklySessionTarget);
+        model.addAttribute("sessionsThisWeek", sessionsThisWeek);
+        model.addAttribute("calorieGoalHitDays", calorieGoalHitDays);
+        model.addAttribute("proteinGoalHitDays", proteinGoalHitDays);
+
+        model.addAttribute("sessionsProgressPercent", sessionsProgressPercent);
+        model.addAttribute("caloriesProgressPercent", caloriesProgressPercent);
+        model.addAttribute("proteinProgressPercent", proteinProgressPercent);
+
+        model.addAttribute("sessionsGoalStatus", sessionsGoalStatus);
+        model.addAttribute("caloriesGoalStatus", caloriesGoalStatus);
+        model.addAttribute("proteinGoalStatus", proteinGoalStatus);
         
         model.addAttribute("calorieGoal", user.getCalorieGoal());
         model.addAttribute("proteinGoal", user.getProteinGoal());
         model.addAttribute("fatGoal", user.getFatGoal());
         model.addAttribute("goalType", user.getGoalType());
         model.addAttribute("activityLevel", user.getActivityLevel());
+
         return "dashboard/dashboard";
     }
 
