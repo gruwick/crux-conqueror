@@ -42,78 +42,98 @@
 
             <div class="hero-right">
                 <div class="hero-panel">
-                    <p>Latest Meal</p>
+                    <p class="hero-panel-label">Latest Meal</p>
                     <h3 th:text="${latestMeal}">No meals logged</h3>
                 </div>
 
                 <div class="hero-panel">
-                    <p>Latest Session Grade</p>
+                    <p class="hero-panel-label">Latest Session Grade</p>
                     <h3 th:text="${latestSessionGrade}">N/A</h3>
                 </div>
             </div>
         </section>
 
-        <section class="summary-section">
-            <h2>Quick Summary</h2>
+        <section class="content-grid home-content-grid">
+            <div class="left-stack">
+                <div class="panel-card">
+                    <h2>This Week</h2>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon sessions">
-                        <i class="fa-solid fa-mountain"></i>
+                    <div class="home-progress-card">
+                        <div class="home-progress-header">
+                            <div>
+                                <p class="home-progress-label">Training Progress</p>
+                                <h3>
+                                    <span th:text="${sessionsLast7Days}">0</span> /
+                                    <span th:text="${weeklySessionTarget}">3</span> sessions
+                                </h3>
+                            </div>
+                            <span class="home-progress-percent" th:text="${sessionProgressPercent} + '%'">0%</span>
+                        </div>
+
+                        <div class="home-progress-bar">
+                            <div class="home-progress-fill"
+                                 th:style="'width:' + ${sessionProgressPercent} + '%;'"></div>
+                        </div>
+
+                        <p class="home-progress-status" th:text="${weeklyTrainingStatus}">
+                            Weekly training status goes here.
+                        </p>
                     </div>
-                    <div class="stat-content">
-                        <p class="stat-label">Total Sessions</p>
-                        <h3 th:text="${totalSessions}">0</h3>
+
+                    <div class="home-mini-grid">
+                        <div class="home-mini-card">
+                            <p class="home-mini-label">Calories Today</p>
+                            <h3 th:text="${caloriesToday}">0</h3>
+                        </div>
+
+                        <div class="home-mini-card">
+                            <p class="home-mini-label">Protein Today</p>
+                            <h3><span th:text="${proteinToday}">0</span>g</h3>
+                        </div>
+
+                        <div class="home-mini-card">
+                            <p class="home-mini-label">Total Sessions</p>
+                            <h3 th:text="${totalSessions}">0</h3>
+                        </div>
+
+                        <div class="home-mini-card">
+                            <p class="home-mini-label">Latest Grade</p>
+                            <h3 th:text="${latestSessionGrade}">N/A</h3>
+                        </div>
                     </div>
                 </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon calories">
-                        <i class="fa-solid fa-fire"></i>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-label">Calories Today</p>
-                        <h3 th:text="${caloriesToday}">0</h3>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon protein">
-                        <i class="fa-solid fa-drumstick-bite"></i>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-label">Protein Today</p>
-                        <h3><span th:text="${proteinToday}">0</span>g</h3>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon grade">
-                        <i class="fa-solid fa-trophy"></i>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-label">Latest Session Grade</p>
-                        <h3 th:text="${latestSessionGrade}">N/A</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="content-grid">
-            <div class="panel-card large-panel">
-                <h2>Training Focus</h2>
-                
             </div>
 
             <div class="side-stack">
                 <div class="panel-card">
-                    <h2>Latest Meal</h2>
-                    <p th:text="${latestMeal}">No meals logged</p>
+                    <h2>Suggestions</h2>
+                    <ul class="suggestion-list">
+                        <li th:each="suggestion : ${suggestions}" th:text="${suggestion}">
+                            Suggestion goes here.
+                        </li>
+                    </ul>
                 </div>
 
                 <div class="panel-card">
-                    <p>Weekly goal tracker</p>
-                    <p>Community highlights</p>
+                    <h2>Latest Activity</h2>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <p class="activity-label">Latest Meal</p>
+                            <p class="activity-value" th:text="${latestMeal}">No meals logged</p>
+                        </div>
+
+                        <div class="activity-item">
+                            <p class="activity-label">Latest Session Grade</p>
+                            <p class="activity-value" th:text="${latestSessionGrade}">N/A</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <h2>Community Highlight</h2>
+                    <p class="community-placeholder">
+                        Add a dynamic top post or leaderboard highlight here when ready.
+                    </p>
                 </div>
             </div>
         </section>
