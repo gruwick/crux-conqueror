@@ -171,10 +171,8 @@ body.homepage .home-hero-compact {
 
 body.homepage .home-hero-compact {
     display: block;
-    width: calc((100% - 16px) * 2 / 3);
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 30px;
+    width: 100%;
+    margin-bottom: 0px;
 }
 
 @media (max-width: 1000px) {
