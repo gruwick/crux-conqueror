@@ -288,6 +288,13 @@
     font-size: 1rem;
 }
 
+.left-stack,
+.side-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 @media (max-width: 900px) {
     .dashboard-header {
         flex-direction: column;
