@@ -213,7 +213,9 @@ public class DashboardController {
         model.addAttribute("attemptsLast30Days", attemptsLast30Days);
         model.addAttribute("topsLast30Days", topsLast30Days);
         model.addAttribute("flashesLast30Days", flashesLast30Days);
-
+        model.addAttribute("trainingSummary", trainingSummary);
+        model.addAttribute("climbingSummary",climbingSummary);
+        
         model.addAttribute("recentSessions", recentSessions);
 
         model.addAttribute("sessionsPrevious7Days", sessionsPrevious7Days);
@@ -231,6 +233,8 @@ public class DashboardController {
         model.addAttribute("fatChartData", fatChartData);
         model.addAttribute("sugarChartData", sugarChartData);
         model.addAttribute("saltChartData", saltChartData);
+
+
 
 
 
