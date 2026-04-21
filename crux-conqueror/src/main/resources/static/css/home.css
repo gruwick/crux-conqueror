@@ -139,6 +139,12 @@ body {
     gap: 16px;
 }
 
+.left-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 @media (max-width: 1000px) {
     .hero {
         grid-template-columns: 1fr;
