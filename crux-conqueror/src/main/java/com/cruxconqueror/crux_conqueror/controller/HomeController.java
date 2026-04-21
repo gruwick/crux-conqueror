@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,9 @@ import com.cruxconqueror.crux_conqueror.repository.FoodEntryRepo;
 import com.cruxconqueror.crux_conqueror.repository.TrainingSessionsRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
 import com.cruxconqueror.crux_conqueror.service.NutritionService;
+import com.cruxconqueror.crux_conqueror.model.ForumPost;
+import com.cruxconqueror.crux_conqueror.repository.ForumLikeRepo;
+import com.cruxconqueror.crux_conqueror.repository.ForumPostRepo;
 
 @Controller
 public class HomeController {
@@ -22,11 +27,15 @@ public class HomeController {
     private final UserRepo userRepo;
     private final TrainingSessionsRepo sessionsRepo;
     private final NutritionService nutritionService;
+    private final ForumLikeRepo forumLikeRepo;
+    private final ForumPostRepo forumPostRepo;
 
-    public HomeController(UserRepo userRepo, TrainingSessionsRepo sessionsRepo, FoodEntryRepo foodEntryRepo, NutritionService nutritionService){
+    public HomeController(UserRepo userRepo, TrainingSessionsRepo sessionsRepo, FoodEntryRepo foodEntryRepo, NutritionService nutritionService, ForumLikeRepo forumLikeRepo, ForumPostRepo forumPostRepo){
         this.userRepo = userRepo;
         this.sessionsRepo = sessionsRepo;
         this.nutritionService = nutritionService;
+        this.forumLikeRepo = forumLikeRepo;
+        this.forumPostRepo = forumPostRepo;
     }
 
     @GetMapping("/")
@@ -82,6 +91,18 @@ public class HomeController {
         if (suggestions.isEmpty()) {
             suggestions.add("You are progressing well this week. Keep building consistency.");
         }
+        List<ForumPost> topPosts = new ArrayList<>(forumPostRepo.findAllByOrderByCreatedAtDesc());
+        Map<Long, Long> topPostLikes = new HashMap<>();
+        for (ForumPost post : topPosts) {
+            topPostLikes.put(post.getId(), forumLikeRepo.countByPost(post));
+        }
+        topPosts.sort((a, b) -> Long.compare(
+                topPostLikes.getOrDefault(b.getId(), 0L),
+                topPostLikes.getOrDefault(a.getId(), 0L)
+        ));
+        if (topPosts.size() > 3) {
+            topPosts = topPosts.subList(0, 3);
+        }
 
         model.addAttribute("username", user.getUsername());
         model.addAttribute("totalSessions", totalSessions);
@@ -95,6 +116,9 @@ public class HomeController {
         model.addAttribute("sessionProgressPercent", sessionProgressPercent);
         model.addAttribute("weeklyTrainingStatus", weeklyTrainingStatus);
         model.addAttribute("suggestions", suggestions);
+
+        model.addAttribute("topPosts", topPosts);
+        model.addAttribute("topPostLikes", topPostLikes);
 
         return "home/home";
     }
