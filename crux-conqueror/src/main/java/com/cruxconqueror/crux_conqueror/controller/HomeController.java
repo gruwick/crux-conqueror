@@ -127,6 +127,14 @@ public class HomeController {
             b.getSessionsLast30(),
             a.getSessionsLast30()
         ));
+
+        int homeRank = -1;
+        for (int i = 0; i < leaderboardPreview.size(); i++) {
+            if (leaderboardPreview.get(i).getUsername().equals(user.getUsername())) {
+                homeRank = i + 1;
+                break;
+            }
+}
         if (leaderboardPreview.size() > 3) {
         leaderboardPreview = leaderboardPreview.subList(0, 3);
         }
@@ -148,6 +156,7 @@ public class HomeController {
         model.addAttribute("topPostLikes", topPostLikes);
 
         model.addAttribute("leaderboardPreview", leaderboardPreview);
+        model.addAttribute("homeRank", homeRank);
 
         return "home/home";
     }
