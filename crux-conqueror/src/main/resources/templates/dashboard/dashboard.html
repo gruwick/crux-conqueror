@@ -304,12 +304,12 @@
     data: {
       labels: chartLabels,
       datasets: [
-        { label: 'Sessions', data: trainingChartData.sessions, tension: 0.3, fill: true, hidden: true },
-        { label: 'Hours', data: trainingChartData.hours, tension: 0.3, fill: true, hidden: true },
-        { label: 'Intensity', data: trainingChartData.intensity, tension: 0.3, fill: true, hidden: true },
-        { label: 'Attempts', data: trainingChartData.attempts, tension: 0.3, fill: true, hidden: true },
-        { label: 'Tops', data: trainingChartData.tops, tension: 0.3, fill: true, hidden: true },
-        { label: 'Flashes', data: trainingChartData.flashes, tension: 0.3, fill: true, hidden: true }
+        { label: 'Sessions', data: trainingChartData.sessions, tension: 0.3, fill: false, hidden: true },
+        { label: 'Hours', data: trainingChartData.hours, tension: 0.3, fill: false, hidden: true },
+        { label: 'Intensity', data: trainingChartData.intensity, tension: 0.3, fill: false, hidden: true },
+        { label: 'Attempts', data: trainingChartData.attempts, tension: 0.3, fill: false, hidden: true },
+        { label: 'Tops', data: trainingChartData.tops, tension: 0.3, fill: false, hidden: true },
+        { label: 'Flashes', data: trainingChartData.flashes, tension: 0.3, fill: false, hidden: true }
       ]
     },
     options: {
@@ -332,7 +332,7 @@
     data: {
       labels: chartLabels,
       datasets: [
-        { label: 'Calories', data: nutritionChartData.calories, tension: 0.3, fill: false, hidden: false },
+        { label: 'Calories', data: nutritionChartData.calories, tension: 0.3, fill: false, hidden: true },
         { label: 'Protein', data: nutritionChartData.protein, tension: 0.3, fill: false, hidden: true },
         { label: 'Fat', data: nutritionChartData.fat, tension: 0.3, fill: false, hidden: true },
         { label: 'Sugar', data: nutritionChartData.sugar, tension: 0.3, fill: false, hidden: true },
