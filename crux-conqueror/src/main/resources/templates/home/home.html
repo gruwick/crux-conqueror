@@ -125,7 +125,7 @@
                         <div class="community-highlight-item" th:each="post : ${topPosts}">
                             <p class="community-post-title" th:text="${post.title}">Post title</p>
                             <p class="community-post-meta">
-                                <span th:text="${topPostLikeCounts[post.id]}">0</span> likes
+                                <span th:text="${topPostLikes[post.id]}">0</span> likes
                             </p>
                         </div>
                     </div>
