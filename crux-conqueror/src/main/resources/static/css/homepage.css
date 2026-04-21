@@ -161,6 +161,12 @@ body.homepage .community-placeholder {
     line-height: 1.5;
 }
 
+body.homepage .home-hero-compact {
+    grid-template-columns: 1fr;
+    max-width: 900px;
+    margin-bottom: 30px;
+}
+
 @media (max-width: 1000px) {
     body.homepage .home-mini-grid {
         grid-template-columns: 1fr;
