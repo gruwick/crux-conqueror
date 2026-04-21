@@ -12,11 +12,6 @@ body.homepage .summary-section h2 {
     margin-top: 0;
 }
 
-body.homepage .home-content-shell {
-    background: rgba(15, 23, 42, 0.35);
-    padding: 20px;
-    border-radius: 18px;
-    }
 body.homepage nav{
     background: rgba(10, 14, 20, 0.7) !important;
     background-image: none !important;
