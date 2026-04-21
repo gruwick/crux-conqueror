@@ -222,6 +222,72 @@
     color: #0f172a;
 }
 
+.goal-progress-panel {
+    margin-bottom: 30px;
+}
+
+.goal-progress-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.goal-progress-card {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 22px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+.goal-progress-card h3 {
+    margin: 6px 0 0;
+    font-size: 1.1rem;
+    color: #0f172a;
+}
+
+.goal-progress-value {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #1f2937;
+}
+
+.goal-progress-status {
+    margin: 0;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.progress-ring {
+    --progress: 0%;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: conic-gradient(#22c55e var(--progress), #e5e7eb 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring-inner {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring-inner span {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 1rem;
+}
+
 @media (max-width: 900px) {
     .dashboard-header {
         flex-direction: column;
