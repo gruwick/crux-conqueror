@@ -169,8 +169,19 @@ body.homepage .home-hero-compact {
     margin-bottom: 30px;
 }
 
+body.homepage .home-hero-compact {
+    display: block;
+    width: calc((100% - 16px) * 2 / 3);
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 30px;
+}
+
 @media (max-width: 1000px) {
     body.homepage .home-mini-grid {
         grid-template-columns: 1fr;
+    }
+    body.homepage.home-hero-compact {
+        width:100%;
     }
 }
