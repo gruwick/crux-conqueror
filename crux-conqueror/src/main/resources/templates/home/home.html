@@ -131,7 +131,7 @@
                                 by <span th:text="${post.user.username}"></span>
                             </p>
                             <p class="community-post-preview"
-                            th:text="${#strings.abbreviate(post.content, 40)}"></p>
+                            th:text="${#strings.abbreviate(post.content, 60)}"></p>
                             <p class="community-post-meta">
                                 <span th:text="${topPostLikes.get(post.id)}"></span> likes
                             </p>
