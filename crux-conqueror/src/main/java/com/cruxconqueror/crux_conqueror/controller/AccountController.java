@@ -17,6 +17,15 @@ import com.cruxconqueror.crux_conqueror.model.FriendRequest;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
 
+/**
+ * Controller responsible for acount page
+ * 
+ * includes:
+ * Viewing account details
+ * updating user prfile and nutrition goals
+ * managing friend requests
+ */
+
 @Controller
 public class AccountController {
     private final UserRepo userRepo;
@@ -27,13 +36,25 @@ public class AccountController {
         this.friendRequestRepo = friendRequestRepo;
     }
 
+    /**loads up the account page
+     * 
+     * Includes
+     * user details
+     * Friend requests incomming and outgoing
+     * Accepted requests
+     * Suggested users
+     */
     @GetMapping("/account")
     public String account(@RequestParam(required = false) String search, Model model, Principal principal) {
+        // Ensures user is logged in
         if (principal == null) {
             return "redirect:/login";
         }
+        //Get currently logged in user
         User user = userRepo.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
+
+                //get friends requests by status
         List<FriendRequest> incomingRequests = friendRequestRepo.findByReceiverAndStatusOrderByCreatedAtDesc(user,
                 "PENDING");
         List<FriendRequest> outgoingRequests = friendRequestRepo.findBySenderAndStatusOrderByCreatedAtDesc(user,
@@ -42,6 +63,8 @@ public class AccountController {
                 "ACCEPTED");
         List<FriendRequest> acceptedReceived = friendRequestRepo.findByReceiverAndStatusOrderByCreatedAtDesc(user,
                 "ACCEPTED");
+
+        // builds a list of confirmed friends
         List<User> friends = new ArrayList<>();
 
         for (FriendRequest request : acceptedSent) {
@@ -54,6 +77,8 @@ public class AccountController {
                 friends.add(request.getSender());
             }
         }
+
+        //Builds a list of users to exlude, pending requests your friends and yourself of course
         List<Long> blockedIds = new ArrayList<>();
         blockedIds.add(user.getId());
 
@@ -72,6 +97,7 @@ public class AccountController {
         }
         List<User> suggestedUsers;
 
+        // search and filter users by usernaem
         if (search != null && !search.isBlank()) {
             suggestedUsers = userRepo.findByUsernameContainingIgnoreCase(search).stream()
                     .filter(u -> u.getId() != null)
@@ -79,6 +105,7 @@ public class AccountController {
                     .sorted(Comparator.comparing(User::getUsername, String.CASE_INSENSITIVE_ORDER))
                     .collect(Collectors.toList());
         } else {
+            // else show a limited number of suggested
             suggestedUsers = userRepo.findAll().stream()
                     .filter(u -> u.getId() != null)
                     .filter(u -> !blockedIds.contains(u.getId()))
@@ -86,10 +113,11 @@ public class AccountController {
                     .limit(8)
                     .collect(Collectors.toList());
         }
+        //sort your friends alphabetically
         friends = friends.stream()
                 .sorted(Comparator.comparing(User::getUsername, String.CASE_INSENSITIVE_ORDER))
                 .collect(Collectors.toList());
-
+        // all data to add to the view
         model.addAttribute("user", user);
         model.addAttribute("incomingRequests", incomingRequests);
         model.addAttribute("outgoingRequests", outgoingRequests);
@@ -100,6 +128,7 @@ public class AccountController {
         return "Account/account";
     }
 
+    //Handles updating details and goals
     @PostMapping("/account")
     public String updateAccount(Principal principal, @RequestParam(required = false) String bio,
             @RequestParam(required = false) Integer age,
@@ -122,7 +151,7 @@ public class AccountController {
         }
         User user = userRepo.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
-
+        //update profile fields
         user.setBio(bio);
         user.setAge(age);
         user.setHeightCm(heightCm);
@@ -130,13 +159,14 @@ public class AccountController {
         user.setExperienceLevel(experienceLevel);
         user.setGoalType(goalType);
         user.setActivityLevel(activityLevel);
+        //update visibility settings
         user.setBioVisibility(bioVisibility);
         user.setAgeVisibility(ageVisibility);
         user.setHeightVisibility(heightVisibility);
         user.setWeightVisibility(weightVisibility);
         user.setExperienceVisibility(experienceVisibility);
         user.setTargetMode(targetMode);
-
+        //Auto vs manual for nutrition goals
         if ("Auto".equalsIgnoreCase(targetMode)) {
             calculateGoals(user);
         } else {
@@ -150,14 +180,17 @@ public class AccountController {
         return "redirect:/account#nutrition";
     }
 
+    //Calculates calorie and macro targets based on user data
     private void calculateGoals(User user) {
+        //ensures data is there
         if (user.getWeightKg() == null || user.getHeightCm() == null || user.getAge() == null) {
             return;
         }
-        // reminder for writing dissertation, am using Mifflin-ST Jeor equation for
+        // Using Mifflin-ST Jeor equation for
         // metabolic rates
         double bmr = (10 * user.getWeightKg()) + (6.25 * user.getHeightCm()) - (5 * user.getAge()) + 5;
         double ree = bmr;
+        //adjust based on activity level
         if ("Very High".equals(user.getActivityLevel()))
             ree *= 1.9;
         else if ("High".equals(user.getActivityLevel()))
@@ -166,7 +199,7 @@ public class AccountController {
             ree *= 1.55;
         else
             ree *= 1.2;
-
+        //adjust based on goal, cut bulk etc
         String goal = user.getGoalType();
         if ("Bulk".equalsIgnoreCase(goal))
             ree += 300;
@@ -177,7 +210,7 @@ public class AccountController {
 
         int totalCalories = (int) Math.round(ree);
         user.setCalorieGoal(totalCalories);
-
+        //Calculate macro split
         int proteinGrams = (int) Math.round(user.getWeightKg() * 1.8);
         int fatGrams = (int) Math.round(user.getWeightKg() * 0.8);
         int proteinCalories = proteinGrams * 4;
@@ -191,13 +224,9 @@ public class AccountController {
         user.setFatGoal(fatGrams);
         user.setCarbGoal(carbGrams);
 
-        /*
-         * user.setProteinGoal((int) Math.round((ree *.3)/4));
-         * user.setFatGoal((int) Math.round((ree *.25) /9));
-         * user.setCarbGoal((int) Math.round(ree * .45) /4);
-         */
-    }
 
+    }
+    // send friend requests to a user
     @PostMapping("/friends/request")
     public String sendFriendRequest(@RequestParam Long receiverId, Principal principal) {
         if (principal == null) {
@@ -207,15 +236,18 @@ public class AccountController {
                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
         User receiver = userRepo.findById(receiverId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        // doesnt let you send one to yourself
         if (sender.getId().equals(receiver.getId())) {
             return "redirect:/account#social";
         }
+        //prevent duplicate friend requests
         boolean alreadyExists = !friendRequestRepo.findBySenderAndReceiver(sender, receiver).isEmpty()
                 || !friendRequestRepo.findBySenderAndReceiver(receiver, sender).isEmpty();
 
         if (alreadyExists) {
             return "redirect:/account#social";
         }
+        //Create and save new request
         FriendRequest request = new FriendRequest();
         request.setSender(sender);
         request.setReceiver(receiver);
@@ -225,7 +257,7 @@ public class AccountController {
 
         return "redirect:/account#social";
     }
-
+    //Accept friend request
     @PostMapping("/friends/{id}/accept")
     public String acceptFriendRequest(@PathVariable Long id, Principal principal) {
         if (principal == null) {
@@ -236,6 +268,7 @@ public class AccountController {
                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
         FriendRequest request = friendRequestRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Friend request not found"));
+        // make sure correct user is accepting
         if (request.getReceiver() == null || !request.getReceiver().getId().equals(currentUser.getId())) {
             return "redirect:/account#social";
         }
@@ -244,7 +277,7 @@ public class AccountController {
 
         return "redirect:/account#social";
     }
-
+    //Decline a friend request
     @PostMapping("/friends/{id}/decline")
     public String declineFriendRequest(@PathVariable Long id, Principal principal) {
         if (principal == null) {
@@ -254,6 +287,7 @@ public class AccountController {
                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
         FriendRequest request = friendRequestRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Friend request not found"));
+        //Ensure correct user is declining
         if (request.getReceiver() == null || !request.getReceiver().getId().equals(currentUser.getId())) {
             return "redirect:/account#social";
         }
@@ -261,7 +295,7 @@ public class AccountController {
 
         return "redirect:/account#social";
     }
-
+    //Cancel a send friend request
     @PostMapping("/friends/{id}/cancel")
     public String cancelFriendRequest(@PathVariable Long id, Principal principal) {
         if (principal == null) {
@@ -272,6 +306,7 @@ public class AccountController {
                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
         FriendRequest request = friendRequestRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Friend request not found"));
+        //Ensuring only the right user can cancel
         if (request.getSender() == null || !request.getSender().getId().equals(currentUser.getId())) {
             return "redirect:/account#social";
         }
