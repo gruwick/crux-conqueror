@@ -299,6 +299,7 @@
     flex-wrap: wrap;
     padding-top: 4px;
 }
+
 /*Reusing session.css for my leaderboard right now */
 .leaderboard-select {
     padding: 10px 14px;
@@ -329,6 +330,7 @@
 .muted-text {
     color: #64748b;
 }
+
 .forum-post-list {
     display: flex;
     flex-direction: column;
@@ -365,6 +367,7 @@
     white-space: pre-wrap;
     word-break: break-word;
 }
+
 .forum-post-actions {
     display: flex;
     align-items: center;
@@ -377,6 +380,7 @@
     font-size: 0.95rem;
     color: #64748b;
 }
+
 .forum-comments-section {
     margin-top: 20px;
     padding-top: 18px;

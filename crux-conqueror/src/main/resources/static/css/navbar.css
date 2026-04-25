@@ -36,7 +36,8 @@ nav .brand-logo {
     justify-content: center;
     overflow: hidden;
 }
-.brand-logo img{
+
+.brand-logo img {
     width: auto;
     height: 60px;
     display: block;

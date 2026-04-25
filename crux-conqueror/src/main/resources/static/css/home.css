@@ -27,7 +27,7 @@ body {
     font-size: 2.5rem;
 }
 
-.hero-subtitle { 
+.hero-subtitle {
     margin-bottom: 20px;
     opacity: 0.9;
 }
@@ -41,7 +41,7 @@ body {
 .action-btn {
     display: flex;
     align-items: center;
-    gap:8px;
+    gap: 8px;
     text-decoration: none;
     padding: 10px 16px;
     border-radius: 8px;
@@ -55,7 +55,7 @@ body {
 
 .secondary-btn {
     background-color: rgba(255, 255, 255, 0.15);
-    color:white;
+    color: white;
 }
 
 .hero-right {
@@ -64,7 +64,7 @@ body {
     gap: 12px;
 }
 
-.hero-panel h3{
+.hero-panel h3 {
     margin: 5px 0;
 }
 
@@ -86,8 +86,9 @@ body {
     padding: 18px;
     border-radius: 14px;
 
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
+
 .stat-icon {
     width: 50px;
     height: 50px;
@@ -99,10 +100,22 @@ body {
     border-radius: 10px;
     color: white;
 }
-.sessions { background: #2563eb; }
-.calories { background: #dc2626; }
-.protein { background: #7c3aed; }
-.grade { background: #d97706; }
+
+.sessions {
+    background: #2563eb;
+}
+
+.calories {
+    background: #dc2626;
+}
+
+.protein {
+    background: #7c3aed;
+}
+
+.grade {
+    background: #d97706;
+}
 
 .stat-label {
     margin: 0;
@@ -126,7 +139,7 @@ body {
     padding: 20px;
     border-radius: 14px;
 
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .large-panel {

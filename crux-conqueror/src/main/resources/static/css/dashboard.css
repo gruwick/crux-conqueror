@@ -46,6 +46,7 @@
     margin-bottom: 24px;
     align-items: start;
 }
+
 .dashboard-grid .large-panel {
     min-height: auto;
 }
@@ -153,6 +154,7 @@
 .dashboard-table tbody tr:hover {
     background: #f8fafc;
 }
+
 .chart-panel-header {
     display: flex;
     justify-content: space-between;

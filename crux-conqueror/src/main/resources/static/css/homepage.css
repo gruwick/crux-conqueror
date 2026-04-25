@@ -1,18 +1,19 @@
 body.homepage {
     background:
-    linear-gradient(rgba(8, 10, 15, 0.45), rgba(8, 10, 15, 0.45)),
-    url('/images/Chalk homepage darkend.png');
+        linear-gradient(rgba(8, 10, 15, 0.45), rgba(8, 10, 15, 0.45)),
+        url('/images/Chalk homepage darkend.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
 body.homepage .summary-section h2 {
     color: white;
     margin-top: 0;
 }
 
-body.homepage nav{
+body.homepage nav {
     background: rgba(10, 14, 20, 0.7) !important;
     background-image: none !important;
 }
@@ -22,10 +23,11 @@ body.homepage .hero {
 }
 
 body.homepage .stat-card,
-body.homepage .panel-card{
+body.homepage .panel-card {
     background: rgba(255, 255, 255, 0.8);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
 }
+
 body.homepage .hero-panel {
     background: rgba(255, 255, 255, 0.12);
     border-radius: 14px;
@@ -127,7 +129,7 @@ body.homepage .suggestion-list {
     color: #475569;
 }
 
-body.homepage .suggestion-list li + li {
+body.homepage .suggestion-list li+li {
     margin-top: 10px;
 }
 
@@ -300,7 +302,8 @@ body.homepage .leaderboard-preview-rank {
     body.homepage .home-mini-grid {
         grid-template-columns: 1fr;
     }
+
     body.homepage .home-hero-compact {
-        width:100%;
+        width: 100%;
     }
 }

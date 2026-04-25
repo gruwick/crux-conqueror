@@ -42,7 +42,7 @@ body {
     background: white;
     padding: 22px;
     border-radius: 14px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .panel-card h2 {
@@ -113,6 +113,7 @@ body {
 .save-btn:hover {
     background-color: #9fd454;
 }
+
 .social-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -186,12 +187,14 @@ body {
 .mini-danger-btn:hover {
     background-color: #fecaca;
 }
+
 .search-form {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     margin: 0 0 16px;
 }
+
 .search-form {
     display: flex;
     gap: 10px;
