@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8" />
   <title>Create account — Crux Conqueror</title>
   <link rel="stylesheet" th:href="@{/css/auth.css}">
   <link rel="stylesheet" th:href="@{/css/normalpage.css}">
 </head>
-  <body class="normalpage"></body>
+
+<body class="normalpage"></body>
+
 <body>
   <main class="auth-shell">
     <section class="auth-card">
@@ -19,7 +22,7 @@
       </div>
       <form th:action="@{/register}" th:object="${form}" method="post" class="auth-form">
         <div class="msg error" th:if="${#fields.hasErrors('*')}">
-        Please fix the errors below.
+          Please fix the errors below.
         </div>
         <label>
           <span>Username</span>
@@ -45,4 +48,5 @@
     </section>
   </main>
 </body>
+
 </html>

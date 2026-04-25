@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,41 +11,42 @@
     <link rel="stylesheet" th:href="@{/css/homepage.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body class="homepage">
     <div th:replace="fragments/navbar :: navbar"></div>
 
     <main class="page-container">
 
-<section class="content-grid home-content-grid">
-    <div class="left-stack">
+        <section class="content-grid home-content-grid">
+            <div class="left-stack">
 
-        <section class="hero home-hero-compact">
-            <div class="hero-left">
-                <h1>Welcome back, <span th:text="${username}">user</span></h1>
-                <p class="hero-subtitle">
-                    Track your training, nutrition, and climbing progress in one place.
-                </p>
+                <section class="hero home-hero-compact">
+                    <div class="hero-left">
+                        <h1>Welcome back, <span th:text="${username}">user</span></h1>
+                        <p class="hero-subtitle">
+                            Track your training, nutrition, and climbing progress in one place.
+                        </p>
 
-                <div class="hero-actions">
-                    <a th:href="@{/dashboard}" class="action-btn primary-btn">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>Go to Dashboard</span>
-                    </a>
+                        <div class="hero-actions">
+                            <a th:href="@{/dashboard}" class="action-btn primary-btn">
+                                <i class="fa-solid fa-chart-line"></i>
+                                <span>Go to Dashboard</span>
+                            </a>
 
-                    <a th:href="@{/sessions/new}" class="action-btn secondary-btn">
-                        <i class="fa-solid fa-dumbbell"></i>
-                        <span>Log Session</span>
-                    </a>
+                            <a th:href="@{/sessions/new}" class="action-btn secondary-btn">
+                                <i class="fa-solid fa-dumbbell"></i>
+                                <span>Log Session</span>
+                            </a>
 
-                    <a th:href="@{/nutrition/new}" class="action-btn secondary-btn">
-                        <i class="fa-solid fa-utensils"></i>
-                        <span>Add Food Entry</span>
-                    </a>
-                </div>
-            </div>
-        </section>
+                            <a th:href="@{/nutrition/new}" class="action-btn secondary-btn">
+                                <i class="fa-solid fa-utensils"></i>
+                                <span>Add Food Entry</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
 
-        <div class="panel-card">
+                <div class="panel-card">
                     <h2>This Week</h2>
 
                     <div class="home-progress-card">
@@ -60,8 +62,8 @@
                         </div>
 
                         <div class="home-progress-bar">
-                            <div class="home-progress-fill"
-                                 th:style="'width:' + ${sessionProgressPercent} + '%;'"></div>
+                            <div class="home-progress-fill" th:style="'width:' + ${sessionProgressPercent} + '%;'">
+                            </div>
                         </div>
 
                         <p class="home-progress-status" th:text="${weeklyTrainingStatus}">
@@ -91,34 +93,34 @@
                         </div>
                     </div>
                 </div>
-            
-            <div class="panel-card">
-                <div class="leaderboard-preview-header">
-                    <div>
-                        <h2>Top Climbers</h2>
-                        <p class="leaderboard-preview-subtitle">Last 30 days</p>
+
+                <div class="panel-card">
+                    <div class="leaderboard-preview-header">
+                        <div>
+                            <h2>Top Climbers</h2>
+                            <p class="leaderboard-preview-subtitle">Last 30 days</p>
+                        </div>
+                        <p class="leaderboard-preview-rank" th:if="${homeRank > 0}">
+                            Your rank: #<span th:text="${homeRank}">1</span>
+                        </p>
+                        <a th:href="@{/leaderboard}" class="secondary-page-btn">View Full</a>
                     </div>
-                    <p class="leaderboard-preview-rank" th:if="${homeRank > 0}">
-                        Your rank: #<span th:text="${homeRank}">1</span>
+
+                    <div class="leaderboard-preview-list" th:if="${not #lists.isEmpty(leaderboardPreview)}">
+                        <div class="leaderboard-preview-item" th:each="row, stat : ${leaderboardPreview}">
+                            <span class="leaderboard-rank" th:text="${stat.count}">1</span>
+                            <span class="leaderboard-name" th:text="${row.username}">username</span>
+                            <span class="leaderboard-value">
+                                <span th:text="${row.sessionsLast30}">0</span> sessions
+                            </span>
+                        </div>
+                    </div>
+
+                    <p class="community-placeholder" th:if="${#lists.isEmpty(leaderboardPreview)}">
+                        No leaderboard data available yet.
                     </p>
-                    <a th:href="@{/leaderboard}" class="secondary-page-btn">View Full</a>
                 </div>
-
-                <div class="leaderboard-preview-list" th:if="${not #lists.isEmpty(leaderboardPreview)}">
-                    <div class="leaderboard-preview-item" th:each="row, stat : ${leaderboardPreview}">
-                        <span class="leaderboard-rank" th:text="${stat.count}">1</span>
-                        <span class="leaderboard-name" th:text="${row.username}">username</span>
-                        <span class="leaderboard-value">
-                            <span th:text="${row.sessionsLast30}">0</span> sessions
-                        </span>
-                    </div>
-                </div>
-
-                <p class="community-placeholder" th:if="${#lists.isEmpty(leaderboardPreview)}">
-                    No leaderboard data available yet.
-                </p>
             </div>
-        </div>
             <div class="side-stack">
                 <div class="panel-card">
                     <h2>Suggestions</h2>
@@ -150,14 +152,12 @@
                     <div th:if="${topPosts != null and !topPosts.isEmpty()}" class="community-highlights">
                         <div class="community-highlight-item" th:each="post : ${topPosts}">
                             <p class="community-post-title">
-                                <a th:href="@{/community}"
-                                th:text="${post.title}"></a>
+                                <a th:href="@{/community}" th:text="${post.title}"></a>
                             </p>
                             <p class="community-post-author">
                                 by <span th:text="${post.user.username}"></span>
                             </p>
-                            <p class="community-post-preview"
-                            th:text="${#strings.abbreviate(post.content, 60)}"></p>
+                            <p class="community-post-preview" th:text="${#strings.abbreviate(post.content, 60)}"></p>
                             <p class="community-post-meta">
                                 <span th:text="${topPostLikes.get(post.id)}"></span> likes
                             </p>
@@ -173,4 +173,5 @@
 
     </main>
 </body>
+
 </html>

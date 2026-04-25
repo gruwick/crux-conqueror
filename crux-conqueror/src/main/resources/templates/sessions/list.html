@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +10,8 @@
     <link rel="stylesheet" th:href="@{/css/sessions.css}">
     <link rel="stylesheet" th:href="@{/css/normalpage.css}">
 </head>
-<body class = "normalpage">
+
+<body class="normalpage">
     <div th:replace="fragments/navbar :: navbar"></div>
 
     <main class="page-container">
@@ -44,10 +46,8 @@
                         Archive selected
                     </button>
 
-                    <button type="submit"
-                            formaction="/sessions/bulk-delete"
-                            onclick="return confirm('Delete selected sessions?');"
-                            class="danger-action-btn">
+                    <button type="submit" formaction="/sessions/bulk-delete"
+                        onclick="return confirm('Delete selected sessions?');" class="danger-action-btn">
                         Delete selected
                     </button>
                 </div>
@@ -91,27 +91,23 @@
                                         <div class="table-actions">
                                             <a th:href="@{'/sessions/' + ${s.id} + '/edit'}" class="table-link">Edit</a>
 
-                                            <form th:action="@{'/sessions/' + ${s.id} + '/delete'}"
-                                                  method="post"
-                                                  class="inline-form">
-                                                <button type="submit"
-                                                        class="mini-danger-btn"
-                                                        onclick="return confirm('Delete this session?');">
+                                            <form th:action="@{'/sessions/' + ${s.id} + '/delete'}" method="post"
+                                                class="inline-form">
+                                                <button type="submit" class="mini-danger-btn"
+                                                    onclick="return confirm('Delete this session?');">
                                                     Delete
                                                 </button>
                                             </form>
 
                                             <form th:if="${!showArchived}"
-                                                  th:action="@{'/sessions/' + ${s.id} + '/archive'}"
-                                                  method="post"
-                                                  class="inline-form">
+                                                th:action="@{'/sessions/' + ${s.id} + '/archive'}" method="post"
+                                                class="inline-form">
                                                 <button type="submit" class="mini-neutral-btn">Archive</button>
                                             </form>
 
                                             <form th:if="${showArchived}"
-                                                  th:action="@{'/sessions/' + ${s.id} + '/unarchive'}"
-                                                  method="post"
-                                                  class="inline-form">
+                                                th:action="@{'/sessions/' + ${s.id} + '/unarchive'}" method="post"
+                                                class="inline-form">
                                                 <button type="submit" class="mini-neutral-btn">Unarchive</button>
                                             </form>
                                         </div>
@@ -125,4 +121,5 @@
         </div>
     </main>
 </body>
+
 </html>
