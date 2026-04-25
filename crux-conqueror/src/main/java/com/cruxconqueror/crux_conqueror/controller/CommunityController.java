@@ -26,6 +26,15 @@ import com.cruxconqueror.crux_conqueror.repository.ForumLikeRepo;
 import com.cruxconqueror.crux_conqueror.model.ForumComment;
 import com.cruxconqueror.crux_conqueror.repository.ForumCommentRepo;
 
+/**
+ * Controller for handling community forum feature
+ * 
+ * Includes:
+ * Viewing posts
+ * Sorting posts
+ * Creating posts
+ * Likeing, favouriting and commenting on posts
+ */
 @Controller
 @RequestMapping("/community")
 public class CommunityController {
@@ -46,7 +55,12 @@ public class CommunityController {
         this.forumLikeRepo = forumLikeRepo;
         this.forumCommentRepo = forumCommentRepo;
     }
-
+    /**
+     * Loads the forum page
+     * 
+     * Handles: 
+     * Scope global or friends
+     * Sorting by most liked favourited etc */ 
     @GetMapping
     public String forum(@RequestParam(name = "scope", defaultValue = "global") String scope,
             @RequestParam(name = "sort", defaultValue = "newest") String sort,
@@ -54,19 +68,20 @@ public class CommunityController {
             Principal principal) {
 
         User currentUser = null;
+        //get logged in user
         if (principal != null) {
             currentUser = userRepo.findByUsername(principal.getName())
                     .orElseThrow(() -> new IllegalStateException("Logged-in user not found"));
         }
 
         List<ForumPost> posts;
-
+        // if viweing friends scope then only show posts from friends
         if ("friends".equals(scope) && currentUser != null) {
             List<FriendRequest> acceptedSent = friendRequestRepo.findBySenderAndStatusOrderByCreatedAtDesc(currentUser,
                     "ACCEPTED");
             List<FriendRequest> acceptedReceived = friendRequestRepo
                     .findByReceiverAndStatusOrderByCreatedAtDesc(currentUser, "ACCEPTED");
-
+            //Builds a list of userames
             List<String> usernames = new ArrayList<>();
             usernames.add(currentUser.getUsername());
 
@@ -84,14 +99,17 @@ public class CommunityController {
 
             posts = postRepo.findByUserUsernameInOrderByCreatedAtDesc(usernames);
         } else {
+            //Default show all
             posts = postRepo.findAllByOrderByCreatedAtDesc();
         }
-
+        // Remeber what posts the user has liked, favourited
         Set<Long> likedPostIds = new HashSet<>();
         Set<Long> favouritePostIds = new HashSet<>();
+        //Store like counts per post
         Map<Long, Long> likeCounts = new HashMap<>();
 
         if (currentUser != null) {
+            //Track posts the user has liked
             List<ForumLike> myLikes = forumLikeRepo.findByUser(currentUser);
             for (ForumLike like : myLikes) {
                 if (like.getPost() != null && like.getPost().getId() != null) {
@@ -100,23 +118,24 @@ public class CommunityController {
             }
 
             List<ForumFavourite> myFavourites = forumFavouriteRepo.findByUser(currentUser);
+            //Track the posts user hs favourited
             for (ForumFavourite favourite : myFavourites) {
                 if (favourite.getPost() != null && favourite.getPost().getId() != null) {
                     favouritePostIds.add(favourite.getPost().getId());
                 }
             }
         }
-
+        //Count likes for each post
         for (ForumPost post : posts) {
             likeCounts.put(post.getId(), forumLikeRepo.countByPost(post));
         }
-
+        //Sort by most liked
         if ("likes".equals(sort)) {
             posts.sort((a, b) -> Long.compare(
                     likeCounts.getOrDefault(b.getId(), 0L),
                     likeCounts.getOrDefault(a.getId(), 0L)));
         }
-
+        //Sort by most favourited
         if ("favourites".equals(sort) && currentUser != null) {
             List<ForumPost> favouritePosts = new ArrayList<>();
             for (ForumPost post : posts) {
@@ -126,6 +145,7 @@ public class CommunityController {
             }
             posts = favouritePosts;
         }
+        //Store comments and comments per post
         Map<Long, List<ForumComment>> commentsByPost = new HashMap<>();
         Map<Long, Long> commentCounts = new HashMap<>();
 
@@ -134,7 +154,7 @@ public class CommunityController {
             commentsByPost.put(post.getId(), comments);
             commentCounts.put(post.getId(), forumCommentRepo.countByPost(post));
         }
-
+        //pass data to view
         model.addAttribute("posts", posts);
         model.addAttribute("scope", scope);
         model.addAttribute("sort", sort);
@@ -147,14 +167,14 @@ public class CommunityController {
 
         return "community/forum";
     }
-
+    //Creates a new post
     @PostMapping
     public String create(@ModelAttribute("newPost") ForumPost newPost, Principal principal) {
 
         User user = userRepo.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException("Logged-in user not found"));
 
-        // basic validation (same style you use elsewhere)
+        // basic validation
         if (newPost.getTitle() == null || newPost.getTitle().isBlank()) {
             throw new IllegalArgumentException("Title is required");
         }
@@ -169,7 +189,7 @@ public class CommunityController {
 
         return "redirect:/community";
     }
-
+    //toggle like on a post or unlike
     @PostMapping("/{id}/like")
     public String toggleLike(@PathVariable Long id,
             @RequestParam(name = "scope", defaultValue = "global") String scope,
@@ -183,7 +203,7 @@ public class CommunityController {
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
 
         ForumLike existing = forumLikeRepo.findByPostAndUser(post, user).orElse(null);
-
+        // if you have already liked then remove like if not add new like
         if (existing != null) {
             forumLikeRepo.delete(existing);
         } else {
@@ -195,7 +215,7 @@ public class CommunityController {
 
         return "redirect:/community?scope=" + scope + "&sort=" + sort + "#posts";
     }
-
+    //Toggle favourite on post
     @PostMapping("/{id}/favourite")
     public String toggleFavourite(@PathVariable Long id,
             @RequestParam(name = "scope", defaultValue = "global") String scope,
@@ -221,7 +241,7 @@ public class CommunityController {
 
         return "redirect:/community?scope=" + scope + "&sort=" + sort + "#posts";
     }
-
+    //add comment to post
     @PostMapping("/{id}/comment")
     public String addComment(@PathVariable Long id,
             @RequestParam String content,
@@ -234,7 +254,7 @@ public class CommunityController {
 
         ForumPost post = postRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
-
+        //prevent empty comment
         if (content == null || content.isBlank()) {
             return "redirect:/community?scope=" + scope + "&sort=" + sort + "#posts";
         }
