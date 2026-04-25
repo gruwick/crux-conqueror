@@ -20,21 +20,21 @@ public class NutritionController {
     private final UserRepo userRepo;
     private final NutritionService nutritionService;
 
-    public NutritionController(FoodEntryRepo foodEntryRepo, UserRepo userRepo, NutritionService nutritionService){
+    public NutritionController(FoodEntryRepo foodEntryRepo, UserRepo userRepo, NutritionService nutritionService) {
         this.foodEntryRepo = foodEntryRepo;
         this.userRepo = userRepo;
         this.nutritionService = nutritionService;
     }
-    
+
     @GetMapping
-    public String list(@RequestParam(required = false)String date, Model model, Principal principal) {
+    public String list(@RequestParam(required = false) String date, Model model, Principal principal) {
         User user = userRepo.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException("User not found"));
         LocalDate selectedDate;
-        if(date != null && !date.isBlank()) {
+        if (date != null && !date.isBlank()) {
             selectedDate = LocalDate.parse(date);
         } else {
-            selectedDate =LocalDate.now();
+            selectedDate = LocalDate.now();
         }
 
         List<FoodEntry> todaysEntries = nutritionService.getEntriesForDate(user, selectedDate);
@@ -50,7 +50,6 @@ public class NutritionController {
 
         LocalDate previousWeek = startOfWeek.minusWeeks(1);
         LocalDate nextWeek = startOfWeek.plusWeeks(1);
-
 
         List<FoodEntry> recentEntries = todaysEntries.stream().limit(10).toList();
         model.addAttribute("entries", recentEntries);
@@ -82,7 +81,8 @@ public class NutritionController {
 
         return "nutrition/new";
     }
-        @PostMapping
+
+    @PostMapping
     public String create(@ModelAttribute("entry") FoodEntry entry, Principal principal) {
         User user = userRepo.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException("Logged-in user not found"));
@@ -97,12 +97,18 @@ public class NutritionController {
             entry.setEntryDateTime(LocalDateTime.now());
         }
 
-        if (entry.getCalories() == null) entry.setCalories(0);
-        if (entry.getCarbs() == null) entry.setCarbs(0);
-        if (entry.getProtein() == null) entry.setProtein(0);
-        if (entry.getFats() == null) entry.setFats(0);
-        if (entry.getSugar() == null) entry.setSugar(0);
-        if (entry.getSalt() == null) entry.setSalt(0);
+        if (entry.getCalories() == null)
+            entry.setCalories(0);
+        if (entry.getCarbs() == null)
+            entry.setCarbs(0);
+        if (entry.getProtein() == null)
+            entry.setProtein(0);
+        if (entry.getFats() == null)
+            entry.setFats(0);
+        if (entry.getSugar() == null)
+            entry.setSugar(0);
+        if (entry.getSalt() == null)
+            entry.setSalt(0);
 
         entry.setUser(user);
 
@@ -125,8 +131,8 @@ public class NutritionController {
 
     @PostMapping("/{id}/edit")
     public String editSubmit(@PathVariable Long id,
-                             @ModelAttribute("entry") FoodEntry updated,
-                             Principal principal) {
+            @ModelAttribute("entry") FoodEntry updated,
+            Principal principal) {
 
         FoodEntry existing = requireOwnedEntry(id, principal);
 
@@ -164,7 +170,8 @@ public class NutritionController {
         foodEntryRepo.delete(entry);
         return "redirect:/nutrition";
     }
-        private FoodEntry requireOwnedEntry(Long id, Principal principal) {
+
+    private FoodEntry requireOwnedEntry(Long id, Principal principal) {
         FoodEntry entry = foodEntryRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Food entry not found"));
 
@@ -179,5 +186,3 @@ public class NutritionController {
         return entry;
     }
 }
-    
-

@@ -10,20 +10,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-
-
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-    
-    
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public DaoAuthenticationProvider authProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder){
+    public DaoAuthenticationProvider authProvider(UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
@@ -31,27 +29,24 @@ public class SecurityConfiguration {
 
     }
 
-@Bean
-SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/css/**","/images/**","/js/**, /test/**").permitAll()
-            .requestMatchers("/login", "/register", "/error").permitAll()
-            .anyRequest().authenticated()
-        )
-        .formLogin(form -> form
-            .loginPage("/login")
-            .loginProcessingUrl("/login")
-            .defaultSuccessUrl("/", true)
-            .failureUrl("/login?error")
-            .permitAll()
-        )
-        .logout(logout -> logout
-            .logoutSuccessUrl("/login?logout")
-        );
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/css/**", "/images/**", "/js/**, /test/**").permitAll()
+                        .requestMatchers("/login", "/register", "/error").permitAll()
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error")
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout"));
 
-    return http.build();
-}
+        return http.build();
+    }
 
 }

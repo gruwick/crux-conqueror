@@ -1,4 +1,5 @@
 package com.cruxconqueror.crux_conqueror.model;
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
@@ -26,19 +27,42 @@ public class ForumComment {
     @Column(name = "Created_At", nullable = false)
     private LocalDateTime createdAt;
 
-    public ForumComment() {}
-    public Long getId() { return id; }
+    public ForumComment() {
+    }
 
-    public ForumPost getPost() { return post; }
-    public void setPost(ForumPost post) { this.post = post; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public ForumPost getPost() {
+        return post;
+    }
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public void setPost(ForumPost post) {
+        this.post = post;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
-    

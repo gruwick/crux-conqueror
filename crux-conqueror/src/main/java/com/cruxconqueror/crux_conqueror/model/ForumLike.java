@@ -1,8 +1,9 @@
 package com.cruxconqueror.crux_conqueror.model;
+
 import jakarta.persistence.*;
 
-
-@Entity@Table(name = "Forum_Likes")
+@Entity
+@Table(name = "Forum_Likes")
 public class ForumLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,14 +16,29 @@ public class ForumLike {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "User_ID", nullable = false)
-    
+
     private User user;
-    public ForumLike() {}
-    public Long getId() { return id; }
 
-    public ForumPost getPost() { return post; }
-    public void setPost(ForumPost post) { this.post = post; }
+    public ForumLike() {
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public Long getId() {
+        return id;
+    }
+
+    public ForumPost getPost() {
+        return post;
+    }
+
+    public void setPost(ForumPost post) {
+        this.post = post;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

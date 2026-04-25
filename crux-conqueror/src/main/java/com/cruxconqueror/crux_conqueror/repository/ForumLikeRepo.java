@@ -9,8 +9,8 @@ import com.cruxconqueror.crux_conqueror.model.User;
 
 public interface ForumLikeRepo extends JpaRepository<ForumLike, Long> {
     Optional<ForumLike> findByPostAndUser(ForumPost post, User user);
+
     long countByPost(ForumPost post);
+
     List<ForumLike> findByUser(User user);
 }
-    
-

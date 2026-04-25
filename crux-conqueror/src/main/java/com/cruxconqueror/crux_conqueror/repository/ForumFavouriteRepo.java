@@ -9,5 +9,6 @@ import com.cruxconqueror.crux_conqueror.model.User;
 
 public interface ForumFavouriteRepo extends JpaRepository<ForumFavourite, Long> {
     Optional<ForumFavourite> findByPostAndUser(ForumPost post, User user);
+
     List<ForumFavourite> findByUser(User user);
 }

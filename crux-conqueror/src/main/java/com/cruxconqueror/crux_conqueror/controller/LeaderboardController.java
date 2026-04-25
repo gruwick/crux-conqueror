@@ -25,7 +25,8 @@ public class LeaderboardController {
     private final UserRepo userRepo;
     private final FriendRequestRepo friendRequestRepo;
 
-    public LeaderboardController(TrainingSessionsRepo sessionsRepo, UserRepo userRepo, FriendRequestRepo friendRequestRepo) {
+    public LeaderboardController(TrainingSessionsRepo sessionsRepo, UserRepo userRepo,
+            FriendRequestRepo friendRequestRepo) {
         this.sessionsRepo = sessionsRepo;
         this.userRepo = userRepo;
         this.friendRequestRepo = friendRequestRepo;
@@ -33,9 +34,8 @@ public class LeaderboardController {
 
     @GetMapping("/leaderboard")
     public String leaderboard(Model model, Principal principal,
-        @RequestParam(defaultValue = "global") String scope,
-        @RequestParam(defaultValue = "sessions") String metric
-    ) {
+            @RequestParam(defaultValue = "global") String scope,
+            @RequestParam(defaultValue = "sessions") String metric) {
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime last30 = now.minusDays(30);
@@ -47,8 +47,10 @@ public class LeaderboardController {
             User currentUser = userRepo.findByUsername(principal.getName())
                     .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
 
-            List<FriendRequest> acceptedSent = friendRequestRepo.findBySenderAndStatusOrderByCreatedAtDesc(currentUser, "ACCEPTED");
-            List<FriendRequest> acceptedReceived = friendRequestRepo.findByReceiverAndStatusOrderByCreatedAtDesc(currentUser, "ACCEPTED");
+            List<FriendRequest> acceptedSent = friendRequestRepo.findBySenderAndStatusOrderByCreatedAtDesc(currentUser,
+                    "ACCEPTED");
+            List<FriendRequest> acceptedReceived = friendRequestRepo
+                    .findByReceiverAndStatusOrderByCreatedAtDesc(currentUser, "ACCEPTED");
 
             Set<String> allowedUsers = new HashSet<>();
             allowedUsers.add(currentUser.getUsername());
@@ -95,7 +97,7 @@ public class LeaderboardController {
                     .mapToInt(Integer::intValue)
                     .average()
                     .orElse(0.0);
-            
+
             String bestGrade = sessions.stream()
                     .map(TrainingSessions::getHighestGrade)
                     .filter(g -> g != null && !g.isBlank())
@@ -108,29 +110,29 @@ public class LeaderboardController {
         }
 
         // Sort: sessions desc, minutes desc, username asc
-            rows.sort((a, b) -> {
+        rows.sort((a, b) -> {
 
-                if ("minutes".equals(metric)) {
-                    return Integer.compare(b.getMinutesLast30(), a.getMinutesLast30());
-                }
+            if ("minutes".equals(metric)) {
+                return Integer.compare(b.getMinutesLast30(), a.getMinutesLast30());
+            }
 
-                if ("intensity".equals(metric)) {
-                    return Double.compare(b.getAvgIntensityLast30(), a.getAvgIntensityLast30());
-                }
+            if ("intensity".equals(metric)) {
+                return Double.compare(b.getAvgIntensityLast30(), a.getAvgIntensityLast30());
+            }
 
-                if ("grade".equals(metric)) {
-                    return Integer.compare(b.getBestGradeScore(), a.getBestGradeScore());
-                }
+            if ("grade".equals(metric)) {
+                return Integer.compare(b.getBestGradeScore(), a.getBestGradeScore());
+            }
 
-                return Integer.compare(b.getSessionsLast30(), a.getSessionsLast30());
-            });
+            return Integer.compare(b.getSessionsLast30(), a.getSessionsLast30());
+        });
 
-                //Error testing
-            System.out.println("---- SORTED ROWS ----");
-            rows.forEach(r -> System.out.println(r.getUsername()
+        // Error testing
+        System.out.println("---- SORTED ROWS ----");
+        rows.forEach(r -> System.out.println(r.getUsername()
                 + " sessions=" + r.getSessionsLast30()
                 + " minutes=" + r.getMinutesLast30()));
-                    System.out.println("---------------------");
+        System.out.println("---------------------");
 
         // Find current user's rank
         String me = principal != null ? principal.getName() : null;
@@ -151,12 +153,14 @@ public class LeaderboardController {
 
         return "community/leaderboard";
     }
-    private int gradeToScore(String grade){
-        if (grade == null || grade.isBlank()) return 0;
-    try{
-        return Integer.parseInt(grade.replaceAll("[^0-9]", ""));
-    } catch (Exception e) {
-        return 0;
-    }
+
+    private int gradeToScore(String grade) {
+        if (grade == null || grade.isBlank())
+            return 0;
+        try {
+            return Integer.parseInt(grade.replaceAll("[^0-9]", ""));
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

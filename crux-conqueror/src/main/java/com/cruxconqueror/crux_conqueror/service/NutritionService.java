@@ -1,4 +1,5 @@
 package com.cruxconqueror.crux_conqueror.service;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,73 +14,79 @@ import com.cruxconqueror.crux_conqueror.repository.FoodEntryRepo;
 public class NutritionService {
     private final FoodEntryRepo foodEntryRepo;
 
-    public NutritionService(FoodEntryRepo foodEntryRepo){
+    public NutritionService(FoodEntryRepo foodEntryRepo) {
         this.foodEntryRepo = foodEntryRepo;
     }
 
-    public List<FoodEntry> getTodaysEntries(User user){
+    public List<FoodEntry> getTodaysEntries(User user) {
         return getEntriesForDate(user, LocalDate.now());
     }
-    public List<FoodEntry> getEntriesForDate(User user, LocalDate date){
+
+    public List<FoodEntry> getEntriesForDate(User user, LocalDate date) {
 
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
 
-        return foodEntryRepo.findByUserAndEntryDateTimeBetweenOrderByEntryDateTimeDesc( user, startOfDay, endOfDay);
+        return foodEntryRepo.findByUserAndEntryDateTimeBetweenOrderByEntryDateTimeDesc(user, startOfDay, endOfDay);
     }
-    public LocalDate getStartOfWeek(LocalDate date){
+
+    public LocalDate getStartOfWeek(LocalDate date) {
         return date.with(DayOfWeek.MONDAY);
     }
 
-    public List<LocalDate> getWeekDays(LocalDate selectedDate){
+    public List<LocalDate> getWeekDays(LocalDate selectedDate) {
         LocalDate startOfWeek = getStartOfWeek(selectedDate);
         List<LocalDate> weekDays = new ArrayList<>();
-        for(int i =0; i<7; i++){
+        for (int i = 0; i < 7; i++) {
             weekDays.add(startOfWeek.plusDays(i));
         }
         return weekDays;
     }
-    
 
-    public int getCaloriesFromEntries(List<FoodEntry> entries){
+    public int getCaloriesFromEntries(List<FoodEntry> entries) {
         return entries.stream()
                 .map(FoodEntry::getCalories)
                 .filter(v -> v != null)
                 .mapToInt(Integer::intValue)
-                .sum();    
-}
+                .sum();
+    }
+
     public int getProteinFromEntries(List<FoodEntry> entries) {
         return entries.stream()
                 .map(FoodEntry::getProtein)
-                .filter(v -> v !=null)
+                .filter(v -> v != null)
                 .mapToInt(Integer::intValue)
                 .sum();
     }
+
     public int getCarbsFromEntries(List<FoodEntry> entries) {
         return entries.stream()
                 .map(FoodEntry::getCarbs)
-                .filter(v -> v !=null)
+                .filter(v -> v != null)
                 .mapToInt(Integer::intValue)
                 .sum();
     }
+
     public int getFatsFromEntries(List<FoodEntry> entries) {
         return entries.stream()
                 .map(FoodEntry::getFats)
-                .filter(v -> v !=null)
+                .filter(v -> v != null)
                 .mapToInt(Integer::intValue)
                 .sum();
     }
+
     public int getSaltFromEntries(List<FoodEntry> entries) {
         return entries.stream()
                 .map(FoodEntry::getSalt)
-                .filter(v -> v !=null)
+                .filter(v -> v != null)
                 .mapToInt(Integer::intValue)
                 .sum();
     }
+
     public int getSugarFromEntries(List<FoodEntry> entries) {
         return entries.stream()
                 .map(FoodEntry::getSugar)
-                .filter(v -> v !=null)
+                .filter(v -> v != null)
                 .mapToInt(Integer::intValue)
                 .sum();
     }

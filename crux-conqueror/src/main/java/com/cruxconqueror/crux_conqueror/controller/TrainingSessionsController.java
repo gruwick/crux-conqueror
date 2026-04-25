@@ -1,4 +1,5 @@
 package com.cruxconqueror.crux_conqueror.controller;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,38 +24,39 @@ public class TrainingSessionsController {
         this.sessionsRepo = sessionsRepo;
         this.userRepo = userRepo;
     }
-    //Allow listing of sessions for current user
+    // Allow listing of sessions for current user
 
-@GetMapping
-public String list(
-        @RequestParam(name = "showArchived", required = false, defaultValue = "false") boolean showArchived,
-        Model model,
-        Principal principal) {
+    @GetMapping
+    public String list(
+            @RequestParam(name = "showArchived", required = false, defaultValue = "false") boolean showArchived,
+            Model model,
+            Principal principal) {
 
-    User user = userRepo.findByUsername(principal.getName())
-            .orElseThrow(() -> new IllegalStateException("Logged-in user not found"));
+        User user = userRepo.findByUsername(principal.getName())
+                .orElseThrow(() -> new IllegalStateException("Logged-in user not found"));
 
-    List<TrainingSessions> sessions = showArchived
-            ? sessionsRepo.findByUserAndArchivedTrueOrderBySessionDateDesc(user)
-            : sessionsRepo.findByUserAndArchivedFalseOrderBySessionDateDesc(user);
+        List<TrainingSessions> sessions = showArchived
+                ? sessionsRepo.findByUserAndArchivedTrueOrderBySessionDateDesc(user)
+                : sessionsRepo.findByUserAndArchivedFalseOrderBySessionDateDesc(user);
 
-    model.addAttribute("sessions", sessions);
-    model.addAttribute("showArchived", showArchived);
+        model.addAttribute("sessions", sessions);
+        model.addAttribute("showArchived", showArchived);
 
-    return "sessions/list";
-}
+        return "sessions/list";
+    }
+
     // for creating form
     @GetMapping("/new")
     public String newSession(Model model) {
         TrainingSessions session = new TrainingSessions();
-        session.setSessionDate(LocalDateTime.now()); 
+        session.setSessionDate(LocalDateTime.now());
         model.addAttribute("session", session);
         model.addAttribute("formTitle", "Log a training session");
         model.addAttribute("formAction", "/sessions");
         model.addAttribute("submitText", "Save session");
         return "sessions/new";
     }
-    
+
     @PostMapping
     public String create(@ModelAttribute("session") TrainingSessions session, Principal principal) {
         User user = userRepo.findByUsername(principal.getName())
@@ -71,24 +73,28 @@ public String list(
         }
         if (session.getSessionDate() == null) {
             session.setSessionDate(LocalDateTime.now());
-        }  
+        }
         session.setUser(user);
 
-        if(session.getAttemptsTotal() == null) session.setAttemptsTotal(0);
-        if(session.getTopsTotal() == null) session.setTopsTotal(0);
-        if(session.getFlashesTotal() == null) session.setFlashesTotal(0);
+        if (session.getAttemptsTotal() == null)
+            session.setAttemptsTotal(0);
+        if (session.getTopsTotal() == null)
+            session.setTopsTotal(0);
+        if (session.getFlashesTotal() == null)
+            session.setFlashesTotal(0);
 
         sessionsRepo.save(session);
 
         return "redirect:/sessions";
-}
-    
+    }
+
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, Principal principal){
+    public String delete(@PathVariable Long id, Principal principal) {
         TrainingSessions session = requireOwnedSession(id, principal);
         sessionsRepo.delete(session);
         return "redirect:/sessions";
     }
+
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model, Principal principal) {
         TrainingSessions session = requireOwnedSession(id, principal);
@@ -100,83 +106,86 @@ public String list(
 
         return "sessions/new";
     }
-@PostMapping("/{id}/edit")
-public String editSubmit(@PathVariable Long id,
-                         @ModelAttribute("session") TrainingSessions updated,
-                         Principal principal) {
 
-    TrainingSessions existing = requireOwnedSession(id, principal);
+    @PostMapping("/{id}/edit")
+    public String editSubmit(@PathVariable Long id,
+            @ModelAttribute("session") TrainingSessions updated,
+            Principal principal) {
 
-    if (updated.getSessionType() == null || updated.getSessionType().isBlank()) {
-        throw new IllegalArgumentException("Session type is required");
+        TrainingSessions existing = requireOwnedSession(id, principal);
+
+        if (updated.getSessionType() == null || updated.getSessionType().isBlank()) {
+            throw new IllegalArgumentException("Session type is required");
+        }
+        if (updated.getDurationMinutes() == null || updated.getDurationMinutes() <= 0) {
+            throw new IllegalArgumentException("Duration must be greater than 0");
+        }
+        if (updated.getIntensity() == null || updated.getIntensity() < 1 || updated.getIntensity() > 10) {
+            throw new IllegalArgumentException("Intensity must be between 1 and 10");
+        }
+        if (updated.getSessionDate() == null) {
+            updated.setSessionDate(existing.getSessionDate());
+        }
+
+        existing.setSessionType(updated.getSessionType());
+        existing.setSessionDate(updated.getSessionDate());
+        existing.setDurationMinutes(updated.getDurationMinutes());
+        existing.setIntensity(updated.getIntensity());
+
+        existing.setHighestGrade(updated.getHighestGrade());
+        existing.setAttemptsTotal(updated.getAttemptsTotal() == null ? 0 : updated.getAttemptsTotal());
+        existing.setTopsTotal(updated.getTopsTotal() == null ? 0 : updated.getTopsTotal());
+        existing.setFlashesTotal(updated.getFlashesTotal() == null ? 0 : updated.getFlashesTotal());
+        existing.setNotes(updated.getNotes());
+
+        sessionsRepo.save(existing);
+
+        return "redirect:/sessions";
     }
-    if (updated.getDurationMinutes() == null || updated.getDurationMinutes() <= 0) {
-        throw new IllegalArgumentException("Duration must be greater than 0");
+
+    @PostMapping("/{id}/archive")
+    public String archive(@PathVariable Long id, Principal principal) {
+        TrainingSessions session = requireOwnedSession(id, principal);
+        session.setArchived(true);
+        session.setArchivedAt(LocalDateTime.now());
+        sessionsRepo.save(session);
+        return "redirect:/sessions";
     }
-    if (updated.getIntensity() == null || updated.getIntensity() < 1 || updated.getIntensity() > 10) {
-        throw new IllegalArgumentException("Intensity must be between 1 and 10");
+
+    @PostMapping("/{id}/unarchive")
+    public String unarchive(@PathVariable Long id, Principal principal) {
+        TrainingSessions session = requireOwnedSession(id, principal);
+        session.setArchived(false);
+        session.setArchivedAt(null);
+        sessionsRepo.save(session);
+        return "redirect:/sessions?showArchived=true";
     }
-    if (updated.getSessionDate() == null) {
-        updated.setSessionDate(existing.getSessionDate());
+
+    @PostMapping("/bulk-delete")
+    public String bulkDelete(@RequestParam(name = "ids", required = false) List<Long> ids, Principal principal) {
+        if (ids == null || ids.isEmpty())
+            return "redirect:/sessions";
+
+        for (Long id : ids) {
+            TrainingSessions s = requireOwnedSession(id, principal);
+            sessionsRepo.delete(s);
+        }
+        return "redirect:/sessions";
     }
 
-    existing.setSessionType(updated.getSessionType());
-    existing.setSessionDate(updated.getSessionDate());
-    existing.setDurationMinutes(updated.getDurationMinutes());
-    existing.setIntensity(updated.getIntensity());
+    @PostMapping("/bulk-archive")
+    public String bulkArchive(@RequestParam(name = "ids", required = false) List<Long> ids, Principal principal) {
+        if (ids == null || ids.isEmpty())
+            return "redirect:/sessions";
 
-    existing.setHighestGrade(updated.getHighestGrade());
-    existing.setAttemptsTotal(updated.getAttemptsTotal() == null ? 0 : updated.getAttemptsTotal());
-    existing.setTopsTotal(updated.getTopsTotal() == null ? 0 : updated.getTopsTotal());
-    existing.setFlashesTotal(updated.getFlashesTotal() == null ? 0 : updated.getFlashesTotal());
-    existing.setNotes(updated.getNotes());
-
-    sessionsRepo.save(existing);
-
-    return "redirect:/sessions";
-}
-
-@PostMapping("/{id}/archive")
-public String archive(@PathVariable Long id, Principal principal) {
-    TrainingSessions session = requireOwnedSession(id, principal);
-    session.setArchived(true);
-    session.setArchivedAt(LocalDateTime.now());
-    sessionsRepo.save(session);
-    return "redirect:/sessions";
-}
-
-@PostMapping("/{id}/unarchive")
-public String unarchive(@PathVariable Long id, Principal principal) {
-    TrainingSessions session = requireOwnedSession(id, principal);
-    session.setArchived(false);
-    session.setArchivedAt(null);
-    sessionsRepo.save(session);
-    return "redirect:/sessions?showArchived=true";
-}
-
-@PostMapping("/bulk-delete")
-public String bulkDelete(@RequestParam(name="ids", required=false) List<Long> ids, Principal principal) {
-    if (ids == null || ids.isEmpty()) return "redirect:/sessions";
-
-    for (Long id : ids) {
-        TrainingSessions s = requireOwnedSession(id, principal);
-        sessionsRepo.delete(s);
+        for (Long id : ids) {
+            TrainingSessions s = requireOwnedSession(id, principal);
+            s.setArchived(true);
+            s.setArchivedAt(LocalDateTime.now());
+            sessionsRepo.save(s);
+        }
+        return "redirect:/sessions";
     }
-    return "redirect:/sessions";
-}
-
-@PostMapping("/bulk-archive")
-public String bulkArchive(@RequestParam(name="ids", required=false) List<Long> ids, Principal principal) {
-    if (ids == null || ids.isEmpty()) return "redirect:/sessions";
-
-    for (Long id : ids) {
-        TrainingSessions s = requireOwnedSession(id, principal);
-        s.setArchived(true);
-        s.setArchivedAt(LocalDateTime.now());
-        sessionsRepo.save(s);
-    }
-    return "redirect:/sessions";
-}
 
     private TrainingSessions requireOwnedSession(Long id, Principal principal) {
         TrainingSessions session = sessionsRepo.findById(id)

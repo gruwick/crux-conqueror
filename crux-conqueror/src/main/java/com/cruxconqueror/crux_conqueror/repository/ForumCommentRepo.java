@@ -7,5 +7,6 @@ import com.cruxconqueror.crux_conqueror.model.ForumPost;
 
 public interface ForumCommentRepo extends JpaRepository<ForumComment, Long> {
     List<ForumComment> findByPostOrderByCreatedAtAsc(ForumPost post);
+
     long countByPost(ForumPost post);
 }

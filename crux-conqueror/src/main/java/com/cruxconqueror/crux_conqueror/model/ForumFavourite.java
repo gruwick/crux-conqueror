@@ -18,12 +18,26 @@ public class ForumFavourite {
     @JoinColumn(name = "User_ID", nullable = false)
     private User user;
 
-    public ForumFavourite() {}
-    public Long getId() { return id; }
+    public ForumFavourite() {
+    }
 
-    public ForumPost getPost() { return post; }
-    public void setPost(ForumPost post) { this.post = post; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public ForumPost getPost() {
+        return post;
+    }
+
+    public void setPost(ForumPost post) {
+        this.post = post;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

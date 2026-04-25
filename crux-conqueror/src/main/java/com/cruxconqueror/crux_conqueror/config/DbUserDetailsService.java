@@ -5,17 +5,19 @@ import com.cruxconqueror.crux_conqueror.repository.UserRepo;
 import java.util.Collections;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+
 /**
  * Implementation of my UserDetails service whcih is used by spring security.
- * Retrieved user data from my database and converts it to a format that sping Security can use for authentication
+ * Retrieved user data from my database and converts it to a format that sping
+ * Security can use for authentication
  * Allows it to be called automatically during login to verify user credentials
  */
 @Service
 public class DbUserDetailsService implements UserDetailsService {
-    
+
     private final UserRepo userRepo;
 
-    public DbUserDetailsService(UserRepo userRepo){
+    public DbUserDetailsService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 
@@ -24,10 +26,9 @@ public class DbUserDetailsService implements UserDetailsService {
         User u = userRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-                return new org.springframework.security.core.userdetails.User(
-                    u.getUsername(),
-                    u.getPasswordHash(),
-                    Collections.emptyList()
-                );
+        return new org.springframework.security.core.userdetails.User(
+                u.getUsername(),
+                u.getPasswordHash(),
+                Collections.emptyList());
     }
 }

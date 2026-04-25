@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Min;
 @Table(name = "Food_Entries")
 
 public class FoodEntry {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Entry_ID")
@@ -21,7 +21,7 @@ public class FoodEntry {
     @Column(name = "Entry_Date_Time", nullable = false)
     private LocalDateTime entryDateTime;
 
-    @Column(name = "Meal_Type", nullable =false, length = 20)
+    @Column(name = "Meal_Type", nullable = false, length = 20)
     private String mealType;
 
     @Column(name = "Food_Name", nullable = false, length = 50)
@@ -35,60 +35,118 @@ public class FoodEntry {
     @Column(name = "Carbs")
     private Integer carbs;
 
-        @Min(0)
+    @Min(0)
     @Column(name = "Protein")
     private Integer protein;
 
-        @Min(0)
+    @Min(0)
     @Column(name = "Fats")
     private Integer fats;
 
-        @Min(0)
+    @Min(0)
     @Column(name = "Sugar")
     private Integer sugar;
 
-        @Min(0)
+    @Min(0)
     @Column(name = "Salt")
     private Integer salt;
 
     @Column(name = "Additional_Thoughts", columnDefinition = "TEXT")
     private String additionalThoughts;
 
-    public FoodEntry() {}
+    public FoodEntry() {
+    }
 
-    public Long getId() {return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getUser() {return user;}
-    public void setUser(User user) {this.user = user;}
+    public User getUser() {
+        return user;
+    }
 
-    public LocalDateTime getEntryDateTime(){return entryDateTime;}
-    public void setEntryDateTime(LocalDateTime entryDateTime) {this.entryDateTime = entryDateTime;}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public String getMealType() {return mealType;}
-    public void setMealType(String mealType) {this.mealType = mealType;}
+    public LocalDateTime getEntryDateTime() {
+        return entryDateTime;
+    }
 
-    public String getFoodName(){ return foodName;}
-    public void setFoodName(String foodName) {this.foodName = foodName;}
+    public void setEntryDateTime(LocalDateTime entryDateTime) {
+        this.entryDateTime = entryDateTime;
+    }
 
-    public Integer getCalories(){return calories;}
-    public void setCalories(Integer calories) {this.calories = calories;}
+    public String getMealType() {
+        return mealType;
+    }
 
-    public Integer getCarbs(){return carbs;}
-    public void setCarbs(Integer carbs) {this.carbs = carbs;}
+    public void setMealType(String mealType) {
+        this.mealType = mealType;
+    }
 
-    public Integer getProtein(){return protein;}
-    public void setProtein(Integer protein) {this.protein = protein;}
+    public String getFoodName() {
+        return foodName;
+    }
 
-    public Integer getFats(){return fats;}
-    public void setFats(Integer fats) {this.fats = fats;}
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
 
-    public Integer getSugar(){return sugar;}
-    public void setSugar(Integer sugar) {this.sugar = sugar;}
+    public Integer getCalories() {
+        return calories;
+    }
 
-    public Integer getSalt(){return salt;}
-    public void setSalt(Integer salt){this.salt = salt;}
+    public void setCalories(Integer calories) {
+        this.calories = calories;
+    }
 
-    public String getAdditionalThoughts() {return additionalThoughts;}
-    public void setAdditionalThoughts(String additional_Throughts){this.additionalThoughts = additional_Throughts;}
+    public Integer getCarbs() {
+        return carbs;
+    }
+
+    public void setCarbs(Integer carbs) {
+        this.carbs = carbs;
+    }
+
+    public Integer getProtein() {
+        return protein;
+    }
+
+    public void setProtein(Integer protein) {
+        this.protein = protein;
+    }
+
+    public Integer getFats() {
+        return fats;
+    }
+
+    public void setFats(Integer fats) {
+        this.fats = fats;
+    }
+
+    public Integer getSugar() {
+        return sugar;
+    }
+
+    public void setSugar(Integer sugar) {
+        this.sugar = sugar;
+    }
+
+    public Integer getSalt() {
+        return salt;
+    }
+
+    public void setSalt(Integer salt) {
+        this.salt = salt;
+    }
+
+    public String getAdditionalThoughts() {
+        return additionalThoughts;
+    }
+
+    public void setAdditionalThoughts(String additional_Throughts) {
+        this.additionalThoughts = additional_Throughts;
+    }
 
 }

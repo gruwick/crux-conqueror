@@ -32,7 +32,8 @@ public class HomeController {
     private final ForumLikeRepo forumLikeRepo;
     private final ForumPostRepo forumPostRepo;
 
-    public HomeController(UserRepo userRepo, TrainingSessionsRepo sessionsRepo, FoodEntryRepo foodEntryRepo, NutritionService nutritionService, ForumLikeRepo forumLikeRepo, ForumPostRepo forumPostRepo){
+    public HomeController(UserRepo userRepo, TrainingSessionsRepo sessionsRepo, FoodEntryRepo foodEntryRepo,
+            NutritionService nutritionService, ForumLikeRepo forumLikeRepo, ForumPostRepo forumPostRepo) {
         this.userRepo = userRepo;
         this.sessionsRepo = sessionsRepo;
         this.nutritionService = nutritionService;
@@ -66,14 +67,18 @@ public class HomeController {
                 .count();
 
         int weeklySessionTarget = 3;
-        int sessionProgressPercent = Math.min((int) Math.round((sessionsLast7Days / (double) weeklySessionTarget) * 100), 100);
+        int sessionProgressPercent = Math
+                .min((int) Math.round((sessionsLast7Days / (double) weeklySessionTarget) * 100), 100);
 
         String weeklyTrainingStatus;
         if (sessionsLast7Days >= weeklySessionTarget) {
             weeklyTrainingStatus = "You have hit your weekly training target.";
-        } else if (sessionsLast7Days == 2) {weeklyTrainingStatus = "You are close to your weekly training target.";
-        } else if (sessionsLast7Days == 1) {weeklyTrainingStatus = "You have started the week, but more training is needed.";
-        } else {weeklyTrainingStatus = "No training sessions have been logged in the last 7 days.";
+        } else if (sessionsLast7Days == 2) {
+            weeklyTrainingStatus = "You are close to your weekly training target.";
+        } else if (sessionsLast7Days == 1) {
+            weeklyTrainingStatus = "You have started the week, but more training is needed.";
+        } else {
+            weeklyTrainingStatus = "No training sessions have been logged in the last 7 days.";
         }
 
         List<String> suggestions = new ArrayList<>();
@@ -100,8 +105,7 @@ public class HomeController {
         }
         topPosts.sort((a, b) -> Long.compare(
                 topPostLikes.getOrDefault(b.getId(), 0L),
-                topPostLikes.getOrDefault(a.getId(), 0L)
-        ));
+                topPostLikes.getOrDefault(a.getId(), 0L)));
         if (topPosts.size() > 3) {
             topPosts = topPosts.subList(0, 3);
         }
@@ -119,14 +123,12 @@ public class HomeController {
 
         for (Map.Entry<String, Integer> entry : sessionsPerUser.entrySet()) {
             leaderboardPreview.add(new LeaderboardRow(
-                entry.getKey(),
-                entry.getValue(),0,0.0,"-",0
-            ));
+                    entry.getKey(),
+                    entry.getValue(), 0, 0.0, "-", 0));
         }
         leaderboardPreview.sort((a, b) -> Integer.compare(
-            b.getSessionsLast30(),
-            a.getSessionsLast30()
-        ));
+                b.getSessionsLast30(),
+                a.getSessionsLast30()));
 
         int homeRank = -1;
         for (int i = 0; i < leaderboardPreview.size(); i++) {
@@ -134,9 +136,9 @@ public class HomeController {
                 homeRank = i + 1;
                 break;
             }
-}
+        }
         if (leaderboardPreview.size() > 3) {
-        leaderboardPreview = leaderboardPreview.subList(0, 3);
+            leaderboardPreview = leaderboardPreview.subList(0, 3);
         }
 
         model.addAttribute("username", user.getUsername());

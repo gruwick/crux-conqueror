@@ -1,4 +1,5 @@
 package com.cruxconqueror.crux_conqueror.controller;
+
 import com.cruxconqueror.crux_conqueror.dto.RegisterForm;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
@@ -18,7 +19,7 @@ public class RegisterController {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
     }
-    
+
     @GetMapping("/register")
     public String showRegister(Model model) {
         model.addAttribute("form", new RegisterForm());
@@ -29,8 +30,7 @@ public class RegisterController {
     public String doRegister(
             @Valid @ModelAttribute("form") RegisterForm form,
             BindingResult bindingResult,
-            Model model
-    ) {
+            Model model) {
         if (bindingResult.hasErrors()) {
             return "auth/register";
         }

@@ -8,5 +8,6 @@ import com.cruxconqueror.crux_conqueror.model.ForumPost;
 
 public interface ForumPostRepo extends JpaRepository<ForumPost, Long> {
     List<ForumPost> findAllByOrderByCreatedAtDesc();
+
     List<ForumPost> findByUserUsernameInOrderByCreatedAtDesc(List<String> usernames);
 }

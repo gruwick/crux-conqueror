@@ -1,4 +1,5 @@
 package com.cruxconqueror.crux_conqueror.model;
+
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
@@ -24,18 +25,42 @@ public class FriendRequest {
     @Column(name = "Created_At", nullable = false)
     private LocalDateTime createdAt;
 
-    public FriendRequest() {}
-    public Long getId() { return id; }
+    public FriendRequest() {
+    }
 
-    public User getSender() { return sender; }
-    public void setSender(User sender) { this.sender = sender; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getReceiver() { return receiver; }
-    public void setReceiver(User receiver) { this.receiver = receiver; }
+    public User getSender() {
+        return sender;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
