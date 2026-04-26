@@ -2,32 +2,54 @@
 
 # Crux Conqueror
 
-Crux Conqueror is a bouldering-focused web application designed to help climbers log training sessions, review performance, and track progress over time.
+Crux Conqueror is a Full stack web-application designed to help existing or new climbers track their sessions, 
+monitor their nutrition, and engage with a community of users.
 
-This repository represents an early prototype developed as part of a final-year project, with a focus on core user value and iterative delivery.
+The system provides data-driven insights through dashboard, performance analytics, 
+and leaderboard features, supporting users in improving their training performance over time.
 
----
-
-## Current Features (Prototype v1)
-
-- User registration and authentication
-- Secure login using Spring Security
-- Login and logout with error messages
-- Training session logging
-- Viewing previously logged training sessions
-- Basic navigation between core pages
 
 ---
 
-## Planned Features
+## Current Features
 
-- User progress dashboard based on session history
-- Training analytics and trend analysis
-- Session editing and deletion
-- Nutrition tracking (future iteration, Prototype V3)
-- Community features and leaderboards (future iteration, Prototype V3)
+- User registration and authentication (Spring Security + BCrypt)
+- Training session logging, editing, archiving and bulk actions
 
-More advanced features, such as AI-assisted navigation or training recommendations, are considered future work and are intentionally out of scope for the current prototype.
+- Dashboard with:
+    - 7/30 day analytics
+    - Training performance summaries
+    - Nutritional performance summaries
+    - Trend based insights based on nutrition and sessions
+
+- Nutrition Tracking with:
+    - daily goals
+    - macro tracking
+    - weekly naviagtion
+
+- Community forum:
+    - Make posts
+    - Comment, like and favourite on posts
+    - sort posts by scope and metrics
+
+- LeaderBoard:
+    - metrics ranking by sessions, intensity performance etc
+    - scope modifier for ranking by friends or global
+
+- Personalised homepage:
+    - suggestions built in
+    - progress tracking
+    - top comunity posts
+    - position on leaderboard
+    - recent activity
+
+
+---
+
+## Future work
+
+- AI based insight recommendations
+- Advanced analytics and trend visualisation
 
 ---
 
@@ -38,14 +60,11 @@ More advanced features, such as AI-assisted navigation or training recommendatio
 - Spring Security
 - JPA / Hibernate
 - MySQL (or H2 for development)
-- Dbeaver
+- Render (for cloud deployment)
 
 ---
 
 ## Running the Project
 
-The application can be run locally using standard Spring Boot tooling:
-
-```bash
-mvn spring-boot:run
-The aplication will then be accessible via http://localhost:8080
+The web-app can be accessed in browser using:
+ https://crux-conqueror.onrender.com
