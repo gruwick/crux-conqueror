@@ -3,7 +3,14 @@ package com.cruxconqueror.crux_conqueror.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
-
+/**
+ * Entity representing user account
+ * 
+ * Stores authentication details
+ * Profile information
+ * personalised nutrition
+ * Activity settings
+ */
 @Entity
 @Table(name = "users")
 public class User {
@@ -12,16 +19,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "User_ID")
     private Long id;
-
+    //Unique username for login
     @Column(name = "Usernames", nullable = false, unique = true)
     private String username;
-
+    //Unique email address
     @Column(name = "Emails", nullable = false, unique = true)
     private String email;
-
+    //Sored passwords in BCrypt
     @Column(name = "Password_Hash", nullable = false)
     private String passwordHash;
-
+    //Timestamp when account was made
     @Column(name = "Date_Made", insertable = false, updatable = false)
     private LocalDateTime dateMade;
 
@@ -60,7 +67,7 @@ public class User {
 
     @Column(name = "Experience_Visibility", length = 20)
     private String experienceVisibility;
-
+    //Determins if targets are calulated automatically or manually set
     @Column(name = "Target_Mode", length = 20)
     private String targetMode;
 
@@ -75,7 +82,7 @@ public class User {
 
     @Column(name = "Fat_Goal")
     private Integer fatGoal;
-
+    //Default constructor required by JPA
     public User() {
     }
 
@@ -84,7 +91,7 @@ public class User {
         this.email = email;
         this.passwordHash = passwordHash;
     }
-
+    //Getters and setters
     public Long getId() {
         return id;
     }
