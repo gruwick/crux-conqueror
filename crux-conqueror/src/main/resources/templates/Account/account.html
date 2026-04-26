@@ -9,15 +9,18 @@
     <link rel="stylesheet" th:href="@{/css/account.css}">
     <link rel="stylesheet" th:href="@{/css/normalpage.css}">
 </head>
+<!-- Main page wrapper and nav -->
 <body class = "normalpage">
+    <!-- Reusable navbar fragment -->
     <div th:replace="fragments/navbar :: navbar"></div>
-
+    <!-- Main content container -->
     <main class="page-container">
+        <!-- Account page header -->
         <section class="account-header">
             <h1>Account Settings</h1>
             <p>Manage your profile details, training goals, and privacy settings.</p>
         </section>
-
+        <!-- Account info, read only -->
         <form th:action="@{/account}" method="post" class="account-form">
          <section class="account-grid">
               <div class="panel-card">
@@ -33,7 +36,7 @@
                     <input type="email" th:value="${user.email}" readonly>
                     </div>
                 </div>
-
+                    <!-- Editable profile details -->
                     <div class="panel-card">
                     <h2>Profile Details</h2>
 
@@ -41,7 +44,7 @@
                         <label for="bio">Bio</label>
                         <textarea id="bio" name="bio" rows="4" th:text="${user.bio}"></textarea>
                     </div>
-
+                <!-- Two colum layout for grouped inputs -->
                 <div class="form-row">
                         <div class="form-group">
                             <label for="age">Age</label>
@@ -94,7 +97,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- Privacy settings for controlling visibility -->
                 <div class="panel-card">
                     <h2>Privacy Settings</h2>
 
@@ -148,11 +151,13 @@
                     </div>
                 </div>
             </section>
+            <!-- Nutrtition goal configuraton -->
             <div class="panel-card" id="nutrition">
                 <h2>Nutrition Goals</h2>
 
                 <div class="form-group">
                     <label for="targetMode">Goal Generation Mode</label>
+                    <!-- Toggle for between manual and automatic nutrition targets -->
                     <select id="targetMode" name="targetMode" onchange="toggleManualGoals()">
                         <option value="Auto" th:selected="${user.targetMode == 'Auto'}">Automatic (Based on Stats)</option>
                         <option value="Manual" th:selected="${user.targetMode == 'Manual'}">Manual (Custom Set)</option>
@@ -184,7 +189,7 @@
                     </div>
                 </div>
             </div>
-
+            <!-- Controls visibility of manual goal inputs -->
             <script>
                 function toggleManualGoals() {
                     const mode = document.getElementById('targetMode').value;
@@ -197,16 +202,16 @@
                 }
                 window.onload = toggleManualGoals;
             </script>
-
-            </div>
+            <!-- Form submit button -->
             <div class="form-actions">
                 <button type="submit" class="save-btn">Save Changes</button>
             </div>
         </form>
+        <!-- Social interaction features, search, friend request and connections -->
         <section class="social-grid" id="social">
     <div class="panel-card">
         <h2>Suggested Accounts</h2>
-
+        <!-- Search for users to add as friends -->
         <form action="/account#social" method="get" class="search-form">
         <input type="text" name="search" th:value="${search}" placeholder="Search by username" class="search-input">
         <button type="submit" class="mini-action-btn">Search</button>
@@ -227,7 +232,7 @@
             </form>
         </div>
     </div>
-
+    <!-- Incomming friend requests -->
     <div class="panel-card">
         <h2>Incoming Requests</h2>
 
@@ -251,7 +256,7 @@
             </div>
         </div>
     </div>
-
+    <!-- Outgoing friend requests -->
     <div class="panel-card">
         <h2>Outgoing Requests</h2>
 
@@ -269,7 +274,7 @@
             </form>
         </div>
     </div>
-
+    <!-- List of accepted friends -->
     <div class="panel-card">
         <h2>Friends</h2>
 
