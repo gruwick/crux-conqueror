@@ -1,15 +1,17 @@
+/*body stylling*/
 body {
   margin: 0;
   font-family: Arial, sans-serif;
 }
-
+/*auth wrapepr*/
+/*Cenetrs login and registation card*/
 .auth-shell {
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 24px;
 }
-
+/*container for auth forms*/
 .auth-card {
   width: 100%;
   max-width: 420px;
@@ -17,13 +19,13 @@ body {
   border-radius: 12px;
   padding: 24px;
 }
-
+/*test udner headings*/
 .subtitle {
   margin-top: 6px;
   margin-bottom: 16px;
   opacity: 0.8;
 }
-
+/*form layout*/
 .auth-form {
   display: grid;
   gap: 12px;
@@ -34,35 +36,35 @@ label span {
   margin-bottom: 6px;
   font-size: 14px;
 }
-
+/*input field styling*/
 input {
   width: 100%;
   padding: 10px;
   border: 1px solid #bbb;
   border-radius: 8px;
 }
-
+/*button styling*/
 button {
   padding: 12px;
   border: 0;
   border-radius: 8px;
   cursor: pointer;
 }
-
+/*Feedback messages*/
 .msg {
   padding: 10px;
   border-radius: 8px;
   margin-bottom: 12px;
 }
-
+/*error messages*/
 .msg.error {
   border: 1px solid #f2b8b8;
 }
-
+/*sucess messages*/
 .msg.success {
   border: 1px solid #b8f2c2;
 }
-
+/*login page layout*/
 body.auth-login {
   margin: 0;
   font-family: Arial, sans-serif;
