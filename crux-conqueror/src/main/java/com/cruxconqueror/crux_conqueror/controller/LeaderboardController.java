@@ -17,6 +17,12 @@ import com.cruxconqueror.crux_conqueror.model.FriendRequest;
 import com.cruxconqueror.crux_conqueror.model.User;
 import com.cruxconqueror.crux_conqueror.repository.FriendRequestRepo;
 import com.cruxconqueror.crux_conqueror.repository.UserRepo;
+/**Controller for leaderboard page
+ * Displays ranked users based on last 30 days training activity
+ * Supports:
+ * Global or friends only scope
+ * sorting by different metrics
+ */
 
 @Controller
 public class LeaderboardController {
@@ -31,7 +37,11 @@ public class LeaderboardController {
         this.userRepo = userRepo;
         this.friendRequestRepo = friendRequestRepo;
     }
-
+    /**Loads leaderboard page. 
+     * Allows for 
+     * filtering by global or friends
+     * sorting by session, minutes, intensity or grade
+     */
     @GetMapping("/leaderboard")
     public String leaderboard(Model model, Principal principal,
             @RequestParam(defaultValue = "global") String scope,
@@ -40,9 +50,9 @@ public class LeaderboardController {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime last30 = now.minusDays(30);
 
-        // Pull recent active sessions for all users
+        // Pull recent active sessions for all users, last 30 days
         List<TrainingSessions> recent = sessionsRepo.findByArchivedFalseAndSessionDateAfter(last30);
-
+        //If friend scope is selcted then include only friends sessions
         if ("friends".equals(scope) && principal != null) {
             User currentUser = userRepo.findByUsername(principal.getName())
                     .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
@@ -51,7 +61,7 @@ public class LeaderboardController {
                     "ACCEPTED");
             List<FriendRequest> acceptedReceived = friendRequestRepo
                     .findByReceiverAndStatusOrderByCreatedAtDesc(currentUser, "ACCEPTED");
-
+            //Define what users are allowed in friends scope
             Set<String> allowedUsers = new HashSet<>();
             allowedUsers.add(currentUser.getUsername());
 
@@ -66,7 +76,7 @@ public class LeaderboardController {
                     allowedUsers.add(request.getSender().getUsername());
                 }
             }
-
+            //Filter sessions to only include those users
             recent = recent.stream()
                     .filter(s -> s.getUser() != null && s.getUser().getUsername() != null)
                     .filter(s -> allowedUsers.contains(s.getUser().getUsername()))
@@ -79,25 +89,26 @@ public class LeaderboardController {
                 .collect(Collectors.groupingBy(s -> s.getUser().getUsername()));
 
         List<LeaderboardRow> rows = new ArrayList<>();
-
+        //Build leaderboard rows for each user
         for (Map.Entry<String, List<TrainingSessions>> e : byUser.entrySet()) {
             String username = e.getKey();
             List<TrainingSessions> sessions = e.getValue();
 
             int count = sessions.size();
+            //Total minutes trained
             int minutes = sessions.stream()
                     .map(TrainingSessions::getDurationMinutes)
                     .filter(Objects::nonNull)
                     .mapToInt(Integer::intValue)
                     .sum();
-
+            //Average intensity
             double avgIntensity = sessions.stream()
                     .map(TrainingSessions::getIntensity)
                     .filter(Objects::nonNull)
                     .mapToInt(Integer::intValue)
                     .average()
                     .orElse(0.0);
-
+            //Best grade
             String bestGrade = sessions.stream()
                     .map(TrainingSessions::getHighestGrade)
                     .filter(g -> g != null && !g.isBlank())
@@ -123,7 +134,7 @@ public class LeaderboardController {
             if ("grade".equals(metric)) {
                 return Integer.compare(b.getBestGradeScore(), a.getBestGradeScore());
             }
-
+            //By default sort by session count
             return Integer.compare(b.getSessionsLast30(), a.getSessionsLast30());
         });
 
@@ -145,7 +156,7 @@ public class LeaderboardController {
                 }
             }
         }
-
+        //pass leaderboard data to view
         model.addAttribute("rows", rows);
         model.addAttribute("myIndex", myIndex);
         model.addAttribute("scope", scope);
@@ -153,7 +164,9 @@ public class LeaderboardController {
 
         return "community/leaderboard";
     }
-
+    /** Converts a grade string into numeric
+     * allows easier comparison and sorting
+     */
     private int gradeToScore(String grade) {
         if (grade == null || grade.isBlank())
             return 0;
