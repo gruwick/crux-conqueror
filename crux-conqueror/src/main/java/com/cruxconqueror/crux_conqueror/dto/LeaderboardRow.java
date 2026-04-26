@@ -1,5 +1,10 @@
 package com.cruxconqueror.crux_conqueror.dto;
-
+/**
+ * Data transfer Object (DTO) for leaderboard views
+ * 
+ * Stored aggregated user stats for display on the leaderboard
+ * rather than exposing full training session model directly
+ */
 public class LeaderboardRow {
 
     private String username;
@@ -8,7 +13,7 @@ public class LeaderboardRow {
     private double avgIntensityLast30;
     private String bestGrade;
     private int bestGradeScore;
-
+    //Constucts a leaderboard row ith aggregated user data
     public LeaderboardRow(String username, int sessionsLast30, int minutesLast30, double avgIntensityLast30,
             String bestGrade, int bestGradeScore) {
         this.username = username;
@@ -18,7 +23,7 @@ public class LeaderboardRow {
         this.bestGrade = bestGrade;
         this.bestGradeScore = bestGradeScore;
     }
-
+    //Getters sued by Thymelead to display leaderboard values
     public String getUsername() {
         return username;
     }
