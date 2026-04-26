@@ -5,6 +5,7 @@ body {
     background-color: #f4f6f8;
     color: #1f2937;
 }
+
 /*Main page wrapper to center content and control width */
 .page-container {
     width: min(95%, 1100px);
@@ -12,6 +13,7 @@ body {
     padding: 30px 20px 50px;
     overflow-x: hidden;
 }
+
 /*Header Section*/
 .account-header {
     margin-bottom: 24px;
@@ -27,17 +29,20 @@ body {
     margin: 0;
     color: #6b7280;
 }
+
 /*Form Layout*/
 .account-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
+
 /*Grid layout for grouping*/
 .account-grid {
     display: grid;
     gap: 20px;
 }
+
 /*Card style cintainer used across account sections*/
 .panel-card {
     background: white;
@@ -51,12 +56,14 @@ body {
     margin-bottom: 18px;
     color: #0f172a;
 }
+
 /*Two column layout for grouped form inputs*/
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
+
 /*Individual form field grouping*/
 .form-group {
     display: flex;
@@ -69,6 +76,7 @@ body {
     font-weight: 600;
     color: #374151;
 }
+
 /*Shared styling for input elements*/
 .form-group input,
 .form-group select,
@@ -82,6 +90,7 @@ body {
     color: #1f2937;
     box-sizing: border-box;
 }
+
 /*Larger area for text fields*/
 .form-group textarea {
     resize: vertical;
@@ -95,11 +104,13 @@ body {
     border-color: #8bc34a;
     box-shadow: 0 0 0 3px rgba(139, 195, 74, 0.15);
 }
+
 /*submission button alignment*/
 .form-actions {
     display: flex;
     justify-content: flex-end;
 }
+
 /*Styling for this button*/
 .save-btn {
     background-color: #8bc34a;
@@ -114,6 +125,7 @@ body {
 .save-btn:hover {
     background-color: #9fd454;
 }
+
 /*Social Section*/
 
 /*grid for friend related panels*/
@@ -123,6 +135,7 @@ body {
     gap: 20px;
     margin-top: 24px;
 }
+
 /*Individual row for friend*/
 .social-row {
     display: flex;
@@ -136,22 +149,26 @@ body {
 .social-row:last-child {
     border-bottom: none;
 }
+
 /*button for social actions*/
 .social-actions {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
 }
+
 /*form for small action buttons*/
 .inline-form {
     display: inline;
     margin: 0;
 }
+
 /*muted text for secondary info*/
 .muted-text {
     margin: 0;
     color: #64748b;
 }
+
 /*button varients*/
 .mini-action-btn,
 .mini-neutral-btn,
@@ -163,6 +180,7 @@ body {
     cursor: pointer;
     transition: 0.2s ease;
 }
+
 /*Accept button*/
 .mini-action-btn {
     background-color: #8bc34a;
@@ -172,6 +190,7 @@ body {
 .mini-action-btn:hover {
     background-color: #9fd454;
 }
+
 /*neutral button*/
 .mini-neutral-btn {
     background-color: #e2e8f0;
@@ -181,6 +200,7 @@ body {
 .mini-neutral-btn:hover {
     background-color: #cbd5e1;
 }
+
 /*Decline button*/
 .mini-danger-btn {
     background-color: #fee2e2;
@@ -190,6 +210,7 @@ body {
 .mini-danger-btn:hover {
     background-color: #fecaca;
 }
+
 /*Search Section*/
 /*search form layout*/
 .search-form {
@@ -206,6 +227,7 @@ body {
     margin: 0 0 16px;
     width: 100%;
 }
+
 /*inout field for searching*/
 .search-input {
     flex: 1;
@@ -217,4 +239,45 @@ body {
     font-family: Arial, sans-serif;
     color: #1f2937;
     background-color: white;
+}
+
+/*Mobile responsiveness*/
+@media (max-width: 600px) {
+    .page-container {
+        width: 100%;
+        padding: 20px 14px 40px;
+        box-sizing: border-box;
+    }
+
+    .account-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .social-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .social-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .social-actions {
+        width: 100%;
+    }
+
+    .save-btn,
+    .mini-action-btn,
+    .mini-neutral-btn,
+    .mini-danger-btn {
+        width: 100%;
+    }
+
+    .search-form {
+        flex-direction: column;
+    }
 }
