@@ -3,7 +3,12 @@ package com.cruxconqueror.crux_conqueror.model;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-
+/**
+ * Entity representing food entry logged by a user
+ * 
+ * Stores macronutrient data for specific meals
+ * incldes calories and optional notes
+ */
 @Entity
 @Table(name = "Food_Entries")
 
@@ -13,20 +18,20 @@ public class FoodEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Entry_ID")
     private Long id;
-
+    //Each food entry belongs to a specific user
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "User_ID", nullable = false)
     private User user;
-
+    //Date and time food was logged
     @Column(name = "Entry_Date_Time", nullable = false)
     private LocalDateTime entryDateTime;
-
+    //Type of meal
     @Column(name = "Meal_Type", nullable = false, length = 20)
     private String mealType;
-
+    //Name desciption
     @Column(name = "Food_Name", nullable = false, length = 50)
     private String foodName;
-
+    //nutritional values, must be greater than or equal to 0
     @Min(0)
     @Column(name = "Calories")
     private Integer calories;
@@ -50,13 +55,13 @@ public class FoodEntry {
     @Min(0)
     @Column(name = "Salt")
     private Integer salt;
-
+    //Optional user notes on meal
     @Column(name = "Additional_Thoughts", columnDefinition = "TEXT")
     private String additionalThoughts;
-
+    //Default construcor required by JPA
     public FoodEntry() {
     }
-
+    //Getters and setters
     public Long getId() {
         return id;
     }
