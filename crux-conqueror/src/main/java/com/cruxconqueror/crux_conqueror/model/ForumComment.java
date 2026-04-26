@@ -3,7 +3,13 @@ package com.cruxconqueror.crux_conqueror.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
-
+/**
+ * Entity for representin a comment on a forum post
+ * 
+ * Stores comment content
+ * Who made it
+ * What post it belongs to 
+ */
 @Entity
 @Table(name = "Forum_Comments")
 public class ForumComment {
@@ -12,24 +18,24 @@ public class ForumComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Comment_ID")
     private Long id;
-
+    //Each comment is linked to a specific post
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "Post_ID", nullable = false)
     private ForumPost post;
-
+    //User who made the comment
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "User_ID", nullable = false)
     private User user;
-
+    //Content of the comment
     @Column(name = "Content", nullable = false, columnDefinition = "TEXT")
     private String content;
-
+    //Time stamp of when its made
     @Column(name = "Created_At", nullable = false)
     private LocalDateTime createdAt;
-
+    //Default constructor required by JPA
     public ForumComment() {
     }
-
+    //Getters and setters
     public Long getId() {
         return id;
     }
