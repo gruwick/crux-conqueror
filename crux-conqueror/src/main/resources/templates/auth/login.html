@@ -8,37 +8,41 @@
 </head>
 
 <body class="auth-login">
+  <!-- Main split image and form -->
   <main class="login-split">
+    <!-- leftside for form -->
     <section class="login-left">
       <section class="login-card">
+        <!-- Branding -->
         <div class="login-brand">
           <img class="login-logo" th:src="@{/images/logo.jpg}" alt="Crux Conqueror" />
           <div class="login-brandText">Crux Conqueror</div>
         </div>
 
         <h1 class="login-title">Sign in</h1>
-
+        <!-- Feedback messages from authentication system -->
         <div class="msg error" th:if="${param.error}">Bad credentials</div>
         <div class="msg success" th:if="${param.logout}">You have successfully logged out</div>
         <div class="msg success" th:if="${param.registered}">Account created — you can sign in now.</div>
-
+        <!-- login form -->
         <form th:action="@{/login}" method="post" class="login-form">
+          <!-- Username input -->
           <label class="login-field">
             <span>Username</span>
             <input type="text" name="username" placeholder="Enter your username" autocomplete="username" required />
           </label>
-
+          <!-- password input -->
           <label class="login-field">
             <span>Password</span>
             <input type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required />
           </label>
-
+          <!-- submit button -->
           <button type="submit" class="login-btn">Continue</button>
-
+          <!-- Link to registration page -->
           <p class="login-small">
             Don't have an account? <a th:href="@{/register}">Create one</a>
           </p>
-
+          <!-- Legal text -->
           <p class="login-legal">
             By signing in, I have read and agree to
             <a th:href="@{/terms}">Terms</a> and
