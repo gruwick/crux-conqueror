@@ -315,3 +315,46 @@
     flex-wrap: wrap;
     padding-top: 4px;
 }
+
+/*Mobile responsiveness*/
+@media (max-width: 600px) {
+    .nutrition-actions {
+        flex-direction: column;
+    }
+
+    .nutrition-actions .action-btn,
+    .nutrition-actions .secondary-page-btn {
+        width: 100%;
+    }
+
+    .week-controls {
+        flex-direction: column;
+    }
+
+    .week-btn {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .week-days {
+        grid-template-columns: 1fr;
+    }
+
+    .nutrition-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions-row {
+        flex-direction: column;
+    }
+
+    .form-actions-row .action-btn,
+    .form-actions-row .secondary-page-btn {
+        width: 100%;
+    }
+}
