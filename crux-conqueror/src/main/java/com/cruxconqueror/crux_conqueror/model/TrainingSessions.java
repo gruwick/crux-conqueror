@@ -6,6 +6,11 @@ import jakarta.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Entity representing a training session
+ * 
+ * Stores general session data (type, duration, intensity)
+ * As well as specific bouldering performance metrics
+ */
 @Entity
 @Table(name = "Training_Sessions")
 public class TrainingSessions {
@@ -14,62 +19,56 @@ public class TrainingSessions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Session_ID")
     private Long id;
-
+    //Each session belongs to a specific user
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "User_ID", nullable = false)
     private User user;
-
+    //Date and time it took place
     @Column(name = "Session_Date", nullable = false)
     private LocalDateTime sessionDate;
-
+    //Session type, Bouldering, Strength, fingerboarding
     @Column(name = "Session_Type", nullable = false, length = 20)
-    private String sessionType; // Some of the types that will be available later; Bouldering, Strength,
-                                // FingerBoard
-
+    private String sessionType;
+    //Duration of the session
     @Min(1)
     @Max(600)
     @Column(name = "Duration_Minutes", nullable = false)
     private Integer durationMinutes;
-
+    //Intensity 
     @Min(1)
     @Max(10)
     @Column(name = "Intensity", nullable = false)
     private Integer intensity;
-
+    //Archiving
     @Column(name = "Archived", nullable = false)
     private Boolean archived = false;
-
+    //Time archived
     @Column(name = "Archived_At")
     private LocalDateTime archivedAt;
 
-    // I want to split up my columns to have specific ones for Bouldering, Strength
-    // and Fingerboarding and will mark them
-
-    // Bouldering columns
-
+    // Optional Bouldering columns
+    //Highest grade
     @Column(name = "Highest_Grade", length = 17)
     private String highestGrade;
-
+    //Attempts total
     @Min(0)
     @Column(name = "Attempts_Total")
     private Integer attemptsTotal;
-
+    //tops total
     @Min(0)
     @Column(name = "Tops_Total")
     private Integer topsTotal;
-
+    //Flashes total
     @Min(0)
     @Column(name = "Flashes_Total")
     private Integer flashesTotal;
-
+    //Additional notes
     @Column(name = "Notes", columnDefinition = "TEXT")
     private String notes;
 
-    // Bouldering per grade mapped to BoulderGradeStat
-
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoulderingGradesStat> gradeStats = new ArrayList<>();
-
+    //Default constructor required by JPA
     public TrainingSessions() {
     }
 
