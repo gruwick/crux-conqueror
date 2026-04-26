@@ -445,3 +445,47 @@
     border-color: #22c55e;
     box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
 }
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .sessions-actions {
+        flex-direction: column;
+    }
+
+    .sessions-actions .action-btn,
+    .sessions-actions .secondary-page-btn {
+        width: 100%;
+    }
+
+    .bulk-actions {
+        flex-direction: column;
+    }
+
+    .secondary-action-btn,
+    .danger-action-btn {
+        width: 100%;
+    }
+
+    .form-row,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions-row {
+        flex-direction: column;
+    }
+
+    .form-actions-row .action-btn,
+    .form-actions-row .secondary-page-btn {
+        width: 100%;
+    }
+
+    .forum-post-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .forum-comment-form button {
+        width: 100%;
+    }
+}
