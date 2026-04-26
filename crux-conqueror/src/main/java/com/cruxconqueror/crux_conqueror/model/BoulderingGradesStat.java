@@ -2,7 +2,12 @@ package com.cruxconqueror.crux_conqueror.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-
+/**
+ * Entity representing bouldering grade stats for a session
+ * 
+ * Stores performance data such as attempts and tops for each grade
+ * all within a specific training session
+ */
 @Entity
 @Table(name = "Bouldering_Grade_Stats")
 public class BoulderingGradesStat {
