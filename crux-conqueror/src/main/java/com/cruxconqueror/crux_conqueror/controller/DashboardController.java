@@ -18,6 +18,12 @@ import com.cruxconqueror.crux_conqueror.repository.UserRepo;
 import com.cruxconqueror.crux_conqueror.model.FoodEntry;
 import com.cruxconqueror.crux_conqueror.repository.FoodEntryRepo;
 
+/** Controller for hanlding main dashboard page
+ * 
+ * Gathers nutition and training dat for logged in user
+ * prepares summary data, chart data and progress feedback
+ * presents in a dashboard view
+*/
 @Controller
 public class DashboardController {
         private final TrainingSessionsRepo sessionsRepo;
@@ -29,12 +35,21 @@ public class DashboardController {
                 this.userRepo = userRepo;
                 this.foodEntryRepo = foodEntryRepo;
         }
-
+        /**Loads in the dashboard for the logged in user
+         * 
+         * Includes:
+         * Training stats
+         * Bouldering performance sum
+         * Nutritional goal
+         * data for dashboard charts
+         */
         @GetMapping("/dashboard")
 
         public String dashboard(Model model, Principal principal) {
+                //Gets logged in user
                 User user = userRepo.findByUsername(principal.getName())
                                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
+                //Retrieve training sessions and nutritional entries
                 List<TrainingSessions> sessions = sessionsRepo.findByUserAndArchivedFalseOrderBySessionDateDesc(user);
                 List<FoodEntry> foodEntries = foodEntryRepo.findByUserOrderByEntryDateTimeDesc(user);
 
@@ -42,28 +57,28 @@ public class DashboardController {
                 LocalDateTime last7 = now.minusDays(7);
                 LocalDateTime last30 = now.minusDays(30);
                 int totalsessions = sessions.size();
-
+                //Count sessions in last 7 days
                 int sessionsLast7Days = (int) sessions.stream()
                                 .filter(s -> s.getSessionDate() != null && s.getSessionDate().isAfter(last7))
                                 .count();
-
+                //filter sessions from last 30 days
                 List<TrainingSessions> sessionsLast30 = sessions.stream()
                                 .filter(s -> s.getSessionDate() != null && s.getSessionDate().isAfter(last30))
                                 .toList();
 
                 int sessionsLast30Days = sessionsLast30.size();
-
+                //Calculate total training time over 30 days
                 int totalMinutesLast30Days = sessionsLast30.stream()
                                 .filter(s -> s.getDurationMinutes() != null)
                                 .mapToInt(TrainingSessions::getDurationMinutes)
                                 .sum();
-
+                //Calculate average intensity over 30 days
                 double avgIntensityLast30Days = sessionsLast30.stream()
                                 .filter(s -> s.getIntensity() != null)
                                 .mapToInt(TrainingSessions::getIntensity)
                                 .average()
                                 .orElse(0.0);
-
+                //Calculate bouldering totals over 30 days
                 int attemptsLast30Days = sessionsLast30.stream()
                                 .mapToInt(s -> s.getAttemptsTotal() == null ? 0 : s.getAttemptsTotal())
                                 .sum();
@@ -77,7 +92,7 @@ public class DashboardController {
                                 .sum();
 
                 String climbingSummary;
-
+                // Provide feedback based on recent bouldering and sucess rate
                 if (attemptsLast30Days == 0) {
                         climbingSummary = "No bouldering attempts were logged in the last 30 days.";
                 } else if (topsLast30Days == 0) {
@@ -92,10 +107,11 @@ public class DashboardController {
                                 climbingSummary = "A strong proportion of attempts resulted in tops, indicating effective route completion.";
                         }
                 }
-
+                //Show most recent sessions on dashboard
                 List<TrainingSessions> recentSessions = sessions.stream().limit(5).toList();
 
                 LocalDateTime last14 = now.minusDays(14);
+                //Count sessions in previous 7day period for comparison
                 int sessionsPrevious7Days = (int) sessions.stream()
                                 .filter(s -> s.getSessionDate() != null
                                                 && s.getSessionDate().isAfter(last14)
@@ -103,7 +119,7 @@ public class DashboardController {
                                 .count();
 
                 String trainingSummary;
-
+                //Compare current 7 days with the previous 7
                 if (sessionsLast7Days == 0) {
                         trainingSummary = "No training sessions were logged in the last 7 days.";
                 } else if (sessionsLast7Days > sessionsPrevious7Days) {
@@ -115,6 +131,7 @@ public class DashboardController {
                 }
 
                 DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEE");
+                //Lists to build 7 day chart
                 List<String> chartLabels = new ArrayList<>();
                 List<Integer> sessionsChartData = new ArrayList<>();
                 List<Integer> hoursChartData = new ArrayList<>();
@@ -128,11 +145,11 @@ public class DashboardController {
                 List<Integer> fatChartData = new ArrayList<>();
                 List<Integer> sugarChartData = new ArrayList<>();
                 List<Integer> saltChartData = new ArrayList<>();
-
+                //Build chart values for last 7 days
                 for (int i = 6; i >= 0; i--) {
                         LocalDate day = LocalDate.now().minusDays(i);
                         chartLabels.add(day.format(dayFormatter));
-
+                        //Get training session for this day
                         List<TrainingSessions> daySessions = sessions.stream()
                                         .filter(s -> s.getSessionDate() != null)
                                         .filter(s -> s.getSessionDate().toLocalDate().equals(day))
@@ -164,7 +181,7 @@ public class DashboardController {
                         flashesChartData.add(daySessions.stream()
                                         .mapToInt(s -> s.getFlashesTotal() == null ? 0 : s.getFlashesTotal())
                                         .sum());
-
+                        //Get nutrition entries for this day
                         List<FoodEntry> dayFoodEntries = foodEntries.stream()
                                         .filter(e -> e.getEntryDateTime() != null)
                                         .filter(e -> e.getEntryDateTime().toLocalDate().equals(day))
@@ -181,7 +198,7 @@ public class DashboardController {
                         int dayFat = dayFoodEntries.stream()
                                         .mapToInt(e -> e.getFats() == null ? 0 : e.getFats())
                                         .sum();
-
+                        //Store Calories/protein fat as percentages of daily goal
                         caloriesChartData.add(user.getCalorieGoal() != null && user.getCalorieGoal() > 0
                                         ? (int) Math.round(((double) dayCals / user.getCalorieGoal()) * 100)
                                         : 0);
@@ -193,7 +210,7 @@ public class DashboardController {
                         fatChartData.add(user.getFatGoal() != null && user.getFatGoal() > 0
                                         ? (int) Math.round(((double) dayFat / user.getFatGoal()) * 100)
                                         : 0);
-
+                        //Sugar and salt kept as totals rather than percentages
                         sugarChartData.add(dayFoodEntries.stream()
                                         .mapToInt(e -> e.getSugar() == null ? 0 : e.getSugar())
                                         .sum());
@@ -202,7 +219,7 @@ public class DashboardController {
                                         .mapToInt(e -> e.getSalt() == null ? 0 : e.getSalt())
                                         .sum());
                 }
-
+                //Add all training stats to view
                 model.addAttribute("username", user.getUsername());
                 model.addAttribute("totalSessions", totalsessions);
                 model.addAttribute("sessionsLast7Days", sessionsLast7Days);
@@ -221,7 +238,7 @@ public class DashboardController {
 
                 model.addAttribute("sessionsPrevious7Days", sessionsPrevious7Days);
                 model.addAttribute("chartLabels", chartLabels);
-
+                //Add chart data to view
                 model.addAttribute("chartData", sessionsChartData);
                 model.addAttribute("hoursChartData", hoursChartData);
                 model.addAttribute("intensityChartData", intensityChartData);
@@ -238,7 +255,7 @@ public class DashboardController {
                 int latestCaloriesPercent = 0;
                 int latestProteinPercent = 0;
                 int latestFatPercent = 0;
-
+                //Find most recent day with nutrition data
                 for (int i = caloriesChartData.size() - 1; i >= 0; i--) {
                         if (caloriesChartData.get(i) > 0 || proteinChartData.get(i) > 0 || fatChartData.get(i) > 0) {
                                 latestCaloriesPercent = caloriesChartData.get(i);
@@ -251,7 +268,7 @@ public class DashboardController {
                 String calorieStatus;
                 String proteinStatus;
                 String fatStatus;
-
+                //Convert latest percentages into simple status labels
                 if (latestCaloriesPercent < 90) {
                         calorieStatus = "below";
                 } else if (latestCaloriesPercent <= 110) {
@@ -277,6 +294,7 @@ public class DashboardController {
                 }
 
                 String nutritionSummary;
+                //Generate simple feedback based on recent nutrition progress
                 if (latestCaloriesPercent == 0 && latestProteinPercent == 0 && latestFatPercent == 0) {
                         nutritionSummary = "No nutrition has been logged recently.";
                 } else if ("below".equals(calorieStatus) && "above".equals(proteinStatus)) {
@@ -298,7 +316,7 @@ public class DashboardController {
                 model.addAttribute("nutritionSummary", nutritionSummary);
 
                 int weeklySessionTarget = 3;
-
+                //Count sessions completed in 7 day period
                 int sessionsThisWeek = (int) sessions.stream()
                                 .filter(s -> s.getSessionDate() != null)
                                 .filter(s -> !s.getSessionDate().toLocalDate().isBefore(LocalDate.now().minusDays(6)))
@@ -306,7 +324,7 @@ public class DashboardController {
 
                 int calorieGoalHitDays = 0;
                 int proteinGoalHitDays = 0;
-
+                //count how many days the user met ther calorie/ protein goals this week
                 for (int i = 6; i >= 0; i--) {
                         LocalDate day = LocalDate.now().minusDays(i);
 
@@ -339,13 +357,14 @@ public class DashboardController {
                                 }
                         }
                 }
-
+                //Convert weekly progress into percentages for dashboard inficators
                 int sessionsProgressPercent = Math
                                 .min((int) Math.round(((double) sessionsThisWeek / weeklySessionTarget) * 100), 100);
                 int caloriesProgressPercent = (int) Math.round((calorieGoalHitDays / 7.0) * 100);
                 int proteinProgressPercent = (int) Math.round((proteinGoalHitDays / 7.0) * 100);
 
                 String sessionsGoalStatus;
+                //Convert percentages into simple status labels
                 if (sessionsProgressPercent >= 100) {
                         sessionsGoalStatus = "Goal hit";
                 } else if (sessionsProgressPercent >= 66) {
@@ -371,7 +390,7 @@ public class DashboardController {
                 } else {
                         proteinGoalStatus = "Low";
                 }
-
+                //Add weekly goal progress
                 model.addAttribute("weeklySessionTarget", weeklySessionTarget);
                 model.addAttribute("sessionsThisWeek", sessionsThisWeek);
                 model.addAttribute("calorieGoalHitDays", calorieGoalHitDays);
@@ -384,7 +403,7 @@ public class DashboardController {
                 model.addAttribute("sessionsGoalStatus", sessionsGoalStatus);
                 model.addAttribute("caloriesGoalStatus", caloriesGoalStatus);
                 model.addAttribute("proteinGoalStatus", proteinGoalStatus);
-
+                //Add user info for display
                 model.addAttribute("calorieGoal", user.getCalorieGoal());
                 model.addAttribute("proteinGoal", user.getProteinGoal());
                 model.addAttribute("fatGoal", user.getFatGoal());
