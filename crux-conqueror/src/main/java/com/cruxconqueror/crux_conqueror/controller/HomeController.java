@@ -23,6 +23,11 @@ import com.cruxconqueror.crux_conqueror.model.TrainingSessions;
 import com.cruxconqueror.crux_conqueror.repository.ForumLikeRepo;
 import com.cruxconqueror.crux_conqueror.repository.ForumPostRepo;
 
+/**Controller for homepage
+ * 
+ * Shows personalised homepage for logged in users
+ * with training, nutrition, community and leaderboard highlights
+ */
 @Controller
 public class HomeController {
 
@@ -40,37 +45,40 @@ public class HomeController {
         this.forumLikeRepo = forumLikeRepo;
         this.forumPostRepo = forumPostRepo;
     }
-
+    //Loads homepage
+    //logged in personalisation is shown
     @GetMapping("/")
     public String home(Model model, Principal principal) {
         if (principal == null) {
             return "home/home";
         }
-
+        //Get currently logged in user
         User user = userRepo.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalStateException("Logged in user not found"));
-
+        //Get nutrition information from nutrition service
         List<FoodEntry> todaysEntries = nutritionService.getTodaysEntries(user);
         int caloriesToday = nutritionService.getCaloriesFromEntries(todaysEntries);
         int proteinToday = nutritionService.getProteinFromEntries(todaysEntries);
         String latestMeal = nutritionService.getLatestMeal(user);
-
+        //Get highest grade from latest user session
         String latestSessionGrade = sessionsRepo.findFirstByUserAndArchivedFalseOrderBySessionDateDesc(user)
                 .map(s -> s.getHighestGrade() == null || s.getHighestGrade().isBlank() ? "N/A" : s.getHighestGrade())
                 .orElse("No sessions logged");
-
+        //Count all active sessions for user
         long totalSessions = sessionsRepo.countByUserAndArchivedFalse(user);
-
+        //count sessions in last 7 days
         LocalDateTime last7 = LocalDateTime.now().minusDays(7);
         int sessionsLast7Days = (int) sessionsRepo.findByUserAndArchivedFalseOrderBySessionDateDesc(user).stream()
                 .filter(s -> s.getSessionDate() != null && s.getSessionDate().isAfter(last7))
                 .count();
 
         int weeklySessionTarget = 3;
+        //Convert weekly session progress into percentage
         int sessionProgressPercent = Math
                 .min((int) Math.round((sessionsLast7Days / (double) weeklySessionTarget) * 100), 100);
 
         String weeklyTrainingStatus;
+        //Simple feedback based on weekly training progress
         if (sessionsLast7Days >= weeklySessionTarget) {
             weeklyTrainingStatus = "You have hit your weekly training target.";
         } else if (sessionsLast7Days == 2) {
@@ -82,7 +90,7 @@ public class HomeController {
         }
 
         List<String> suggestions = new ArrayList<>();
-
+        //Personalised suggestions for user
         if (sessionsLast7Days < weeklySessionTarget) {
             suggestions.add("You are behind on your weekly training target.");
         }
@@ -98,6 +106,7 @@ public class HomeController {
         if (suggestions.isEmpty()) {
             suggestions.add("You are progressing well this week. Keep building consistency.");
         }
+        //Get community posts and rank by number of likes
         List<ForumPost> topPosts = new ArrayList<>(forumPostRepo.findAllByOrderByCreatedAtDesc());
         Map<Long, Long> topPostLikes = new HashMap<>();
         for (ForumPost post : topPosts) {
@@ -106,11 +115,13 @@ public class HomeController {
         topPosts.sort((a, b) -> Long.compare(
                 topPostLikes.getOrDefault(b.getId(), 0L),
                 topPostLikes.getOrDefault(a.getId(), 0L)));
+        //Only show top 3 posts on homepage
         if (topPosts.size() > 3) {
             topPosts = topPosts.subList(0, 3);
         }
 
         LocalDateTime last30 = LocalDateTime.now().minusDays(30);
+        //Build a small leaderboard based on sessions in lst 30 days
         List<TrainingSessions> recent = sessionsRepo.findByArchivedFalseAndSessionDateAfter(last30);
         Map<String, Integer> sessionsPerUser = new HashMap<>();
         for (TrainingSessions s : recent) {
@@ -126,10 +137,11 @@ public class HomeController {
                     entry.getKey(),
                     entry.getValue(), 0, 0.0, "-", 0));
         }
+        //Sort based on most session in last 30 days
         leaderboardPreview.sort((a, b) -> Integer.compare(
                 b.getSessionsLast30(),
                 a.getSessionsLast30()));
-
+            //Find users rank
         int homeRank = -1;
         for (int i = 0; i < leaderboardPreview.size(); i++) {
             if (leaderboardPreview.get(i).getUsername().equals(user.getUsername())) {
@@ -137,10 +149,11 @@ public class HomeController {
                 break;
             }
         }
+        //Only show top 3 on leaderboard
         if (leaderboardPreview.size() > 3) {
             leaderboardPreview = leaderboardPreview.subList(0, 3);
         }
-
+        //Add homepage data to view
         model.addAttribute("username", user.getUsername());
         model.addAttribute("totalSessions", totalSessions);
         model.addAttribute("caloriesToday", caloriesToday);
